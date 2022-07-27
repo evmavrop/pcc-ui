@@ -41,6 +41,10 @@ class DataManager {
     return this.doGet(url, "domains");
   }
 
+  getProviders() {
+    let url = "http://" + this.endpoint + "/providers";
+    return this.doGet(url, "providers");
+  }
   getPrefixes() {
       let url = "http://" + this.endpoint + "/prefixes";
       return this.doGet(url, "prefixes");
