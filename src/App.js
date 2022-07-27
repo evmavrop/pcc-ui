@@ -7,6 +7,8 @@ import Domains from "./components/Domains";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 
+import DataManager from "./api/DataManager";
+import Prefixes from "./components/Prefixes";
 
 function App() {
 
@@ -23,6 +25,11 @@ function App() {
                   exact
                   path="/domains"
                   element={<Domains />}
+                />
+                <Route
+                  exact
+                  path="/prefixes"
+                  element={<Prefixes />}
                 />
               </Routes>
             </main>
