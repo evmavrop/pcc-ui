@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import '@fortawesome/fontawesome-free-solid'
@@ -49,11 +49,11 @@ const Prefixes = () => {
       {
         id: "action",
         cell: props => (
-           <div className="edit-buttons">
-              <Link className="btn btn-light btn-sm ml-1 mr-1" to={"#"} >
-                 <FontAwesomeIcon icon="list" />
-              </Link>
-           </div>
+          <div className="edit-buttons">
+            <Link className="btn btn-light btn-sm ml-1 mr-1" to={"#"} >
+              <FontAwesomeIcon icon="list" />
+            </Link>
+          </div>
         ),
         header: () => <span>Description</span>,
         footer: null,
@@ -70,4 +70,18 @@ const Prefixes = () => {
   );
 };
 
-export default Prefixes;
+const PrefixDetails = () => {
+  let params = useParams();
+  
+  if (isNaN(Number(params.id))) {
+    return (<Navigate to="/" replace={true} />);
+  }
+
+  return (<span>Prefix: {params.id}</span>)
+}
+
+const PrefixAdd = () => {
+  return (<span>Add</span>)
+}
+
+export { Prefixes, PrefixDetails, PrefixAdd };
