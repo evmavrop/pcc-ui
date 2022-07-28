@@ -32,13 +32,13 @@ const Table = (props) => {
 
   return (
     <div className="card">
-      <table className="table table-sm text-start App-card1">
+      <table className="table table-sm App-card1">
         <thead className="thead-light">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th className="w-25" key={header.id} colSpan={header.colSpan}>
+                  <th key={header.id} colSpan={header.colSpan}>
                     {header.isPlaceholder ? null : (
                       <>
                         <div style={{ cursor: "pointer" }}
@@ -52,11 +52,11 @@ const Table = (props) => {
                           }}
                         >
                           {header.column.getCanFilter() ? (
-                            <div className="input-group input-group-sm">
+                            <div className="d-flex flex-column">
                               <Filter column={header.column} table={table} />
                             </div>
-                          ) : <span
-                            style={{ fontWeight: "bold" }}
+                          ) : <div className="d-flex flex-column"><span
+                            style={{ fontWeight: "bold", fontSize: "1rem"}}
                             onClick={header.column.getToggleSortingHandler()}
                           >
                             {{
@@ -65,7 +65,14 @@ const Table = (props) => {
                             }[header.column.getIsSorted()] || ""}
                             {header.column.id.charAt(0).toUpperCase()
                               + header.column.id.slice(1)}
-                          </span>}
+                          </span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              aria-label="Sizing example input"
+                              style={{ visibility: "hidden" }}
+                            />
+                          </div>}
                         </div>
                       </>
                     )}
@@ -113,9 +120,7 @@ function Filter({ column, table }) {
   return (
     <>
       <span
-        className="input-group-text"
-        id="inputGroup-sizing-sm"
-        style={{ fontWeight: "bold" }}
+        style={{ fontWeight: "bold", fontSize: "1rem" }}
         onClick={column.getToggleSortingHandler()}
       >
         {{
@@ -130,7 +135,6 @@ function Filter({ column, table }) {
         value={columnFilterValue || ""}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`Search...`}
-        className="w-36 border"
         list={column.id + "list"}
       />
     </>
@@ -141,7 +145,7 @@ function Filter({ column, table }) {
 function DebouncedInput({
   value: initialValue,
   onChange,
-  debounce = 500,
+  debounce = 100,
   ...props
 }) {
   const [value, setValue] = React.useState(initialValue);
@@ -161,10 +165,8 @@ function DebouncedInput({
   return (
     <input
       type="text"
-      className="form-control"
+      className="form-control border"
       aria-label="Sizing example input"
-      aria-describedby="inputGroup-sizing-default"
-      {...props}
       value={value}
       onChange={(e) => setValue(e.target.value)}
     />
