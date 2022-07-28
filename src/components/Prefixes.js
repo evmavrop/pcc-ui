@@ -163,32 +163,63 @@ const PrefixDetails = (props) => {
   return (
     <div>
       {deleteCard}
-      <form>
-        <label>
-          Name: {prefix && prefix.name}
-        </label>
-        <br></br>
-        <label>
-          Service: {prefix && prefix.service_name}
-        </label>
-        <br></br>
-        <label>
-          Provider: {prefix && prefix.provider_name}
-        </label>
-        <br></br>
-        <label>
-          Domain: {prefix && prefix.domain_name}
-        </label>
-        <br></br>
-
-        <label>
-          Owner: {prefix && prefix.owner}
-        </label>
-        <br></br>
-        <label>
-          Used By: {prefix && prefix.used_by}
-        </label>
-      </form>
+    <div className="container">
+      <div className="card">
+        <div className="card-header text-start">
+          <h2>Prefix: {prefix && prefix.name}</h2>
+        </div>
+        <div className="card-body">
+          <div className="row">
+            <div className="col">
+              <FontAwesomeIcon icon="list" size="8x" />
+            </div>
+            <div className="col d-flex flex-column justify-content-between">
+              <div className="row">
+                <div className="col col-2 d-flex justify-content-start">
+                  <span class="badge bg-dark">Service:</span>
+                </div>
+                <div className="col col-10 d-flex justify-content-start">
+                  {prefix && prefix.service_name}
+                </div>
+              </div>
+              <div className="row">
+                <div className="col col-2 d-flex justify-content-start">
+                  <span class="badge bg-dark">Provider:</span>
+                </div>
+                <div className="col col-10 d-flex justify-content-start">
+                  {prefix && prefix.provider_name}
+                </div>
+              </div>
+              <div className="row">
+                <div className="col col-2 d-flex justify-content-start">
+                  <span class="badge bg-dark">Domain:</span>
+                </div>
+                <div className="col col-10 d-flex justify-content-start">
+                  {prefix && prefix.domain_name}
+                </div>
+              </div>
+              <div className="row">
+                <div className="col col-2 d-flex justify-content-start">
+                  <span class="badge bg-dark">Owner:</span>
+                </div>
+                <div className="col col-10 d-flex justify-content-start">
+                  {prefix && prefix.owner}
+                </div>
+              </div>
+              <div className="row">
+                <div className="col col-2 d-flex justify-content-start">
+                  <span class="badge bg-dark">Used by:</span>
+                </div>
+                <div className="col col-10 d-flex justify-content-start">
+                  {prefix && prefix.used_by}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="card-footer"></div>
+    </div>
     </div>
   )
 }
