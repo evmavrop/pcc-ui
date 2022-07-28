@@ -49,6 +49,11 @@ class DataManager {
       let url = "http://" + this.endpoint + "/prefixes";
       return this.doGet(url, "prefixes");
     }
+
+  getServices() {
+    let url = "http://" + this.endpoint + "/services";
+    return this.doGet(url, "services");
+  }
 }
 
 export default DataManager;
