@@ -135,6 +135,24 @@ const PrefixAdd = () => {
   const [used_by, setUsedBy] = useState("");
   const [status, setStatus] = useState("");
 
+  const [providers, setProviders] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager("localhost:8080/v1");
+    DM.getProviders().then((response) => setProviders(response));
+  }, []);
+
+  const [domains, setDomains] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager("localhost:8080/v1");
+    DM.getDomains().then((response) => setDomains(response));
+  }, []);
+
+  const [services, setServices] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager("localhost:8080/v1");
+    DM.getServices().then((response) => setServices(response));
+  }, []);
+
   const handleNameChange = (event) => {
     setName(event.target.value);
   }
@@ -188,16 +206,34 @@ const PrefixAdd = () => {
       </div>
       <div className="mb-3">
         <label htmlFor="serviceID" className="form-label">Service</label>
-        <input type="text" value={service_id} onChange={handleServiceIDChange} className="form-control" id="serviceId" />
+        <div className="select-container">
+          <select  onChange={handleServiceIDChange}>
+            {services.map((service) => (
+              <option  key={service.id}  value={service.id}>{service.name} </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="mb-3">
         <label htmlFor="providerID" className="form-label">Provider</label>
-        <input type="text" value={provider_id} onChange={handleProviderIDChange} className="form-control" id="providerID" />
-      </div>
+       <div className="select-container">
+          <select  onChange={handleProviderIDChange}>
+            {providers.map((provider) => (
+              <option key={provider.id} value={provider.id}>{provider.name} </option>
+            ))}
+          </select>
+        </div>
+        </div>
       <div className="mb-3">
         <label htmlFor="domainID" className="form-label">Domain</label>
-        <input type="text" value={domain_id} onChange={handleDomainIDChange} className="form-control" id="domainId" />
-      </div>
+        <div className="select-container">
+          <select  onChange={handleDomainIDChange}>
+            {domains.map((domain) => (
+              <option key={domain.id}  value={domain.id}>{domain.name} </option>
+            ))}
+          </select>
+        </div>
+       </div>
       <div className="mb-3">
         <label htmlFor="owner" className="form-label">Owner</label>
         <input type="text" value={owner} onChange={handleOwnerChange} className="form-control" id="owner" />
