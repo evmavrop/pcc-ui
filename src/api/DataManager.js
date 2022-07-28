@@ -45,8 +45,16 @@ class DataManager {
     let url = "http://" + this.endpoint + "/providers";
     return this.doGet(url, "providers");
   }
-  getPrefixes() {
-      let url = "http://" + this.endpoint + "/prefixes";
+
+   getPrefixes(id) {
+      let url;
+      if (id) {
+        url = "http://" + this.endpoint + "/prefixes/" + id;
+      }
+      else {
+        url = "http://" + this.endpoint + "/prefixes";
+      }
+      console.log("url get prefix or prefixes:  "+url);
       return this.doGet(url, "prefixes");
     }
 
