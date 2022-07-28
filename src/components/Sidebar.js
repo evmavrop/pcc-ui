@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = (props) => {
   return (
@@ -33,9 +34,12 @@ const Sidebar = (props) => {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="prefixes">
+            <NavLink
+              to="prefixes"
+              className="nav-link"
+            >
               Prefixes
-            </a>
+            </NavLink>
           </li>
         </ul>
         <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">

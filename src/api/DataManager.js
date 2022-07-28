@@ -57,10 +57,13 @@ class DataManager {
       console.log("url get prefix or prefixes:  "+url);
       return this.doGet(url, "prefixes");
     }
-
   getServices() {
     let url = "http://" + this.endpoint + "/services";
     return this.doGet(url, "services");
+  }
+  addPrefix(data) {
+    let url = "http://" + this.endpoint + "/prefixes";
+    return this.doSend("POST", url, data);
   }
 }
 
