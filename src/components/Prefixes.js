@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams, useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import '@fortawesome/fontawesome-free-solid'
@@ -54,7 +54,9 @@ const Prefixes = () => {
             <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}`} >
               <FontAwesomeIcon icon="list" />
             </Link>
-
+            <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}/delete`} >
+              <FontAwesomeIcon icon="times" />
+            </Link>
           </div>
         ),
 
@@ -80,48 +82,114 @@ const Prefixes = () => {
   );
 };
 
-const PrefixDetails = () => {
+const PrefixDetails = (props) => {
   let params = useParams();
-  const [prefix, setPrefix] = useState([]);
+  let navigate = useNavigate();
+  const [prefixes, setPrefixes] = useState([]);
+
+  let DM = new DataManager("localhost:8080/v1");
+
+  let prefix = {}
+  if (prefixes) {
+    prefixes.forEach((p) => {
+      if (String(p.id) === params.id) {
+        prefix = p;
+      }
+    });
+  }
 
   useEffect(() => {
-    console.log("in use effect prefix details")
-    let DM = new DataManager("localhost:8080/v1");
-    DM.getPrefixes(params.id).then((response) => setPrefix(response));
-  }, []);
+    DM.getPrefixes().then((response) => setPrefixes(response));
+  });
 
   if (isNaN(Number(params.id))) {
     return (<Navigate to="/" replace={true} />);
   }
 
+  const handleDelete = (id) => {
+    DM.deletePrefix(id).then((response) => navigate("/prefixes"));
+  }
+
+  let deleteCard = null;
+
+  if (props.toDelete) {
+    deleteCard = (
+      <div className="card border-danger mb-2">
+        <div className="card-header border-danger text-danger text-center">
+          <h5>
+            <FontAwesomeIcon
+              className="mx-3"
+              icon="exclamation-triangle"
+            />
+            <strong>Prefix Deletion</strong>
+          </h5>
+        </div>
+        <div className=" card-body border-danger text-center">
+          Are you sure you want to delete prefix: <strong>{prefix.name}</strong> ?
+        </div>
+        <div className="card-footer border-danger text-danger text-center">
+          <button
+            className="btn btn-danger mr-2"
+            onClick={() => {
+              handleDelete(params.id);
+            }}
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => {
+              navigate("/prefixes");
+            }}
+            className="btn btn-dark"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
+  } else {
+    deleteCard = (
+      <button
+        onClick={() => {
+          navigate("/prefixes/");
+        }}
+        className="btn btn-dark"
+      >
+        Back
+      </button>
+    );
+  }
+
   return (
+    <div>
+      {deleteCard}
+      <form>
+        <label>
+          Name: {prefix && prefix.name}
+        </label>
+        <br></br>
+        <label>
+          Service: {prefix && prefix.service_name}
+        </label>
+        <br></br>
+        <label>
+          Provider: {prefix && prefix.provider_name}
+        </label>
+        <br></br>
+        <label>
+          Domain: {prefix && prefix.domain_name}
+        </label>
+        <br></br>
 
-    <form>
-      <label>
-        Name: {prefix && prefix.name}
-      </label>
-      <br></br>
-      <label>
-        Service: {prefix && prefix.service_name}
-      </label>
-      <br></br>
-      <label>
-        Provider: {prefix && prefix.provider_name}
-      </label>
-      <br></br>
-      <label>
-        Domain: {prefix && prefix.domain_name}
-      </label>
-      <br></br>
-
-      <label>
-        Owner: {prefix && prefix.owner}
-      </label>
-      <br></br>
-      <label>
-        Used By: {prefix && prefix.used_by}
-      </label>
-    </form>
+        <label>
+          Owner: {prefix && prefix.owner}
+        </label>
+        <br></br>
+        <label>
+          Used By: {prefix && prefix.used_by}
+        </label>
+      </form>
+    </div>
   )
 }
 

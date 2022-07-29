@@ -44,6 +44,10 @@ function App() {
                   element={<PrefixDetails />}
                 />
                 <Route
+                  path="/prefixes/:id/delete"
+                  element={<PrefixDetails toDelete={true}/>}
+                />
+                <Route
                   path="/prefixes/add"
                   element={<PrefixAdd />}
                 />
