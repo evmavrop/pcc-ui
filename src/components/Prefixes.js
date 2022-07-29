@@ -49,7 +49,7 @@ const Prefixes = () => {
       {
         id: "action",
         cell: props => (
-          
+
           <div className="edit-buttons">
             <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}`} >
               <FontAwesomeIcon icon="list" />
@@ -57,7 +57,7 @@ const Prefixes = () => {
 
           </div>
         ),
-        
+
         header: () => <span>Description</span>,
         footer: null,
         enableColumnFilter: false,
@@ -71,9 +71,9 @@ const Prefixes = () => {
     <div>
       {prefixes && <><div className="col">
         {<Link className="btn btn-light" to="/prefixes/add">
-            <FontAwesomeIcon className="mr-2" icon="plus" size="lg" /> Create
-            Prefix
-          </Link>
+          <FontAwesomeIcon className="mr-2" icon="plus" size="lg" /> Create
+          Prefix
+        </Link>
         }
       </div><Table columns={columns} data={prefixes} /></>}
     </div>
@@ -97,32 +97,32 @@ const PrefixDetails = () => {
   return (
 
     <form>
-  <label>
-    Name: {prefix && prefix.name}
-  </label>
-  <br></br>
-  <label>
-    Service: {prefix && prefix.service_name}
-  </label>
-  <br></br>
-  <label>
-    Provider: {prefix && prefix.provider_name}
-  </label>
-  <br></br>
-  <label>
-    Domain: {prefix && prefix.domain_name}
-  </label>
-  <br></br>
-  
-  <label>
-    Owner: {prefix && prefix.owner}
-  </label>
-  <br></br>
-  <label>
-    Used By: {prefix && prefix.used_by}
-  </label>
-</form>
- )
+      <label>
+        Name: {prefix && prefix.name}
+      </label>
+      <br></br>
+      <label>
+        Service: {prefix && prefix.service_name}
+      </label>
+      <br></br>
+      <label>
+        Provider: {prefix && prefix.provider_name}
+      </label>
+      <br></br>
+      <label>
+        Domain: {prefix && prefix.domain_name}
+      </label>
+      <br></br>
+
+      <label>
+        Owner: {prefix && prefix.owner}
+      </label>
+      <br></br>
+      <label>
+        Used By: {prefix && prefix.used_by}
+      </label>
+    </form>
+  )
 }
 
 const PrefixAdd = () => {
@@ -134,6 +134,24 @@ const PrefixAdd = () => {
   const [owner, setOwner] = useState("");
   const [used_by, setUsedBy] = useState("");
   const [status, setStatus] = useState("");
+
+  const [providers, setProviders] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager("localhost:8080/v1");
+    DM.getProviders().then((response) => { setProviders(response); setProviderID(response[0].id) });
+  }, []);
+
+  const [domains, setDomains] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager("localhost:8080/v1");
+    DM.getDomains().then((response) => { setDomains(response); setDomainID(response[0].id) });
+  }, []);
+
+  const [services, setServices] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager("localhost:8080/v1");
+    DM.getServices().then((response) => { setServices(response); setServiceID(response[0].id) });
+  }, []);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -188,15 +206,27 @@ const PrefixAdd = () => {
       </div>
       <div className="mb-3">
         <label htmlFor="serviceID" className="form-label">Service</label>
-        <input type="text" value={service_id} onChange={handleServiceIDChange} className="form-control" id="serviceId" />
+        <select className="form-select" onChange={handleServiceIDChange}>
+          {services.map((service) => (
+            <option key={service.id} value={service.id}>{service.name} </option>
+          ))}
+        </select>
       </div>
       <div className="mb-3">
         <label htmlFor="providerID" className="form-label">Provider</label>
-        <input type="text" value={provider_id} onChange={handleProviderIDChange} className="form-control" id="providerID" />
+        <select className="form-select" onChange={handleProviderIDChange}>
+          {providers.map((provider) => (
+            <option key={provider.id} value={provider.id}>{provider.name} </option>
+          ))}
+        </select>
       </div>
       <div className="mb-3">
         <label htmlFor="domainID" className="form-label">Domain</label>
-        <input type="text" value={domain_id} onChange={handleDomainIDChange} className="form-control" id="domainId" />
+        <select className="form-select" onChange={handleDomainIDChange}>
+          {domains.map((domain) => (
+            <option key={domain.id} value={domain.id}>{domain.name} </option>
+          ))}
+        </select>
       </div>
       <div className="mb-3">
         <label htmlFor="owner" className="form-label">Owner</label>
