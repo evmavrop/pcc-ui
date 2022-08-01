@@ -54,7 +54,6 @@ class DataManager {
     else {
       url = "http://" + this.endpoint + "/prefixes";
     }
-    console.log("url get prefix or prefixes:  " + url);
     return this.doGet(url, "prefixes");
   }
 
@@ -74,6 +73,14 @@ class DataManager {
       url = "http://" + this.endpoint + "/prefixes/" + id;
     }
     return this.doSend("DELETE", url, {});
+  }
+
+  updatePrefix(id, method, data) {
+    let url;
+    if (id) {
+      url = "http://" + this.endpoint + "/prefixes/" + id;
+    }
+    return this.doSend(method, url, data);
   }
 }
 

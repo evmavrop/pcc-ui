@@ -9,7 +9,7 @@ import Domains from "./components/Domains";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import Providers from "./components/Providers";
-import { Prefixes, PrefixDetails, PrefixAdd } from "./components/Prefixes";
+import { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate } from "./components/Prefixes";
 import Services from "./components/Services";
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
                 />
                 <Route
                   path="/prefixes/:id"
-                  element={<PrefixDetails />}
+                  element={<PrefixDetails toDelete={false}/>}
                 />
                 <Route
                   path="/prefixes/:id/delete"
@@ -50,6 +50,10 @@ function App() {
                 <Route
                   path="/prefixes/add"
                   element={<PrefixAdd />}
+                />
+                <Route
+                  path="/prefixes/:id/update"
+                  element={<PrefixUpdate/>}
                 />
                 <Route path="*"
                   element={<NotFound />}
