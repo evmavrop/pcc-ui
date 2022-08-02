@@ -7,12 +7,14 @@ import '@fortawesome/fontawesome-free-solid'
 import DataManager from "../api/DataManager";
 import Table from "./Table";
 
+import config from "../config";
+
 const Providers = () => {
 
   const [providers, setProviders] = useState([]);
 
   useEffect(() => {
-    let DM = new DataManager("localhost:8080/v1");
+    let DM = new DataManager(config.endpoint);
     DM.getProviders().then((response) => setProviders(response));
   }, []);
 

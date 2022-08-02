@@ -32,7 +32,7 @@ const Table = (props) => {
 
   return (
     <div className="card">
-      <table className="table table-sm App-card1">
+      <table className="table table-sm table-hover App-card1">
         <thead className="thead-light">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>

@@ -24,7 +24,8 @@ function App() {
             <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4">
               <Routes>
                 <Route
-                  element={<span>Dashboard</span>}
+                  path="/dashboard"
+                  element={<></>}
                 />
                 <Route
                   path="/domains"

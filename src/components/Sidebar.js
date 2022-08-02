@@ -47,24 +47,28 @@ const Sidebar = (props) => {
         </h6>
         <ul className="nav flex-column text-start">
           <li className="nav-item">
-            <a className="nav-link" aria-current="page" href="providers">
+          <NavLink
+              to="providers"
+              className="nav-link"
+            >
               Providers
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="status">
-              Status
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="services">
+          <NavLink
+              to="services"
+              className="nav-link"
+            >
               Services
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="domains">
+          <NavLink
+              to="domains"
+              className="nav-link"
+            >
               Domains
-            </a>
+            </NavLink>
           </li>
         </ul>
       </div>
