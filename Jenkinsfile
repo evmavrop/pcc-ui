@@ -18,8 +18,6 @@ pipeline {
                 echo 'Build pcc-ui'
                     sh '''
                         cd $WORKSPACE/$PROJECT_DIR
-                        rm ./src/config.js
-                        cp $AMS_ADMIN_CONF ./src/
                         npm install
                         npm run build
                     '''
