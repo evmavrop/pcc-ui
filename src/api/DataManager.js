@@ -37,40 +37,40 @@ class DataManager {
   }
 
   getDomains() {
-    let url = "http://" + this.endpoint + "/domains";
+    let url = this.endpoint + "/domains";
     return this.doGet(url, "domains");
   }
 
   getProviders() {
-    let url = "http://" + this.endpoint + "/providers";
+    let url = this.endpoint + "/providers";
     return this.doGet(url, "providers");
   }
 
   getPrefixes(id) {
     let url;
     if (id) {
-      url = "http://" + this.endpoint + "/prefixes/" + id;
+      url = this.endpoint + "/prefixes/" + id;
     }
     else {
-      url = "http://" + this.endpoint + "/prefixes";
+      url = this.endpoint + "/prefixes";
     }
     return this.doGet(url, "prefixes");
   }
 
   getServices() {
-    let url = "http://" + this.endpoint + "/services";
+    let url = this.endpoint + "/services";
     return this.doGet(url, "services");
   }
   
   addPrefix(data) {
-    let url = "http://" + this.endpoint + "/prefixes";
+    let url = this.endpoint + "/prefixes";
     return this.doSend("POST", url, data);
   }
 
   deletePrefix(id) {
     let url;
     if (id) {
-      url = "http://" + this.endpoint + "/prefixes/" + id;
+      url = this.endpoint + "/prefixes/" + id;
     }
     return this.doSend("DELETE", url, {});
   }
@@ -78,7 +78,7 @@ class DataManager {
   updatePrefix(id, method, data) {
     let url;
     if (id) {
-      url = "http://" + this.endpoint + "/prefixes/" + id;
+      url = this.endpoint + "/prefixes/" + id;
     }
     return this.doSend(method, url, data);
   }
