@@ -482,7 +482,7 @@ const PrefixUpdate = () => {
   }
 
   const handleSubmit = (event) => {
-    let DM = new DataManager("localhost:8080/v1");
+    let DM = new DataManager(config.endpoint);
     let method = "PATCH";
 
     const data = {
