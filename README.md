@@ -17,9 +17,8 @@ The `public` directory of the project may host specific assets such as the `favi
 3. `npm install`
 4. `npm start`
 
-This will run the app in the development mode.
-Open http://localhost:3000 to view it in your browser.
-
+This will run the app in the development mode.Open http://localhost:3000 to view it in your browser.
+ 
 The page will reload when you make changes.
 You may also see any lint errors in the console.
 
