@@ -15,8 +15,7 @@ pipeline {
                 }
             }
             steps {
-                echo 'Build ams-admin-ui'
-                withCredentials([file(credentialsId: 'pcc-ui-conf', variable: 'PCC_UI_CONF')]) {
+                echo 'Build pcc-ui'
                     sh '''
                         cd $WORKSPACE/$PROJECT_DIR
                         rm ./src/config.js
@@ -24,17 +23,6 @@ pipeline {
                         npm install
                         npm run build
                     '''
-                }
-                script {
-                    if ( env.BRANCH_NAME == 'devel' ) {
-                        sshagent (credentials: ['newgrnetci-pcc-ui']) {
-                            sh '''
-                                cd $WORKSPACE/$PROJECT_DIR
-                                ssh -o "StrictHostKeyChecking no" root@pcc.devel.argo.grnet.gr rm -rf /var/www/pcc.devel.argo.grnet.gr/*
-                                scp -o "StrictHostKeyChecking no" -r  build/* root@pcc.devel.argo.grnet.gr:/var/www/pcc.devel.argo.grnet.gr/
-                            '''
-                        }
-                    }
                 }
             }
         }
