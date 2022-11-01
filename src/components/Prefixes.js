@@ -112,8 +112,6 @@ const PrefixDetails = (props) => {
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
 
-  let DM = new DataManager(config.endpoint);
-
   let prefix = {}
   if (prefixes) {
     prefixes.forEach((p) => {
@@ -124,14 +122,16 @@ const PrefixDetails = (props) => {
   }
 
   useEffect(() => {
+    let DM = new DataManager(config.endpoint);
     DM.getPrefixes().then((response) => setPrefixes(response));
-  }, []);
+  });
 
   if (isNaN(Number(params.id))) {
     return (<Navigate to="/" replace={true} />);
   }
 
   const handleDelete = (id) => {
+    let DM = new DataManager(config.endpoint);
     DM.deletePrefix(id).then((response) => navigate("/prefixes"));
   }
 
@@ -418,7 +418,7 @@ const PrefixUpdate = () => {
       setUsedBy(response.used_by);
       setStatus(response.status);
     });
-  }, []);
+  }, [params.id]);
 
   const [name, setName] = useState("");
   const [service_id, setServiceID] = useState("");
