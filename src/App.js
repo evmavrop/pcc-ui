@@ -8,7 +8,7 @@ import { NotFound } from "./components/Utils";
 import Domains from "./components/Domains";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import Providers from "./components/Providers";
+import { Providers, ProviderDetails } from "./components/Providers";
 import { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate } from "./components/Prefixes";
 import Services from "./components/Services";
 
@@ -35,6 +35,11 @@ function App() {
                   exact
                   path="/providers"
                   element={<Providers />}
+                />
+                <Route
+                  exact
+                  path="/providers/:name"
+                  element={<ProviderDetails />}
                 />
                 <Route
                   path="/prefixes"
