@@ -41,6 +41,14 @@ const Sidebar = (props) => {
               Prefixes
             </NavLink>
           </li>
+          <li className="nav-item">
+            <NavLink
+              to="lookup"
+              className="nav-link"
+            >
+              Lookup
+            </NavLink>
+          </li>
         </ul>
         <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
           <span>Settings</span>
