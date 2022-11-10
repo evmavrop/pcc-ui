@@ -61,9 +61,24 @@ class DataManager {
     let url = this.endpoint + "/services";
     return this.doGet(url, "services");
   }
+
+  getReverseLookUpFilters() {
+    let url = this.endpoint + "/reverse-lookup/filters";
+    return this.doGet(url, "filters");
+  }
+
+  getReverseLookUpTypes() {
+    let url = this.endpoint + "/reverse-lookup/types";
+    return this.doGet(url, "filters");
+  }
   
   addPrefix(data) {
     let url = this.endpoint + "/prefixes";
+    return this.doSend("POST", url, data);
+  }
+
+  reverseLookUp(data) {
+    let url = this.endpoint + "/reverse-lookup";
     return this.doSend("POST", url, data);
   }
 

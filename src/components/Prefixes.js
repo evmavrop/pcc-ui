@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, Navigate, useParams, useNavigate } from "react-router-dom";
-
+import { Formik, Field, Form } from 'formik';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import '@fortawesome/fontawesome-free-solid'
 
@@ -14,6 +14,15 @@ const status_t = {
   "1": "Exists"
 };
 
+String.prototype.toPascalCase = function() {
+  const words = this.match(/[a-z]+/gi);
+  if (!words) return "";
+  return words
+      .map(function(w) {
+          return w.charAt(0).toUpperCase() + w.substr(1).toLowerCase();
+      })
+      .join(" ");
+};
 
 const Prefixes = () => {
   let navigate = useNavigate();
@@ -86,7 +95,7 @@ const Prefixes = () => {
         <div className="container">
           <div className="row d-flex justify-content-between mb-4">
             <div className="col col-10"></div>
-            <div className="col col-2 text-end">
+            <div className="col col-2 mt-4 text-end">
               <button
                 onClick={() => {
                   navigate("/prefixes/add");
@@ -226,6 +235,14 @@ const PrefixDetails = (props) => {
                 </div>
                 <div className="row">
                   <div className="col col-2 d-flex justify-content-start">
+                    <span className="badge bg-dark">LookUp Type:</span>
+                  </div>
+                  <div className="col col-10 d-flex justify-content-start">
+                    {prefix && prefix.lookup_service_type}
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col col-2 d-flex justify-content-start">
                     <span className="badge bg-dark">Used by:</span>
                   </div>
                   <div className="col col-10 d-flex justify-content-start">
@@ -254,6 +271,132 @@ const PrefixDetails = (props) => {
   )
 }
 
+const PrefixLookup = () => {
+
+  // const [prefixes, setPrefixes] = useState([]);
+  // useEffect(() => {
+  //   let DM = new DataManager(config.endpoint);
+  //   DM.getPrefixes().then((response) => setPrefixes(response));
+  // }, []);
+
+  const [filters, setReverseLookUpFilters] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
+    DM.getReverseLookUpFilters().then((response) => setReverseLookUpFilters(response));
+  }, []);
+
+  const [handles, setHandles] = useState([]);
+
+      // const handleSubmit = (event) => {
+      //   event.preventDefault();
+      //   filters.forEach((f,i) => {
+      //     console.log("Key: ", event.target[i].value);
+      //     console.log("Value: ", event.target[i].value);
+      //   });
+      // };
+
+  let filtersDiv = [];
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row) => row.handle,
+        id: "handle",
+        cell: (info) => info.getValue(),
+        header: () => <span>Handle</span>,
+        footer: null,
+      },
+      {
+        id: "action",
+        cell: props => (
+
+          <div className="edit-buttons">
+            <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}`} >
+              <FontAwesomeIcon icon="list" />
+            </Link>
+            <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}/update`} >
+              <FontAwesomeIcon icon="edit" />
+            </Link>
+            <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}/delete`} >
+              <FontAwesomeIcon icon="times" />
+            </Link>
+          </div>
+        ),
+
+        header: () => <span>Description</span>,
+        footer: null,
+        enableColumnFilter: false,
+      }
+      ,
+    ],
+    []
+  );
+
+  const filtersDivCreate = () => {
+    filters && filters.forEach((f, i) => {
+      filtersDiv.push(
+        <div key={"filter-div-" + i} className="mb-3 row">
+          <label className="col-sm-2 col-form-label">{f.toPascalCase()}</label>
+          <div className="col-sm-10">
+            <Field id={'formik-field-id-'+ f} type="text" className="form-control" name={f}></Field>
+          </div>
+        </div>
+      );
+    });
+    // filtersDiv.push(
+    //   <div key={"filter-div-checkbox"} className="mb-3 row">
+    //     <div className="col-sm-2">
+    //       <input className="form-check-input" type="checkbox" id="flexCheckDefault"></input>
+    //     </div>
+    //     <div className="col-sm-10" style={{ "textAlign": "start" }}>
+    //       <label className="form-check-label">
+    //         Retrieve Records
+    //       </label>
+    //     </div>
+    //   </div>
+    // );
+  }
+
+  const filtersFormikInitialize = () => {
+    let d = {};
+    if (filters) {
+      filters.forEach(f => {
+        d[f] = "";
+      });
+    }
+    return d;
+  }
+
+  filtersDivCreate();
+
+  return (
+    <div className="container">
+      {/* <form onSubmit={e => { handleSubmit(e) }}>
+      {filtersDiv}
+      </form> */}
+      {filters &&
+      <>
+      <Formik
+      initialValues={filtersFormikInitialize()}
+      onSubmit={(data) => {
+        let DM = new DataManager(config.endpoint);
+        DM.reverseLookUp({"filters": data}).then((response) => { setHandles(response); console.log(response)});
+      }}
+    >
+      <Form>
+        {filtersDiv}
+        <button type="submit" className="btn btn-primary mb-3">Submit</button>
+      </Form>
+    </Formik>
+      <div className="row d-flex flex-column justify-content-between">
+        <Table columns={columns} data={handles} />
+      </div>
+      </>
+      }
+    </div>
+  );
+}
+
 const PrefixAdd = () => {
 
   let navigate = useNavigate();
@@ -265,6 +408,7 @@ const PrefixAdd = () => {
   const [owner, setOwner] = useState("");
   const [used_by, setUsedBy] = useState("");
   const [status, setStatus] = useState("1");
+  const [lookup_service_type, setLookUpServiceType] = useState("");
 
   const [providers, setProviders] = useState([]);
   useEffect(() => {
@@ -282,6 +426,12 @@ const PrefixAdd = () => {
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
     DM.getServices().then((response) => { setServices(response); setServiceID(response[0].id) });
+  }, []);
+
+  const [lookup_service_types, setLookUpServiceTypes] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
+    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response);});
   }, []);
 
   const handleNameChange = (event) => {
@@ -312,6 +462,10 @@ const PrefixAdd = () => {
     setStatus(event.target.value);
   }
 
+  const handleLookUpServiceTypeChange = (event) => {
+    setLookUpServiceType(event.target.value);
+  }
+
   const handleSubmit = (event) => {
     let DM = new DataManager(config.endpoint);
 
@@ -323,11 +477,23 @@ const PrefixAdd = () => {
       "owner": owner,
       "used_by": used_by,
       "status": status,
+      "lookup_service_type": lookup_service_type
     }
 
     DM.addPrefix(data).then((response) => { navigate("/prefixes/") });
     event.preventDefault();
   }
+
+  const lookup_service_type_select = (
+    <>
+    <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
+    <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
+      {lookup_service_types && lookup_service_types.map((t,i) => {
+        return <option key={`type-${i}`} value={t}>{t}</option>
+      })}
+    </select>
+    </>
+  );
 
   if (providers) {
     return (
@@ -369,6 +535,11 @@ const PrefixAdd = () => {
             <div className="mb-3">
               <label htmlFor="usedBy" className="form-label fw-bold">Used by</label>
               <input type="text" value={used_by} onChange={handleUsedByChange} className="form-control" id="usedBy" />
+            </div>
+            <div className="mb-3">
+              {lookup_service_types && lookup_service_types.length > 0 ? 
+                lookup_service_type_select
+              : null}
             </div>
             <div className="mb-3">
               <label htmlFor="status" className="form-label fw-bold">Status</label>
@@ -417,6 +588,7 @@ const PrefixUpdate = () => {
       setOwner(response.owner);
       setUsedBy(response.used_by);
       setStatus(response.status);
+      setLookUpServiceType(response.lookup_service_type);
     });
   }, [params.id]);
 
@@ -427,6 +599,7 @@ const PrefixUpdate = () => {
   const [owner, setOwner] = useState("");
   const [used_by, setUsedBy] = useState("");
   const [status, setStatus] = useState("");
+  const [lookup_service_type, setLookUpServiceType] = useState("");
 
   const [providers, setProviders] = useState([]);
   useEffect(() => {
@@ -444,6 +617,12 @@ const PrefixUpdate = () => {
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
     DM.getServices().then((response) => { setServices(response) });
+  }, []);
+
+  const [lookup_service_types, setLookUpServiceTypes] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
+    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response);});
   }, []);
 
   const handleNameChange = (event) => {
@@ -481,6 +660,11 @@ const PrefixUpdate = () => {
     setUpdated({ ...updated, "status": event.target.value });
   }
 
+  const handleLookUpServiceTypeChange = (event) => {
+    setLookUpServiceType(event.target.value);
+    setUpdated({ ...updated, "lookup_service_type": event.target.value });
+  }
+
   const handleSubmit = (event) => {
     let DM = new DataManager(config.endpoint);
     let method = "PATCH";
@@ -493,6 +677,7 @@ const PrefixUpdate = () => {
       "owner": owner,
       "used_by": used_by,
       "status": status,
+      "lookup_service_type": lookup_service_type
     }
 
     let updated_keys = Object.keys(updated);
@@ -508,6 +693,17 @@ const PrefixUpdate = () => {
     DM.updatePrefix(params.id, method, updated).then((response) => { navigate("/prefixes") });
     event.preventDefault();
   }
+
+  const lookup_service_type_select = (
+    <>
+    <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
+    <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
+      {lookup_service_types && lookup_service_types.map((t,i) => {
+        return <option key={`type-${i}`} value={t}>{t}</option>
+      })}
+    </select>
+    </>
+  );
 
   return (
     <div className="container">
@@ -550,6 +746,11 @@ const PrefixUpdate = () => {
             <input type="text" value={used_by} onChange={handleUsedByChange} className="form-control" id="usedBy" />
           </div>
           <div className="mb-3">
+              {lookup_service_types && lookup_service_types.length > 0 ? 
+                lookup_service_type_select
+              : null}
+            </div>
+          <div className="mb-3">
             <label htmlFor="status" className="form-label fw-bold">Status</label>
             <select className="form-select" onChange={handleStatusChange} value={status}>
               <option key="status-0" value="1">{status_t["1"]}</option>
@@ -576,4 +777,4 @@ const PrefixUpdate = () => {
   )
 }
 
-export { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate };
+export { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup };
