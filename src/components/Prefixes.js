@@ -297,7 +297,7 @@ const PrefixLookup = () => {
 
   let filtersDiv = [];
 
-  const columns = useMemo(
+  const columnsDetailed = useMemo(
     () => [
       {
         accessorFn: (row) => row.handle,
@@ -307,27 +307,32 @@ const PrefixLookup = () => {
         footer: null,
       },
       {
-        id: "action",
-        cell: props => (
-
-          <div className="edit-buttons">
-            <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}`} >
-              <FontAwesomeIcon icon="list" />
-            </Link>
-            <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}/update`} >
-              <FontAwesomeIcon icon="edit" />
-            </Link>
-            <Link className="btn btn-light btn-sm ml-1 mr-1" to={`/prefixes/${props.row.original.id}/delete`} >
-              <FontAwesomeIcon icon="times" />
-            </Link>
-          </div>
-        ),
-
-        header: () => <span>Description</span>,
+        accessorFn: (row) => row.type,
+        id: "type",
+        cell: (info) => info.getValue(),
+        header: () => <span>Type</span>,
         footer: null,
-        enableColumnFilter: false,
+      },
+      {
+        accessorFn: (row) => row.value,
+        id: "value",
+        cell: (info) => info.getValue(),
+        header: () => <span>Value</span>,
+        footer: null,
       }
-      ,
+    ],
+    []
+  );
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row) => row.handle,
+        id: "handle",
+        cell: (info) => info.getValue(),
+        header: () => <span>Handle</span>,
+        footer: null,
+      }
     ],
     []
   );
@@ -367,6 +372,21 @@ const PrefixLookup = () => {
     return d;
   }
 
+  const flattenhandles = (handles) => {
+    let flathandles = [];
+    handles && handles.forEach((h,i) => {
+      if (h["values"].length > 0) {
+        h["values"].forEach((v,j) => {
+          flathandles.push({"handle": h["handle"], "type": v["type"], "value": v["value"]});
+        });
+      }
+      else {
+        flathandles.push({"handle": h["handle"]});
+      }
+    });
+   return flathandles;
+  }
+
   filtersDivCreate();
 
   return (
@@ -380,7 +400,7 @@ const PrefixLookup = () => {
       initialValues={filtersFormikInitialize()}
       onSubmit={(data) => {
         let DM = new DataManager(config.endpoint);
-        DM.reverseLookUp({"filters": data}).then((response) => { setHandles(response); console.log(response)});
+        DM.reverseLookUp({"filters": data}).then((response) => { setHandles(flattenhandles(response))});
       }}
     >
       <Form>
@@ -389,7 +409,11 @@ const PrefixLookup = () => {
       </Form>
     </Formik>
       <div className="row d-flex flex-column justify-content-between">
+        {handles.length > 0 && handles[0].type ?
+        <Table columns={columnsDetailed} data={handles} />
+        :
         <Table columns={columns} data={handles} />
+        }
       </div>
       </>
       }
