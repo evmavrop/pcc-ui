@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Link, Navigate, useParams, useNavigate } from "react-router-dom";
 import { Formik, Field, Form } from 'formik';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,14 +14,14 @@ const status_t = {
   "1": "Exists"
 };
 
-String.prototype.toPascalCase = function() {
+String.prototype.toPascalCase = function () {
   const words = this.match(/[a-z]+/gi);
   if (!words) return "";
   return words
-      .map(function(w) {
-          return w.charAt(0).toUpperCase() + w.substr(1).toLowerCase();
-      })
-      .join(" ");
+    .map(function (w) {
+      return w.charAt(0).toUpperCase() + w.substr(1).toLowerCase();
+    })
+    .join(" ");
 };
 
 const Prefixes = () => {
@@ -273,27 +273,24 @@ const PrefixDetails = (props) => {
 
 const PrefixLookup = () => {
 
-  // const [prefixes, setPrefixes] = useState([]);
-  // useEffect(() => {
-  //   let DM = new DataManager(config.endpoint);
-  //   DM.getPrefixes().then((response) => setPrefixes(response));
-  // }, []);
-
   const [filters, setReverseLookUpFilters] = useState([]);
+  const [handles, setHandles] = useState([]);
+  const [handlesNextPage, setHandlesNextPage] = useState([]);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
     DM.getReverseLookUpFilters().then((response) => setReverseLookUpFilters(response));
   }, []);
 
-  const [handles, setHandles] = useState([]);
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
+    DM.reverseLookUp(pageIndex, pageSize, { "filters": ref.current.values }).then((response) => { setHandles(flattenhandles(response)) });
+    DM.reverseLookUp(pageIndex + 1, pageSize, { "filters": ref.current.values }).then((response) => { setHandlesNextPage(flattenhandles(response)) });
+  }, [pageIndex, pageSize]);
 
-      // const handleSubmit = (event) => {
-      //   event.preventDefault();
-      //   filters.forEach((f,i) => {
-      //     console.log("Key: ", event.target[i].value);
-      //     console.log("Value: ", event.target[i].value);
-      //   });
-      // };
+  const ref = useRef(null);
 
   let filtersDiv = [];
 
@@ -343,23 +340,11 @@ const PrefixLookup = () => {
         <div key={"filter-div-" + i} className="mb-3 row">
           <label className="col-sm-2 col-form-label">{f.toPascalCase()}</label>
           <div className="col-sm-10">
-            <Field id={'formik-field-id-'+ f} type="text" className="form-control" name={f}></Field>
+            <Field id={'formik-field-id-' + f} type="text" className="form-control" name={f}></Field>
           </div>
         </div>
       );
     });
-    // filtersDiv.push(
-    //   <div key={"filter-div-checkbox"} className="mb-3 row">
-    //     <div className="col-sm-2">
-    //       <input className="form-check-input" type="checkbox" id="flexCheckDefault"></input>
-    //     </div>
-    //     <div className="col-sm-10" style={{ "textAlign": "start" }}>
-    //       <label className="form-check-label">
-    //         Retrieve Records
-    //       </label>
-    //     </div>
-    //   </div>
-    // );
   }
 
   const filtersFormikInitialize = () => {
@@ -374,48 +359,102 @@ const PrefixLookup = () => {
 
   const flattenhandles = (handles) => {
     let flathandles = [];
-    handles && handles.forEach((h,i) => {
+    handles && Array.isArray(handles) && handles.forEach((h, i) => {
       if (h["values"].length > 0) {
-        h["values"].forEach((v,j) => {
-          flathandles.push({"handle": h["handle"], "type": v["type"], "value": v["value"]});
+        h["values"].forEach((v, j) => {
+          flathandles.push({ "handle": h["handle"], "type": v["type"], "value": v["value"] });
         });
       }
       else {
-        flathandles.push({"handle": h["handle"]});
+        flathandles.push({ "handle": h["handle"] });
       }
     });
-   return flathandles;
+    return flathandles;
   }
 
   filtersDivCreate();
 
+  let cols = [];
+  if (handles.length > 0 && handles[0].type) {
+    cols = columnsDetailed;
+  }
+  else {
+    cols = columns
+  }
+
   return (
     <div className="container">
-      {/* <form onSubmit={e => { handleSubmit(e) }}>
-      {filtersDiv}
-      </form> */}
       {filters &&
-      <>
-      <Formik
-      initialValues={filtersFormikInitialize()}
-      onSubmit={(data) => {
-        let DM = new DataManager(config.endpoint);
-        DM.reverseLookUp({"filters": data}).then((response) => { setHandles(flattenhandles(response))});
-      }}
-    >
-      <Form>
-        {filtersDiv}
-        <button type="submit" className="btn btn-primary mb-3">Submit</button>
-      </Form>
-    </Formik>
-      <div className="row d-flex flex-column justify-content-between">
-        {handles.length > 0 && handles[0].type ?
-        <Table columns={columnsDetailed} data={handles} />
-        :
-        <Table columns={columns} data={handles} />
-        }
-      </div>
-      </>
+        <>
+          <Formik
+            innerRef={ref}
+            initialValues={filtersFormikInitialize()}
+            onSubmit={(data) => {
+              let DM = new DataManager(config.endpoint);
+              DM.reverseLookUp(pageIndex, pageSize, { "filters": data }).then((response) => { setHandles(flattenhandles(response)) });
+              DM.reverseLookUp(pageIndex + 1, pageSize, { "filters": ref.current.values }).then((response) => { setHandlesNextPage(flattenhandles(response)) });
+            }}
+          >
+            <Form>
+              {filtersDiv}
+              <button type="submit" className="btn btn-primary mb-3">Submit</button>
+            </Form>
+          </Formik>
+          <div className="row d-flex flex-column justify-content-between">
+            <Table columns={cols} data={handles} />
+            <div className="flex items-center gap-2">
+              <button
+                className="border rounded p-1"
+                onClick={() => {
+                  setPageIndex(pageIndex - 1);
+                }}
+                disabled={pageIndex === 0 ? true : false}
+              >
+                {'<'}
+              </button>
+              <button
+                className="border rounded p-1"
+                onClick={() => {
+                  setPageIndex(pageIndex + 1);
+                }}
+                disabled={handlesNextPage.length === 0 ? true : false}
+              >
+                {'>'}
+              </button>
+              <span className="flex items-center gap-1">
+                <div>Page</div>
+                <strong>
+                  {pageIndex + 1}
+                </strong>
+              </span>
+              <span className="flex items-center gap-1">
+                | Go to page:
+                <input
+                  type="number"
+                  defaultValue={pageIndex + 1}
+                  onChange={e => {
+                    const page = e.target.value ? Number(e.target.value) - 1 : 0
+                    setPageIndex(page)
+                  }}
+                  disabled={handlesNextPage.length === 0 ? true : false}
+                  className="border p-1 rounded w-16"
+                />
+              </span>
+              <select
+                value={pageSize}
+                onChange={e => {
+                  setPageSize(Number(e.target.value))
+                }}
+              >
+                {[10, 20, 30, 40, 50].map(pageSize => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </>
       }
     </div>
   );
@@ -455,7 +494,7 @@ const PrefixAdd = () => {
   const [lookup_service_types, setLookUpServiceTypes] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response);});
+    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response); });
   }, []);
 
   const handleNameChange = (event) => {
@@ -510,12 +549,12 @@ const PrefixAdd = () => {
 
   const lookup_service_type_select = (
     <>
-    <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
-    <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
-      {lookup_service_types && lookup_service_types.map((t,i) => {
-        return <option key={`type-${i}`} value={t}>{t}</option>
-      })}
-    </select>
+      <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
+      <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
+        {lookup_service_types && lookup_service_types.map((t, i) => {
+          return <option key={`type-${i}`} value={t}>{t}</option>
+        })}
+      </select>
     </>
   );
 
@@ -561,9 +600,9 @@ const PrefixAdd = () => {
               <input type="text" value={used_by} onChange={handleUsedByChange} className="form-control" id="usedBy" />
             </div>
             <div className="mb-3">
-              {lookup_service_types && lookup_service_types.length > 0 ? 
+              {lookup_service_types && lookup_service_types.length > 0 ?
                 lookup_service_type_select
-              : null}
+                : null}
             </div>
             <div className="mb-3">
               <label htmlFor="status" className="form-label fw-bold">Status</label>
@@ -646,7 +685,7 @@ const PrefixUpdate = () => {
   const [lookup_service_types, setLookUpServiceTypes] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response);});
+    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response); });
   }, []);
 
   const handleNameChange = (event) => {
@@ -720,12 +759,12 @@ const PrefixUpdate = () => {
 
   const lookup_service_type_select = (
     <>
-    <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
-    <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
-      {lookup_service_types && lookup_service_types.map((t,i) => {
-        return <option key={`type-${i}`} value={t}>{t}</option>
-      })}
-    </select>
+      <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
+      <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
+        {lookup_service_types && lookup_service_types.map((t, i) => {
+          return <option key={`type-${i}`} value={t}>{t}</option>
+        })}
+      </select>
     </>
   );
 
@@ -770,10 +809,10 @@ const PrefixUpdate = () => {
             <input type="text" value={used_by} onChange={handleUsedByChange} className="form-control" id="usedBy" />
           </div>
           <div className="mb-3">
-              {lookup_service_types && lookup_service_types.length > 0 ? 
-                lookup_service_type_select
+            {lookup_service_types && lookup_service_types.length > 0 ?
+              lookup_service_type_select
               : null}
-            </div>
+          </div>
           <div className="mb-3">
             <label htmlFor="status" className="form-label fw-bold">Status</label>
             <select className="form-select" onChange={handleStatusChange} value={status}>
