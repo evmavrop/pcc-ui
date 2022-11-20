@@ -77,8 +77,10 @@ class DataManager {
     return this.doSend("POST", url, data);
   }
 
-  reverseLookUp(data) {
+  reverseLookUp(pageIndex, pageSize, data) {
     let url = this.endpoint + "/reverse-lookup";
+    url += `?page=${pageIndex}`;
+    url += `&limit=${pageSize}`;
     return this.doSend("POST", url, data);
   }
 
