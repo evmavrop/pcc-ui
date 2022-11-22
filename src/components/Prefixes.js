@@ -494,7 +494,7 @@ const PrefixAdd = () => {
   const [lookup_service_types, setLookUpServiceTypes] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response); });
+    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response); setLookUpServiceType(response[0])});
   }, []);
 
   const handleNameChange = (event) => {
