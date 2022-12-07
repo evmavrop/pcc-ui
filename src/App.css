@@ -42,3 +42,23 @@
     transform: rotate(360deg);
   }
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td,
+th {
+  padding: .25em;
+  border: 1px solid black;
+}
+
+/* tbody:nth-child(odd) {
+  background: #c2c2c2;
+} */
+
+tbody:hover td[rowspan],
+tr:hover td {
+  background: #ccc;
+}

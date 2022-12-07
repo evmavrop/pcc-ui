@@ -301,21 +301,20 @@ const PrefixLookup = () => {
         id: "handle",
         cell: (info) => info.getValue(),
         header: () => <span>Handle</span>,
+        enableSorting: false,
         footer: null,
       },
       {
-        accessorFn: (row) => row.type,
+        accessorFn: (row) => row.values,
         id: "type",
-        cell: (info) => info.getValue(),
-        header: () => <span>Type</span>,
-        footer: null,
+        enableSorting: false,
+        enableColumnFilter: false
       },
       {
-        accessorFn: (row) => row.value,
+        accessorFn: (row) => row.values.type,
         id: "value",
-        cell: (info) => info.getValue(),
-        header: () => <span>Value</span>,
-        footer: null,
+        enableSorting: false,
+        enableColumnFilter: false
       }
     ],
     []
@@ -336,14 +335,29 @@ const PrefixLookup = () => {
 
   const filtersDivCreate = () => {
     filters && filters.forEach((f, i) => {
-      filtersDiv.push(
-        <div key={"filter-div-" + i} className="mb-3 row">
-          <label className="col-sm-2 col-form-label">{f.toPascalCase()}</label>
-          <div className="col-sm-10">
-            <Field id={'formik-field-id-' + f} type="text" className="form-control" name={f}></Field>
+      if (f === "RETRIEVE_RECORDS") {
+        filtersDiv.push(
+          <div key={"filter-div-" + i} className="mb-3 row">
+              <label className="col-sm-2 col-form-label">{f.toPascalCase()}</label>
+              <div className="col-sm-10">
+                <Field className="form-select" as="select" name={f}>
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </Field>
+              </div>
+            </div>
+        );
+      }
+      else {
+        filtersDiv.push(
+          <div key={"filter-div-" + i} className="mb-3 row">
+            <label className="col-sm-2 col-form-label">{f.toPascalCase()}</label>
+            <div className="col-sm-10">
+              <Field id={'formik-field-id-' + f} type="text" className="form-control" name={f}></Field>
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     });
   }
 
@@ -351,35 +365,43 @@ const PrefixLookup = () => {
     let d = {};
     if (filters) {
       filters.forEach(f => {
-        d[f] = "";
+        if (f === "RETRIEVE_RECORDS") {
+          d[f] = "false";
+        }
+        else {
+          d[f] = "";
+        }
       });
     }
     return d;
   }
 
   const flattenhandles = (handles) => {
-    let flathandles = [];
-    handles && Array.isArray(handles) && handles.forEach((h, i) => {
-      if (h["values"].length > 0) {
-        h["values"].forEach((v, j) => {
-          flathandles.push({ "handle": h["handle"], "type": v["type"], "value": v["value"] });
-        });
-      }
-      else {
-        flathandles.push({ "handle": h["handle"] });
-      }
-    });
-    return flathandles;
+    // let flathandles = [];
+    // handles && Array.isArray(handles) && handles.forEach((h, i) => {
+    //   if (h["values"].length > 0) {
+    //     h["values"].forEach((v, j) => {
+    //       flathandles.push({ "handle": h["handle"], "type": v["type"], "value": v["value"] });
+    //     });
+    //   }
+    //   else {
+    //     flathandles.push({ "handle": h["handle"] });
+    //   }
+    // });
+    return handles;
   }
 
   filtersDivCreate();
 
   let cols = [];
-  if (handles.length > 0 && handles[0].type) {
+  let rowspanenabled = false;
+  if (handles.length > 0 && handles[0].values.length > 0) {
     cols = columnsDetailed;
+    rowspanenabled = true;
   }
   else {
-    cols = columns
+    cols = columns;
+    rowspanenabled = false;
   }
 
   return (
@@ -388,6 +410,7 @@ const PrefixLookup = () => {
         <>
           <Formik
             innerRef={ref}
+            enableReinitialize={true}
             initialValues={filtersFormikInitialize()}
             onSubmit={(data) => {
               let DM = new DataManager(config.endpoint);
@@ -401,7 +424,7 @@ const PrefixLookup = () => {
             </Form>
           </Formik>
           <div className="row d-flex flex-column justify-content-between">
-            <Table columns={cols} data={handles} />
+            <Table columns={cols} data={handles} rowspan={rowspanenabled}/>
             <div className="flex items-center gap-2">
               <button
                 className="border rounded p-1"
