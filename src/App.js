@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes} from "react-router-dom";
 import { NotFound } from "./components/Utils";
 import Domains from "./components/Domains";
 import Sidebar from "./components/Sidebar";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Providers, ProviderDetails } from "./components/Providers";
 import { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup } from "./components/Prefixes";
@@ -18,10 +19,12 @@ function App() {
     <BrowserRouter basename="/">
       <div className="App">
         <Header></Header>
+       
         <div className="container-fluid">
           <div className="row">
-            <Sidebar />
-            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4">
+          <Sidebar/>
+          <div id="main" class="col">
+            <main>
               <Routes>
                 <Route
                   path="/dashboard"
@@ -75,9 +78,12 @@ function App() {
           />
               </Routes>
             </main>
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
+      
     </BrowserRouter>
   );
 }
