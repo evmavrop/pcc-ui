@@ -8,7 +8,7 @@ const Header = (props) => {
     <div id="header-top">
       <div class="row">
         <div class="eudat-link">
-          <a href="http://www.eudat.eu" target="_blank">GO TO EUDAT WEBSITE</a>
+          <a href="http://www.eudat.eu" target="_blank" rel="noreferrer">GO TO EUDAT WEBSITE</a>
         </div>
       </div>
     </div>
@@ -23,8 +23,8 @@ const Header = (props) => {
               <div id="gb_menu">
               <ul id="menu" >
              
-              <li><a href="#" target="_blank">FOR USERS</a></li>
-              <li><a href="#" target="_blank">ABOUT</a></li>
+              <li><a href="#" target="_blank" rel="noreferrer">FOR USERS</a></li>
+              <li><a href="#" target="_blank" rel="noreferrer">ABOUT</a></li>
             </ul>
                 
               </div>

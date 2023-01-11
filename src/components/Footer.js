@@ -14,10 +14,10 @@ const Footer = (props) => {
                 <div class="col-md-6">
                     <nav class="navbar navbar-footer pull-right">
                     <ul id="menu" class="nav nav-footer">
-                        <li><a href="https://www.eudat.eu/eudat-cdi-aup" target="_blank">EUDAT Service ToU</a></li>
-                        <li><a href="#" target="_blank">Data Privacy Policy</a></li>
-                        <li><a href="#" target="_blank">Legal Notice</a></li>
-                        <li><a href="https://eudat.eu/eudat-cdi" target="_blank">About EUDAT</a></li>
+                        <li><a href="https://www.eudat.eu/eudat-cdi-aup" target="_blank" rel="noreferrer">EUDAT Service ToU</a></li>
+                        <li><a href="#" target="_blank" rel="noreferrer">Data Privacy Policy</a></li>
+                        <li><a href="#" target="_blank" rel="noreferrer">Legal Notice</a></li>
+                        <li><a href="https://eudat.eu/eudat-cdi" target="_blank" rel="noreferrer">About EUDAT</a></li>
                     </ul>
                     </nav>
                 </div>
@@ -31,7 +31,7 @@ const Footer = (props) => {
                 </div>
                 <div class="col-md-4">
                     <div class="footer-powered">
-                        <a href="https://www.grnet.gr" target="_blank">Powered by GRNET</a>
+                        <a href="https://www.grnet.gr" target="_blank" rel="noreferrer" >Powered by GRNET</a>
                     </div>
                 </div>
             </div>
