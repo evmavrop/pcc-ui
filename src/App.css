@@ -129,6 +129,9 @@ header {
 }
 
 .footer-main {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   background: #2C2C2C;
   color: white;
   padding: 0px;

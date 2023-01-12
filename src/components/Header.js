@@ -6,20 +6,20 @@ const Header = (props) => {
   return ( 
     <header>
     <div id="header-top">
-      <div class="row">
-        <div class="eudat-link">
+      <div className="row">
+        <div className="eudat-link">
           <a href="http://www.eudat.eu" target="_blank" rel="noreferrer">GO TO EUDAT WEBSITE</a>
         </div>
       </div>
     </div>
     <div id="header-main">
-      <div class="row">
-        <div class="col-md-3">
-          <a href="/"><img class="header_logo" src={logo} alt="PCC"/></a>
+      <div className="row">
+        <div className="col-md-3">
+          <a href="/"><img className="header_logo" src={logo} alt="PCC"/></a>
         </div>
-        <div class="col-md-9">
-          <div class="navbar navbar-default">
-            <div class="container-fluid">
+        <div className="col-md-9">
+          <div className="navbar navbar-default">
+            <div className="container-fluid">
               <div id="gb_menu">
               <ul id="menu" >
              

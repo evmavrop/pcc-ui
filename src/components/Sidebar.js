@@ -11,8 +11,8 @@ const Sidebar = (props) => {
     <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
           <span>Menu</span>
         </h6>
-    <div class="sticky-top">
-      <ul id="sidebar" class="nav flex-column">
+    <div className="sticky-top">
+      <ul id="sidebar" className="nav flex-column">
           <li className="nav-item">
             <a className="nav-link active" aria-current="page" href="dashboard">
               <svg
