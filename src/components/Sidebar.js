@@ -5,13 +5,14 @@ const Sidebar = (props) => {
   return (
     <nav
       id="sidebarMenu"
-      className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+      className="col-md-3 col-lg-2 d-md-block bg-light"
     >
-      <div className="position-sticky pt-3 sidebar-sticky">
-        <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
+    <div id="sticky-sidebar" >
+    <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
           <span>Menu</span>
         </h6>
-        <ul className="nav flex-column ms-auto text-start">
+    <div className="sticky-top">
+      <ul id="sidebar" className="nav flex-column">
           <li className="nav-item">
             <a className="nav-link active" aria-current="page" href="dashboard">
               <svg
@@ -80,6 +81,7 @@ const Sidebar = (props) => {
           </li>
         </ul>
       </div>
+    </div>
     </nav>
   );
 };
