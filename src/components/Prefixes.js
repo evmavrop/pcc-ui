@@ -498,31 +498,31 @@ const PrefixAdd = () => {
   const [domain_id, setDomainID] = useState("");
   const [owner, setOwner] = useState("");
   const [used_by, setUsedBy] = useState("");
-  const [status, setStatus] = useState("1");
+  const [status, setStatus] = useState("");
   const [lookup_service_type, setLookUpServiceType] = useState("");
 
   const [providers, setProviders] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getProviders().then((response) => { setProviders(response); setProviderID(response[0].id) });
+    DM.getProviders().then((response) => { setProviders(response); });
   }, []);
 
   const [domains, setDomains] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getDomains().then((response) => { setDomains(response); setDomainID(response[0].id) });
+    DM.getDomains().then((response) => { setDomains(response); });
   }, []);
 
   const [services, setServices] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getServices().then((response) => { setServices(response); setServiceID(response[0].id) });
+    DM.getServices().then((response) => { setServices(response); });
   }, []);
 
   const [lookup_service_types, setLookUpServiceTypes] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response); setLookUpServiceType(response[0])});
+    DM.getReverseLookUpTypes().then((response) => { setLookUpServiceTypes(response); });
   }, []);
 
   const handleNameChange = (event) => {
@@ -579,6 +579,7 @@ const PrefixAdd = () => {
     <>
       <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
       <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
+      <option disabled defaultValue="" value="">Select Type</option>
         {lookup_service_types && lookup_service_types.map((t, i) => {
           return <option key={`type-${i}`} value={t}>{t}</option>
         })}
@@ -598,6 +599,7 @@ const PrefixAdd = () => {
             <div className="mb-3">
               <label htmlFor="serviceID" className="form-label fw-bold">Service</label>
               <select className="form-select" onChange={handleServiceIDChange} value={service_id}>
+                <option disabled defaultValue="" value="">Select Service</option>
                 {services.map((service) => (
                   <option key={service.id} value={service.id}>{service.name} </option>
                 ))}
@@ -606,6 +608,7 @@ const PrefixAdd = () => {
             <div className="mb-3">
               <label htmlFor="providerID" className="form-label fw-bold">Provider</label>
               <select className="form-select" onChange={handleProviderIDChange} value={provider_id}>
+              <option disabled defaultValue="" value="">Select Provider</option>
                 {providers.map((provider) => (
                   <option key={provider.id} value={provider.id}>{provider.name}</option>
                 ))}
@@ -614,6 +617,7 @@ const PrefixAdd = () => {
             <div className="mb-3">
               <label htmlFor="domainID" className="form-label fw-bold">Domain</label>
               <select className="form-select" onChange={handleDomainIDChange} value={domain_id}>
+              <option disabled defaultValue="" value="">Select Domain</option>
                 {domains.map((domain) => (
                   <option key={domain.id} value={domain.id}>{domain.name} </option>
                 ))}
@@ -635,6 +639,7 @@ const PrefixAdd = () => {
             <div className="mb-3">
               <label htmlFor="status" className="form-label fw-bold">Status</label>
               <select className="form-select" onChange={handleStatusChange} value={status}>
+                <option disabled defaultValue="" value="">Select Status</option>
                 <option key="status-0" value="1">{status_t["1"]}</option>
                 <option key="status-1" value="0">{status_t["0"]}</option>
               </select>

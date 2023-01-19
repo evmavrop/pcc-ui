@@ -1,6 +1,9 @@
 
 .App{
   margin:0px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 .App-logo {
   height: 40vmin;
@@ -128,10 +131,12 @@ header {
   width: 150px;
 }
 
-.footer-main {
-  position: fixed;
+footer {
   bottom: 0;
   width: 100%;
+}
+
+.footer-main {
   background: #2C2C2C;
   color: white;
   padding: 0px;
