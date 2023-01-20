@@ -578,7 +578,7 @@ const PrefixAdd = () => {
   const lookup_service_type_select = (
     <>
       <label htmlFor="status" className="form-label fw-bold">LookUp Type</label>
-      <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type}>
+      <select className="form-select" onChange={handleLookUpServiceTypeChange} value={lookup_service_type} required>
       <option disabled defaultValue="" value="">Select Type</option>
         {lookup_service_types && lookup_service_types.map((t, i) => {
           return <option key={`type-${i}`} value={t}>{t}</option>
@@ -594,11 +594,11 @@ const PrefixAdd = () => {
           <div className="row text-start">
             <div className="mb-3">
               <label htmlFor="prefixName" className="form-label fw-bold">Name</label>
-              <input type="text" value={name} onChange={handleNameChange} className="form-control" id="prefixName" aria-describedby="prefixNameHelp" />
+              <input type="text" value={name} onChange={handleNameChange} className="form-control" id="prefixName" aria-describedby="prefixNameHelp" required/>
             </div>
             <div className="mb-3">
               <label htmlFor="serviceID" className="form-label fw-bold">Service</label>
-              <select className="form-select" onChange={handleServiceIDChange} value={service_id}>
+              <select className="form-select" onChange={handleServiceIDChange} value={service_id} required>
                 <option disabled defaultValue="" value="">Select Service</option>
                 {services.map((service) => (
                   <option key={service.id} value={service.id}>{service.name} </option>
@@ -607,7 +607,7 @@ const PrefixAdd = () => {
             </div>
             <div className="mb-3">
               <label htmlFor="providerID" className="form-label fw-bold">Provider</label>
-              <select className="form-select" onChange={handleProviderIDChange} value={provider_id}>
+              <select className="form-select" onChange={handleProviderIDChange} value={provider_id} required>
               <option disabled defaultValue="" value="">Select Provider</option>
                 {providers.map((provider) => (
                   <option key={provider.id} value={provider.id}>{provider.name}</option>
@@ -616,7 +616,7 @@ const PrefixAdd = () => {
             </div>
             <div className="mb-3">
               <label htmlFor="domainID" className="form-label fw-bold">Domain</label>
-              <select className="form-select" onChange={handleDomainIDChange} value={domain_id}>
+              <select className="form-select" onChange={handleDomainIDChange} value={domain_id} required>
               <option disabled defaultValue="" value="">Select Domain</option>
                 {domains.map((domain) => (
                   <option key={domain.id} value={domain.id}>{domain.name} </option>
@@ -625,11 +625,11 @@ const PrefixAdd = () => {
             </div>
             <div className="mb-3">
               <label htmlFor="owner" className="form-label fw-bold">Owner</label>
-              <input type="text" value={owner} onChange={handleOwnerChange} className="form-control" id="owner" />
+              <input type="text" value={owner} onChange={handleOwnerChange} className="form-control" id="owner" required/>
             </div>
             <div className="mb-3">
               <label htmlFor="usedBy" className="form-label fw-bold">Used by</label>
-              <input type="text" value={used_by} onChange={handleUsedByChange} className="form-control" id="usedBy" />
+              <input type="text" value={used_by} onChange={handleUsedByChange} className="form-control" id="usedBy" required/>
             </div>
             <div className="mb-3">
               {lookup_service_types && lookup_service_types.length > 0 ?
@@ -638,7 +638,7 @@ const PrefixAdd = () => {
             </div>
             <div className="mb-3">
               <label htmlFor="status" className="form-label fw-bold">Status</label>
-              <select className="form-select" onChange={handleStatusChange} value={status}>
+              <select className="form-select" onChange={handleStatusChange} value={status} required>
                 <option disabled defaultValue="" value="">Select Status</option>
                 <option key="status-0" value="1">{status_t["1"]}</option>
                 <option key="status-1" value="0">{status_t["0"]}</option>
