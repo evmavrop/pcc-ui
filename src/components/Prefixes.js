@@ -546,7 +546,6 @@ const PrefixAdd = () => {
   }, []);
 
   const onformSubmit = (data) => {
-    console.log(data);
     let DM = new DataManager(config.endpoint);
 
     DM.addPrefix(data).then(() => {
@@ -750,30 +749,32 @@ const PrefixUpdate = () => {
   let params = useParams();
   let navigate = useNavigate();
 
-  const [updated, setUpdated] = useState({});
+  const [defaultFormValues, setDefaultFormValues] = useState({});
+
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({mode: "onChange"});
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
     DM.getPrefixes(params.id).then((response) => {
-      setName(response.name);
-      setServiceID(response.service_id);
-      setProviderID(response.provider_id);
-      setDomainID(response.provider_id);
-      setOwner(response.owner);
-      setUsedBy(response.used_by);
-      setStatus(response.status);
-      setLookUpServiceType(response.lookup_service_type);
+      const d = {
+        name: response.name,
+        service_id: response.service_id,
+        provider_id: response.provider_id,
+        domain_id: response.provider_id,
+        owner: response.owner,
+        used_by: response.used_by,
+        status: response.status,
+        lookup_service_type: response.lookup_service_type
+      };
+      setDefaultFormValues(d)
+      reset(d);
     });
   }, [params.id]);
-
-  const [name, setName] = useState("");
-  const [service_id, setServiceID] = useState("");
-  const [provider_id, setProviderID] = useState("");
-  const [domain_id, setDomainID] = useState("");
-  const [owner, setOwner] = useState("");
-  const [used_by, setUsedBy] = useState("");
-  const [status, setStatus] = useState("");
-  const [lookup_service_type, setLookUpServiceType] = useState("");
 
   const [providers, setProviders] = useState([]);
   useEffect(() => {
@@ -807,75 +808,30 @@ const PrefixUpdate = () => {
     });
   }, []);
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-    setUpdated({ ...updated, name: event.target.value });
-  };
-
-  const handleServiceIDChange = (event) => {
-    setServiceID(event.target.value);
-    setUpdated({ ...updated, service_id: event.target.value });
-  };
-
-  const handleProviderIDChange = (event) => {
-    setProviderID(event.target.value);
-    setUpdated({ ...updated, provider_id: event.target.value });
-  };
-
-  const handleDomainIDChange = (event) => {
-    setDomainID(event.target.value);
-    setUpdated({ ...updated, domain_id: event.target.value });
-  };
-
-  const handleOwnerChange = (event) => {
-    setOwner(event.target.value);
-    setUpdated({ ...updated, owner: event.target.value });
-  };
-
-  const handleUsedByChange = (event) => {
-    setUsedBy(event.target.value);
-    setUpdated({ ...updated, used_by: event.target.value });
-  };
-
-  const handleStatusChange = (event) => {
-    setStatus(event.target.value);
-    setUpdated({ ...updated, status: event.target.value });
-  };
-
-  const handleLookUpServiceTypeChange = (event) => {
-    setLookUpServiceType(event.target.value);
-    setUpdated({ ...updated, lookup_service_type: event.target.value });
-  };
-
-  const handleSubmit = (event) => {
+  const onformSubmit = (data) => {
     let DM = new DataManager(config.endpoint);
     let method = "PATCH";
 
-    const data = {
-      name: name,
-      service_id: service_id,
-      provider_id: provider_id,
-      domain_id: domain_id,
-      owner: owner,
-      used_by: used_by,
-      status: status,
-      lookup_service_type: lookup_service_type
-    };
+    let intersection = {};
+    for (let key in data) {
+        if (key in defaultFormValues && data[key] !== defaultFormValues[key]) {
+            intersection[key] = data[key];
+        }
+    }
 
-    let updated_keys = Object.keys(updated);
-    let total_keys = Object.keys(data);
+    let updated_keys = Object.keys(defaultFormValues);
+    let total_keys = Object.keys(intersection);
     if (updated_keys.filter((x) => total_keys.includes(x)).length === total_keys.length) {
-      for (const [key] of Object.entries(updated)) {
-        if (updated[key] === data[key]) {
+      for (const [key] of Object.entries(defaultFormValues)) {
+        if (defaultFormValues[key] === intersection[key]) {
           method = "PUT";
         }
       }
     }
 
-    DM.updatePrefix(params.id, method, updated).then(() => {
+    DM.updatePrefix(params.id, method, intersection).then(() => {
       navigate("/prefixes");
     });
-    event.preventDefault();
   };
 
   const lookup_service_type_select = (
@@ -884,9 +840,12 @@ const PrefixUpdate = () => {
         LookUp Type
       </label>
       <select
-        className="form-select"
-        onChange={handleLookUpServiceTypeChange}
-        value={lookup_service_type}>
+        className={`form-select ${errors.lookup_service_type ? "is-invalid" : ""}`}
+        id="lookupServiceType"
+        {...register("lookup_service_type", { required: true })}>
+        <option disabled value="">
+          Select Type
+        </option>
         {lookup_service_types &&
           lookup_service_types.map((t, i) => {
             return (
@@ -896,126 +855,170 @@ const PrefixUpdate = () => {
             );
           })}
       </select>
+      {errors.lookup_service_type && (
+        <div className="invalid-feedback">Lookup Service Type must be selected</div>
+      )}
     </>
   );
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit} className="text-start">
-        <div className="row">
-          <div className="mb-3">
-            <label htmlFor="prefixName" className="form-label fw-bold">
-              Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={handleNameChange}
-              className="form-control"
-              id="prefixName"
-              aria-describedby="prefixNameHelp"
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="serviceID" className="form-labe fw-bold">
-              Service
-            </label>
-            <select className="form-select" onChange={handleServiceIDChange} value={service_id}>
-              {services.map((service) => (
-                <option key={service.id} value={service.id}>
-                  {service.name}{" "}
+        <form onSubmit={handleSubmit(onformSubmit)}>
+          <div className="row text-start">
+            <div className="mb-3">
+              <label htmlFor="prefixName" className="form-label fw-bold">
+                Name
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                id="prefixName"
+                aria-describedby="prefixNameHelp"
+                {...register("name", {
+                  required: { value: true, message: "Name is required" },
+                  minLength: { value: 3, message: "Minimum length is 3" }
+                })}
+              />
+              {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="serviceID" className="form-label fw-bold">
+                Service
+              </label>
+              <select
+                className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
+                id="serviceID"
+                {...register("service_id", { required: true })}>
+                <option disabled value="">
+                  Select Service
                 </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="providerID" className="form-label fw-bold">
-              Provider
-            </label>
-            <select className="form-select" onChange={handleProviderIDChange} value={provider_id}>
-              {providers.map((provider) => (
-                <option key={provider.id} value={provider.id}>
-                  {provider.name}{" "}
+                {services.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.name}{" "}
+                  </option>
+                ))}
+              </select>
+              {errors.service_id && (
+                <div className="invalid-feedback">Service must be selected</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="providerID" className="form-label fw-bold">
+                Provider
+              </label>
+              <select
+                className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
+                id="providerID"
+                {...register("provider_id", { required: true })}>
+                <option disabled value="">
+                  Select Provider
                 </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="domainID" className="form-label fw-bold">
-              Domain
-            </label>
-            <select className="form-select" onChange={handleDomainIDChange} value={domain_id}>
-              {domains.map((domain) => (
-                <option key={domain.id} value={domain.id}>
-                  {domain.name}{" "}
+                {providers.map((provider) => (
+                  <option key={provider.id} value={provider.id}>
+                    {provider.name}
+                  </option>
+                ))}
+              </select>
+              {errors.provider_id && (
+                <div className="invalid-feedback">Provider must be selected</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="domainID" className="form-label fw-bold">
+                Domain
+              </label>
+              <select
+                className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
+                id="domainID"
+                {...register("domain_id", { required: true })}>
+                <option disabled value="">
+                  Select Domain
                 </option>
-              ))}
-            </select>
+                {domains.map((domain) => (
+                  <option key={domain.id} value={domain.id}>
+                    {domain.name}{" "}
+                  </option>
+                ))}
+              </select>
+              {errors.domain_id && <div className="invalid-feedback">Domain must be selected</div>}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="owner" className="form-label fw-bold">
+                Owner
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.owner ? "is-invalid" : ""}`}
+                id="owner"
+                {...register("owner", {
+                  required: { value: true, message: "Owner is required" },
+                  minLength: { value: 3, message: "Minimum length is 3" }
+                })}
+              />
+              {errors.owner && <div className="invalid-feedback">{errors.owner.message}</div>}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="usedBy" className="form-label fw-bold">
+                Used by
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.used_by ? "is-invalid" : ""}`}
+                id="usedBy"
+                {...register("used_by", {
+                  required: { value: true, message: "Used By is required" },
+                  minLength: { value: 3, message: "Minimum length is 3" }
+                })}
+              />
+              {errors.used_by && <div className="invalid-feedback">{errors.used_by.message}</div>}
+            </div>
+            <div className="mb-3">
+              {lookup_service_types && lookup_service_types.length > 0
+                ? lookup_service_type_select
+                : null}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="status" className="form-label fw-bold">
+                Status
+              </label>
+              <select
+                className={`form-select ${errors.status ? "is-invalid" : ""}`}
+                id="status"
+                {...register("status", { required: true })}>
+                <option disabled value="">
+                  Select Status
+                </option>
+                <option key="status-0" value="1">
+                  {status_t["1"]}
+                </option>
+                <option key="status-1" value="0">
+                  {status_t["0"]}
+                </option>
+              </select>
+              {errors.status && <div className="invalid-feedback">Status must be selected</div>}
+            </div>
           </div>
-          <div className="mb-3">
-            <label htmlFor="owner" className="form-label fw-bold">
-              Owner
-            </label>
-            <input
-              type="text"
-              value={owner}
-              onChange={handleOwnerChange}
-              className="form-control"
-              id="owner"
-            />
+          <div className="row text-end">
+            <div className="column col-10"></div>
+            <div className="column col-2 d-flex justify-content-end">
+              <button
+                type="submit"
+                value="Submit"
+                className="btn btn-primary"
+                style={{ marginRight: "1rem" }}>
+                Create
+              </button>
+              <button
+                onClick={() => {
+                  navigate("/prefixes/");
+                }}
+                className="btn btn-dark">
+                Back
+              </button>
+            </div>
           </div>
-          <div className="mb-3">
-            <label htmlFor="usedBy" className="form-label fw-bold">
-              Used by
-            </label>
-            <input
-              type="text"
-              value={used_by}
-              onChange={handleUsedByChange}
-              className="form-control"
-              id="usedBy"
-            />
-          </div>
-          <div className="mb-3">
-            {lookup_service_types && lookup_service_types.length > 0
-              ? lookup_service_type_select
-              : null}
-          </div>
-          <div className="mb-3">
-            <label htmlFor="status" className="form-label fw-bold">
-              Status
-            </label>
-            <select className="form-select" onChange={handleStatusChange} value={status}>
-              <option key="status-0" value="1">
-                {status_t["1"]}
-              </option>
-              <option key="status-1" value="0">
-                {status_t["0"]}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div className="row text-end">
-          <div className="column col-10"></div>
-          <div className="column col-2 d-flex justify-content-end">
-            <button
-              type="submit"
-              value="Submit"
-              className="btn btn-primary"
-              style={{ marginRight: "1rem" }}>
-              Update
-            </button>
-            <button
-              onClick={() => {
-                navigate("/prefixes/");
-              }}
-              className="btn btn-dark">
-              Back
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
   );
 };
 
