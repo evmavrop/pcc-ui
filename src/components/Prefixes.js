@@ -152,7 +152,7 @@ const PrefixDetails = (props) => {
     }
     if (prefix.name !== undefined) {
       DM.getPIDCountByPrefixID(prefix.name).then((response) => {
-        if (!response instanceof Object) {
+        if (!(response instanceof Object)) {
           setPIDCount(response);
         }
       });
