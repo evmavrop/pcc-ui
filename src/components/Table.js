@@ -250,6 +250,14 @@ function DebouncedInput({
     setValue(initialValue);
   }, [initialValue]);
 
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value);
+    }, debounce);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
   return (
     <input
       type="text"
