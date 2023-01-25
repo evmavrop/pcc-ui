@@ -124,6 +124,7 @@ const PrefixDetails = (props) => {
   let params = useParams();
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
+  const [pid_count, setPIDCount] = useState("");
 
   let prefix = {};
   if (prefixes) {
@@ -138,6 +139,23 @@ const PrefixDetails = (props) => {
     let DM = new DataManager(config.endpoint);
     DM.getPrefixes().then((response) => setPrefixes(response));
   }, []);
+
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
+    let prefix = {};
+    if (prefixes) {
+      prefixes.forEach((p) => {
+        if (String(p.id) === params.id) {
+          prefix = p;
+        }
+      });
+    }
+    if (prefix.name !== undefined) {
+      DM.getPIDCountByPrefixID(prefix.name).then((response) => {
+        setPIDCount(response);
+      });
+    }
+  });
 
   if (isNaN(Number(params.id))) {
     return <Navigate to="/" replace={true} />;
@@ -193,6 +211,10 @@ const PrefixDetails = (props) => {
         <div className="card">
           <div className="card-header text-start">
             <h2>Prefix: {prefix && prefix.name}</h2>
+            {pid_count ?
+            <h2>PID count: {pid_count}</h2>
+            : null
+            }
           </div>
           <div className="card-body">
             <div className="row">

@@ -57,6 +57,11 @@ class DataManager {
     return this.doGet(url, "prefixes");
   }
 
+  getPIDCountByPrefixID(id) {
+    let url = this.endpoint + "/prefixes/" + id + "/count";
+    return this.doGet(url, "pid_count");
+  }
+
   getServices() {
     let url = this.endpoint + "/services";
     return this.doGet(url, "services");
