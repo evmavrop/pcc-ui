@@ -20,7 +20,7 @@ function App() {
       <div className="App">
         <Header></Header>
        
-        <div className="container-fluid h-100">
+        <div className="container-fluid">
           <div className="row">
           <Sidebar/>
           <div id="main" className="col">
