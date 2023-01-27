@@ -798,6 +798,9 @@ const PrefixUpdate = () => {
   let navigate = useNavigate();
 
   const [defaultFormValues, setDefaultFormValues] = useState({});
+  const [alert, setAlert] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const {
     reset,
@@ -877,8 +880,19 @@ const PrefixUpdate = () => {
       }
     }
 
-    DM.updatePrefix(params.id, method, intersection).then(() => {
-      navigate("/prefixes");
+    DM.updatePrefix(params.id, method, intersection).then((r) => {
+      setAlert(true);
+      if (!("message" in r)) {
+        setAlertType("success");
+        setAlertMessage("Prefix succesfully updated.");
+        setTimeout(() => { 
+          navigate("/prefixes/");
+        }, 2000);
+      }
+      else {
+        setAlertType("danger");
+        setAlertMessage(r["message"]);
+      }
     });
   };
 
@@ -911,6 +925,9 @@ const PrefixUpdate = () => {
 
   return (
     <div className="container">
+        {alert &&
+        <Alert type={alertType} message={alertMessage}/>
+        }
         <form onSubmit={handleSubmit(onformSubmit)}>
           <div className="row text-start">
             <div className="mb-3">
@@ -1054,7 +1071,7 @@ const PrefixUpdate = () => {
                 value="Submit"
                 className="btn btn-primary"
                 style={{ marginRight: "1rem" }}>
-                Create
+                Update
               </button>
               <button
                 onClick={() => {
