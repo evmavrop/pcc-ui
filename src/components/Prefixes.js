@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 
 import DataManager from "../api/DataManager";
 import Table from "./Table";
+import Alert from "./Alert";
 
 import config from "../config";
 
@@ -543,6 +544,10 @@ const PrefixAdd = () => {
     }
   });
 
+  const [alert, setAlert] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+
   const [providers, setProviders] = useState([]);
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
@@ -577,10 +582,20 @@ const PrefixAdd = () => {
 
   const onformSubmit = (data) => {
     let DM = new DataManager(config.endpoint);
-
-    DM.addPrefix(data).then(() => {
-      navigate("/prefixes/");
-    });
+    DM.addPrefix(data).then((r) => {
+      setAlert(true);
+      if (!("message" in r)) {
+        setAlertType("success");
+        setAlertMessage("Prefix succesfully created.");
+        setTimeout(() => { 
+          navigate("/prefixes/");
+        }, 2000);
+      }
+      else {
+        setAlertType("danger");
+        setAlertMessage(r["message"]);
+      }
+    })
   };
 
   const lookup_service_type_select = (
@@ -613,6 +628,9 @@ const PrefixAdd = () => {
   if (providers) {
     return (
       <div className="container">
+        {alert &&
+        <Alert type={alertType} message={alertMessage}/>
+        }
         <form onSubmit={handleSubmit(onformSubmit)}>
           <div className="row text-start">
             <div className="mb-3">
