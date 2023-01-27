@@ -210,6 +210,12 @@ const PrefixDetails = (props) => {
     <div>
       {deleteCard}
       <div className="container">
+       <div className="row">
+          <div className="col"><h2>Prefix Details</h2></div>
+          <div className="text-right col">
+            <a className="btn btn-info  ml-1 mr-1">Update Prefix</a>
+          </div>
+       </div>
         <div className="card">
           <div className="card-header text-start">
             <h2>Prefix: {prefix && prefix.name}</h2>
