@@ -51,7 +51,11 @@ const Providers = () => {
   );
 
   return (
-    <div>
+    <div className="mt-4 mx-4">
+      <h2 className="view-title">
+          <i><FontAwesomeIcon icon="building" size="lg" /></i>
+          <span>Providers List</span>
+        </h2>
       {providers && <Table columns={columns} data={providers} />}
     </div>
   );

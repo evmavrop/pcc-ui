@@ -69,19 +69,19 @@ const Prefixes = () => {
       {
         id: "action",
         cell: (props) => (
-          <div className="edit-buttons">
+          <div className="edit-buttons btn-group shadow">
             <Link
-              className="btn btn-light btn-sm ml-1 mr-1"
+              className="btn btn-secondary btn-sm "
               to={`/prefixes/${props.row.original.id}`}>
               <FontAwesomeIcon icon="list" />
             </Link>
             <Link
-              className="btn btn-light btn-sm ml-1 mr-1"
+              className="btn btn-secondary btn-sm "
               to={`/prefixes/${props.row.original.id}/update`}>
               <FontAwesomeIcon icon="edit" />
             </Link>
             <Link
-              className="btn btn-light btn-sm ml-1 mr-1"
+              className="btn btn-secondary btn-sm "
               to={`/prefixes/${props.row.original.id}/delete`}>
               <FontAwesomeIcon icon="times" />
             </Link>
@@ -98,23 +98,20 @@ const Prefixes = () => {
 
   return (
     <div>
+     
       {prefixes && (
-        <div className="container">
-          <div className="row d-flex justify-content-between mb-4">
-            <div className="col col-10"></div>
-            <div className="col col-2 mt-4 text-end">
-              <button
-                onClick={() => {
-                  navigate("/prefixes/add");
-                }}
-                className="btn btn-secondary">
-                <FontAwesomeIcon className="mr-2" icon="plus" size="lg" /> Create New
-              </button>
-            </div>
-          </div>
-          <div className="row d-flex flex-column justify-content-between">
-            <Table columns={columns} data={prefixes} />
-          </div>
+        <div className="col mx-4 mt-4 prefix-table">
+        <h2 className="view-title">
+          <i><FontAwesomeIcon icon="tags" size="lg" /></i>
+          <span>Prefix List</span>
+          <button className="btn btn-secondary mb-2"
+            onClick={() => {navigate("/prefixes/add");}}>
+            <FontAwesomeIcon  icon="plus" size="lg" /> Create new
+          </button>
+        </h2>
+          
+            <Table columns={columns} data={prefixes}  />
+          
         </div>
       )}
     </div>
@@ -211,79 +208,106 @@ const PrefixDetails = (props) => {
     <div>
       {deleteCard}
       <div className="container">
-       <div className="row">
-          <div className="col"><h2>Prefix Details</h2></div>
-          <div className="text-right col">
-            <a className="btn btn-info  ml-1 mr-1">Update Prefix</a>
-          </div>
-       </div>
-        <div className="card">
+ 
+        <div className="card mt-4">
           <div className="card-header text-start">
-            <h2>Prefix: {prefix && prefix.name}</h2>
+            <h2 className="view-title"><i><FontAwesomeIcon icon="tags"  /></i> Prefix: {prefix && prefix.name}</h2>
             {pid_count ?
             <h2>PID count: {pid_count}</h2>
             : null
             }
           </div>
-          <div className="card-body">
+          <div className="card-body p-4">
             <div className="row">
-              <div className="col">
-                <FontAwesomeIcon icon="list" size="8x" />
+
+           
+
+
+              <div className="col-2">
+                  <span style={{'font-size':'8rem'}}>📦</span>
               </div>
-              <div className="col d-flex flex-column justify-content-between">
+
+              <div className="col-10">
+
                 <div className="row">
-                  <div className="col col-2 d-flex justify-content-start">
-                    <span className="badge bg-dark">Service:</span>
+                  <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Service: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.service_name}</span>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Provider: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.provider_name}</span>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Domain: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Owner: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Lookup Type: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Used By: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col col-10 d-flex justify-content-start">
-                    {prefix && prefix.service_name}
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col col-2 d-flex justify-content-start">
-                    <span className="badge bg-dark">Provider:</span>
-                  </div>
-                  <div className="col col-10 d-flex justify-content-start">
-                    {prefix && prefix.provider_name}
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col col-2 d-flex justify-content-start">
-                    <span className="badge bg-dark">Domain:</span>
-                  </div>
-                  <div className="col col-10 d-flex justify-content-start">
-                    {prefix && prefix.domain_name}
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col col-2 d-flex justify-content-start">
-                    <span className="badge bg-dark">Owner:</span>
-                  </div>
-                  <div className="col col-10 d-flex justify-content-start">
-                    {prefix && prefix.owner}
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col col-2 d-flex justify-content-start">
-                    <span className="badge bg-dark">LookUp Type:</span>
-                  </div>
-                  <div className="col col-10 d-flex justify-content-start">
-                    {prefix && prefix.lookup_service_type}
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col col-2 d-flex justify-content-start">
-                    <span className="badge bg-dark">Used by:</span>
-                  </div>
-                  <div className="col col-10 d-flex justify-content-start">
-                    {prefix && prefix.used_by}
-                  </div>
+
+              </div>
+
+              <div className="text-center">
+                <div className="btn-group shadow">
+                  <Link
+                    className="btn btn-secondary"
+                    to={`/prefixes/${prefix.id}/update`}>
+                    <FontAwesomeIcon icon="edit" /> Update Prefix
+                  </Link>
+                  <Link
+                    className="btn btn-secondary"
+                    to={`/prefixes/${prefix.id}/delete`}>
+                    <FontAwesomeIcon icon="times" /> Delete Prefix
+                  </Link>
                 </div>
               </div>
+
+             
+
+              
             </div>
+            
           </div>
         </div>
-        <div className="card-footer"></div>
+        <div className="card-footer">
+          
+        </div>
+        <br/>
         {props.toDelete === false ? (
           <button
             onClick={() => {
@@ -632,8 +656,9 @@ const PrefixAdd = () => {
         <Alert type={alertType} message={alertMessage}/>
         }
         <form onSubmit={handleSubmit(onformSubmit)}>
-          <div className="row text-start">
-            <div className="mb-3">
+          <div className="row mt-4 text-start">
+          <h2>Create new prefix</h2>
+            <div className="mb-3 mt-4">
               <label htmlFor="prefixName" className="form-label fw-bold">
                 Name
               </label>
@@ -929,8 +954,9 @@ const PrefixUpdate = () => {
         <Alert type={alertType} message={alertMessage}/>
         }
         <form onSubmit={handleSubmit(onformSubmit)}>
-          <div className="row text-start">
-            <div className="mb-3">
+          <div className="row text-start mt-4">
+          <h2>Update prefix</h2>
+            <div className="mb-3 mt-4">
               <label htmlFor="prefixName" className="form-label fw-bold">
                 Name
               </label>

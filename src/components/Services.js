@@ -50,7 +50,11 @@ const Services = () => {
   );
 
   return (
-    <div>
+    <div className="mt-4 mx-4">
+      <h2 className="view-title">
+          <i><FontAwesomeIcon icon="flag" size="lg" /></i>
+          <span>Services List</span>
+        </h2>
       {services && <Table columns={columns} data={services}  />}
     </div>
   );

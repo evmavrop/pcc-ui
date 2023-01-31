@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "@fortawesome/fontawesome-free-solid";
 
 const Sidebar = (props) => {
   return (
@@ -13,7 +15,7 @@ const Sidebar = (props) => {
         </h6>
     <div className="sticky-top">
       <ul id="sidebar" className="nav flex-column">
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <a className="nav-link active" aria-current="page" href="dashboard">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -33,13 +35,13 @@ const Sidebar = (props) => {
               </svg>
               Dashboard
             </a>
-          </li>
+          </li> */}
           <li className="nav-item">
             <NavLink
               to="prefixes"
               className="nav-link"
             >
-              Prefixes
+              <FontAwesomeIcon icon="tags" /> Prefixes
             </NavLink>
           </li>
           <li className="nav-item">
@@ -47,7 +49,7 @@ const Sidebar = (props) => {
               to="lookup"
               className="nav-link"
             >
-              Lookup
+              <FontAwesomeIcon icon="search" /> Lookup
             </NavLink>
           </li>
         </ul>
@@ -60,7 +62,7 @@ const Sidebar = (props) => {
               to="providers"
               className="nav-link"
             >
-              Providers
+              <FontAwesomeIcon icon="building" /> Providers
             </NavLink>
           </li>
           <li className="nav-item">
@@ -68,7 +70,7 @@ const Sidebar = (props) => {
               to="services"
               className="nav-link"
             >
-              Services
+              <FontAwesomeIcon icon="flag" /> Services
             </NavLink>
           </li>
           <li className="nav-item">
@@ -76,7 +78,7 @@ const Sidebar = (props) => {
               to="domains"
               className="nav-link"
             >
-              Domains
+              <FontAwesomeIcon icon="bookmark" /> Domains
             </NavLink>
           </li>
         </ul>
