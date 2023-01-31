@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import DataManager from "../api/DataManager";
 import Table from "./Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "@fortawesome/fontawesome-free-solid";
 
 import config from "../config";
 
@@ -41,7 +43,11 @@ const Domains = () => {
   );
 
   return (
-    <div>
+    <div className="mt-4 mx-4">
+      <h2 className="view-title">
+          <i><FontAwesomeIcon icon="bookmark" size="lg" /></i>
+          <span>Domains List</span>
+        </h2>
       {domains && <Table columns={columns} data={domains} />}
     </div>
   );

@@ -63,10 +63,64 @@ overflow-x: hidden;
   background: #c2c2c2;
 } */
 
-tbody:hover td[rowspan],
-tr:hover td {
-  background: #ccc;
+
+.nav-item a {
+  font-size:1.2rem;
+  color:#5d5d5d;
+  min-width: 100%;
 }
+
+.nav-item a:hover {
+  color:orange;
+}
+
+
+.view-title{
+  font-size:2rem;
+  margin-right:2rem;
+}
+
+.view-title i {
+  margin-right:1rem;
+  color: #f69b19;
+}
+
+.view-title span {
+  margin-right:2rem;
+}
+
+.sort-indication {
+  opacity:0.08;
+}
+
+th:hover {
+  cursor: pointer;
+}
+
+th:hover .sort-indication {
+  opacity:0.26;
+}
+
+.edit-buttons{
+  opacity: 0.2;
+}
+
+.prefix-table tr:hover .edit-buttons {
+  opacity: 1;
+}
+
+.prefix-table tr td:first-child:before {
+   content: "📦 ";
+   font-size:1.8rem;
+  
+}
+
+.prefix-table tr td:first-child {
+  background-color: rgba(0, 0, 0, 3%);
+  font-weight: bold;
+  
+}
+
 #sticky-sidebar {
   bottom: 0;
 }

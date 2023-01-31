@@ -2,7 +2,7 @@ import "./App.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./dashboard.css";
-import { BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
 
 import { NotFound } from "./components/Utils";
 import Domains from "./components/Domains";
@@ -67,6 +67,9 @@ function App() {
                 <Route
                   path="/lookup"
                   element={<PrefixLookup/>}
+                />
+                <Route path="/"
+                  element={ <Navigate to="/prefixes" />}
                 />
                 <Route path="*"
                   element={<NotFound />}
