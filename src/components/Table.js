@@ -56,16 +56,41 @@ const Table = (props) => {
               return (
                 <tr key={row.id} className="border-bottom">
                   {row.getVisibleCells().map((cell) => {
+                    let itemData = cell.getValue()
+                   
+                    if (!Array.isArray(itemData)) {
                     return (
                       <td key={cell.id} className="align-middle">
-                        
-                            {flexRender(
+                            
+                            {
+                              
+                              flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
                             )}
                           
                       </td>
-                    );
+                    );} else {
+                      let results = []
+                      
+                      for (let i=0; i<itemData.length; i++) {
+                        console.log("lala", itemData[i])
+                        results.push(<tr><td align="right" >{itemData[i].type}: </td><td>{itemData[i].value}</td></tr>)
+                      }
+                     
+                      return (
+                        
+                        <td key={cell.id} className="align-middle">
+                            <table className="table table-sm table-striped table-bordered">
+                              <tbody>
+                                {results}
+                              </tbody>
+                            </table>
+                            
+                          
+                      </td>
+                      );
+                    }
                   })}
                 </tr>
               );

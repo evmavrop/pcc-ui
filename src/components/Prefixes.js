@@ -470,6 +470,11 @@ const PrefixLookup = () => {
 
   return (
     <div className="container">
+       <h2 className="view-title mt-4 mb-4">
+          <i><FontAwesomeIcon icon="search" size="lg" /></i>
+          <span>Lookup</span>
+        
+        </h2>
       {filters && filters.length > 0 && (
         <>
           <Formik
