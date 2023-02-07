@@ -220,9 +220,6 @@ const PrefixDetails = (props) => {
           <div className="card-body p-4">
             <div className="row">
 
-           
-
-
               <div className="col-2">
                   <span style={{'font-size':'8rem'}}>📦</span>
               </div>
@@ -254,30 +251,36 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
                       </div>
                     </div>
+                    { prefix && prefix.owner &&
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
                           <div className="input-group-text">Owner: </div>
                         </div>
-                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                        <span type="text" className="form-control" > {prefix.owner}</span>
                       </div>
                     </div>
+                    }
+                    {prefix && prefix.lookup_service_type &&
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
                           <div className="input-group-text">Lookup Type: </div>
                         </div>
-                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                        <span type="text" className="form-control" > {prefix.lookup_service_type}</span>
                       </div>
                     </div>
+                    }
+                    {prefix && prefix.used_by &&
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
                           <div className="input-group-text">Used By: </div>
                         </div>
-                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                        <span type="text" className="form-control" > {prefix.used_by}</span>
                       </div>
                     </div>
+                    }
                   </div>
 
               </div>
@@ -296,12 +299,8 @@ const PrefixDetails = (props) => {
                   </Link>
                 </div>
               </div>
-
-             
-
-              
             </div>
-            
+
           </div>
         </div>
         <div className="card-footer">
@@ -442,17 +441,6 @@ const PrefixLookup = () => {
   };
 
   const flattenhandles = (handles) => {
-    // let flathandles = [];
-    // handles && Array.isArray(handles) && handles.forEach((h, i) => {
-    //   if (h["values"].length > 0) {
-    //     h["values"].forEach((v, j) => {
-    //       flathandles.push({ "handle": h["handle"], "type": v["type"], "value": v["value"] });
-    //     });
-    //   }
-    //   else {
-    //     flathandles.push({ "handle": h["handle"] });
-    //   }
-    // });
     return handles;
   };
 
@@ -559,23 +547,29 @@ const PrefixLookup = () => {
 const PrefixAdd = () => {
   let navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    defaultValues: {
-      service_id: [],
-      provider_id: [],
-      domain_id: [],
-      status: [],
-      lookup_service_type: []
-    }
-  });
-
   const [alert, setAlert] = useState(false);
   const [alertType, setAlertType] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+
+  const [formDefaultValues, setDefaultFormValues] = useState({
+    service_id: [],
+    provider_id: [],
+    domain_id: [],
+    status: 1,
+    owner: "",
+    lookup_service_type: []
+  })
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm({
+    defaultValues: useMemo(() => {
+      return formDefaultValues;
+    }, [formDefaultValues])
+  });
 
   const [providers, setProviders] = useState([]);
   useEffect(() => {
@@ -609,6 +603,25 @@ const PrefixAdd = () => {
     });
   }, []);
 
+  useEffect(() => {
+    setDefaultFormValues(
+      {
+        ...formDefaultValues,
+        ...{
+          lookup_service_type: (lookup_service_types.length > 0 ? lookup_service_types[0]: formDefaultValues.lookup_service_type)
+        }
+      }
+    );
+    reset(
+      {
+        ...formDefaultValues,
+        ...{
+          lookup_service_type: formDefaultValues.lookup_service_type
+        }
+      }
+    );
+  }, [lookup_service_types]);
+
   const onformSubmit = (data) => {
     let DM = new DataManager(config.endpoint);
     DM.addPrefix(data).then((r) => {
@@ -635,7 +648,7 @@ const PrefixAdd = () => {
       <select
         className={`form-select ${errors.lookup_service_type ? "is-invalid" : ""}`}
         id="lookupServiceType"
-        {...register("lookup_service_type", { required: true })}>
+        {...register("lookup_service_type", { required: false })}>
         <option disabled value="">
           Select Type
         </option>
@@ -749,7 +762,7 @@ const PrefixAdd = () => {
                 className={`form-control ${errors.owner ? "is-invalid" : ""}`}
                 id="owner"
                 {...register("owner", {
-                  required: { value: true, message: "Owner is required" },
+                  required: { value: false, message: "Owner is required" },
                   minLength: { value: 3, message: "Minimum length is 3" }
                 })}
               />
@@ -764,7 +777,7 @@ const PrefixAdd = () => {
                 className={`form-control ${errors.used_by ? "is-invalid" : ""}`}
                 id="usedBy"
                 {...register("used_by", {
-                  required: { value: true, message: "Used By is required" },
+                  required: { value: false, message: "Used By is required" },
                   minLength: { value: 3, message: "Minimum length is 3" }
                 })}
               />
@@ -782,7 +795,7 @@ const PrefixAdd = () => {
               <select
                 className={`form-select ${errors.status ? "is-invalid" : ""}`}
                 id="status"
-                {...register("status", { required: true })}>
+                {...register("status", { required: false })}>
                 <option disabled value="">
                   Select Status
                 </option>
@@ -934,7 +947,7 @@ const PrefixUpdate = () => {
       <select
         className={`form-select ${errors.lookup_service_type ? "is-invalid" : ""}`}
         id="lookupServiceType"
-        {...register("lookup_service_type", { required: true })}>
+        {...register("lookup_service_type", { required: false })}>
         <option disabled value="">
           Select Type
         </option>
@@ -1047,7 +1060,7 @@ const PrefixUpdate = () => {
                 className={`form-control ${errors.owner ? "is-invalid" : ""}`}
                 id="owner"
                 {...register("owner", {
-                  required: { value: true, message: "Owner is required" },
+                  required: { value: false, message: "Owner is required" },
                   minLength: { value: 3, message: "Minimum length is 3" }
                 })}
               />
@@ -1062,7 +1075,7 @@ const PrefixUpdate = () => {
                 className={`form-control ${errors.used_by ? "is-invalid" : ""}`}
                 id="usedBy"
                 {...register("used_by", {
-                  required: { value: true, message: "Used By is required" },
+                  required: { value: false, message: "Used By is required" },
                   minLength: { value: 3, message: "Minimum length is 3" }
                 })}
               />
@@ -1080,7 +1093,7 @@ const PrefixUpdate = () => {
               <select
                 className={`form-select ${errors.status ? "is-invalid" : ""}`}
                 id="status"
-                {...register("status", { required: true })}>
+                {...register("status", { required: false })}>
                 <option disabled value="">
                   Select Status
                 </option>
