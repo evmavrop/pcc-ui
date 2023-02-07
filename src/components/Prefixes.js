@@ -568,7 +568,9 @@ const PrefixAdd = () => {
   } = useForm({
     defaultValues: useMemo(() => {
       return formDefaultValues;
-    }, [formDefaultValues])
+    }, [formDefaultValues]),
+    mode: "onChange",
+    reValidateMode: "onChange"
   });
 
   const [providers, setProviders] = useState([]);
@@ -850,7 +852,10 @@ const PrefixUpdate = () => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm({mode: "onChange"});
+  } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange"
+  });
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
