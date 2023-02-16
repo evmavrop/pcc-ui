@@ -74,7 +74,6 @@ const Table = (props) => {
                       let results = []
                       
                       for (let i=0; i<itemData.length; i++) {
-                        console.log("lala", itemData[i])
                         results.push(<tr><td align="right" >{itemData[i].type}: </td><td>{itemData[i].value}</td></tr>)
                       }
                      
