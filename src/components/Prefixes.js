@@ -470,16 +470,55 @@ const PrefixLookup = () => {
             enableReinitialize={true}
             initialValues={filtersFormikInitialize()}
             onSubmit={(data) => {
+              // FIXME: Workaround for the LOC filter. Move its value to URL filter and parse response
+              let tmp = false;
+              if (data["LOC"] !== "") {
+                data["URL"] = data["LOC"];
+                data["LOC"] = "";
+                tmp = true;
+              }
               let DM = new DataManager(config.endpoint);
               if (ref.current !== null) {
                 DM.reverseLookUp(pageIndex, pageSize, { filters: data }).then((response) => {
-                  setHandles(flattenhandles(response));
+                  if (tmp) {
+                    response.map(r => {
+                      r.values.map(v => {
+                        if (v["10320/LOC"] !== undefined) {
+                          setHandles(flattenhandles(response));
+                        }
+                      });
+                    });
+                  }
+                  else {
+                    setHandles(flattenhandles(response));
+                  }
                 });
                 DM.reverseLookUp(pageIndex + 1, pageSize, { filters: ref.current.values }).then(
                   (response) => {
-                    setHandlesNextPage(flattenhandles(response));
+                    if (tmp) {
+                      console.log(response);
+                      response.map(r => {
+                        if (r["values"].length > 0 ) {
+                          r.values.map(v => {
+                            if (v["10320/LOC"] !== undefined) {
+                              setHandlesNextPage(flattenhandles(response));
+                            }
+                          });
+                        }
+                      });
+                    }
+                    else {
+                      setHandlesNextPage(flattenhandles(response));
+                    }
                   }
                 );
+              }
+              // FIXME: Revert the LOC filter value
+              if (tmp) {
+                let v = data["URL"];
+                data["URL"] = "";
+                data["LOC"] = v;
+                tmp = false;
               }
             }}>
             <Form>
