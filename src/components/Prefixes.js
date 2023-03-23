@@ -98,20 +98,20 @@ const Prefixes = () => {
 
   return (
     <div>
-     
+
       {prefixes && (
         <div className="col mx-4 mt-4 prefix-table">
-        <h2 className="view-title">
-          <i><FontAwesomeIcon icon="tags" size="lg" /></i>
-          <span>Prefix List</span>
-          <button className="btn btn-secondary mb-2"
-            onClick={() => {navigate("/prefixes/add");}}>
-            <FontAwesomeIcon  icon="plus" size="lg" /> Create new
-          </button>
-        </h2>
-          
-            <Table columns={columns} data={prefixes}  />
-          
+          <h2 className="view-title">
+            <i><FontAwesomeIcon icon="tags" size="lg" /></i>
+            <span>Prefix List</span>
+            <button className="btn btn-secondary mb-2"
+              onClick={() => { navigate("/prefixes/add"); }}>
+              <FontAwesomeIcon icon="plus" size="lg" /> Create new
+            </button>
+          </h2>
+
+          <Table columns={columns} data={prefixes} />
+
         </div>
       )}
     </div>
@@ -208,50 +208,50 @@ const PrefixDetails = (props) => {
     <div>
       {deleteCard}
       <div className="container">
- 
+
         <div className="card mt-4">
           <div className="card-header text-start">
-            <h2 className="view-title"><i><FontAwesomeIcon icon="tags"  /></i> Prefix: {prefix && prefix.name}</h2>
+            <h2 className="view-title"><i><FontAwesomeIcon icon="tags" /></i> Prefix: {prefix && prefix.name}</h2>
             {pid_count ?
-            <h2>PID count: {pid_count}</h2>
-            : null
+              <h2>PID count: {pid_count}</h2>
+              : null
             }
           </div>
           <div className="card-body p-4">
             <div className="row">
 
               <div className="col-2">
-                  <span style={{'font-size':'8rem'}}>📦</span>
+                <span style={{ 'font-size': '8rem' }}>📦</span>
               </div>
 
               <div className="col-10">
 
                 <div className="row">
                   <div className="col-auto">
-                      <div className="input-group mb-2">
-                        <div className="input-group-prepend">
-                          <div className="input-group-text">Service: </div>
-                        </div>
-                        <span type="text" className="form-control" > {prefix && prefix.service_name}</span>
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">Service: </div>
                       </div>
+                      <span type="text" className="form-control" > {prefix && prefix.service_name}</span>
                     </div>
-                    <div className="col-auto">
-                      <div className="input-group mb-2">
-                        <div className="input-group-prepend">
-                          <div className="input-group-text">Provider: </div>
-                        </div>
-                        <span type="text" className="form-control" > {prefix && prefix.provider_name}</span>
+                  </div>
+                  <div className="col-auto">
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">Provider: </div>
                       </div>
+                      <span type="text" className="form-control" > {prefix && prefix.provider_name}</span>
                     </div>
-                    <div className="col-auto">
-                      <div className="input-group mb-2">
-                        <div className="input-group-prepend">
-                          <div className="input-group-text">Domain: </div>
-                        </div>
-                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                  </div>
+                  <div className="col-auto">
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">Domain: </div>
                       </div>
+                      <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
                     </div>
-                    { prefix && prefix.owner &&
+                  </div>
+                  {prefix && prefix.owner &&
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
@@ -260,8 +260,8 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix.owner}</span>
                       </div>
                     </div>
-                    }
-                    {prefix && prefix.lookup_service_type &&
+                  }
+                  {prefix && prefix.lookup_service_type &&
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
@@ -270,8 +270,8 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix.lookup_service_type}</span>
                       </div>
                     </div>
-                    }
-                    {prefix && prefix.used_by &&
+                  }
+                  {prefix && prefix.used_by &&
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
@@ -280,8 +280,8 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix.used_by}</span>
                       </div>
                     </div>
-                    }
-                  </div>
+                  }
+                </div>
 
               </div>
 
@@ -304,9 +304,9 @@ const PrefixDetails = (props) => {
           </div>
         </div>
         <div className="card-footer">
-          
+
         </div>
-        <br/>
+        <br />
         {props.toDelete === false ? (
           <button
             onClick={() => {
@@ -350,6 +350,8 @@ const PrefixLookup = () => {
   }, [pageIndex, pageSize]);
 
   const ref = useRef(null);
+  const checksum_type = useRef("CHECKSUM");
+  const checksum_value = useRef("");
 
   let filtersDiv = [];
 
@@ -394,6 +396,7 @@ const PrefixLookup = () => {
 
   const filtersDivCreate = () => {
     filtersDiv = [];
+    let checksumOptions = [];
     filters &&
       filters.length > 0 &&
       filters.forEach((f, i) => {
@@ -409,7 +412,12 @@ const PrefixLookup = () => {
               </div>
             </div>
           );
-        } else {
+        } else if (f == "CHECKSUM" || f == "EUDAT_CHECKSUM") {
+          checksumOptions.push(
+            <option key={"checksum-option-" + i} value={f}>{f}</option>
+          );
+        }
+        else {
           filtersDiv.push(
             <div key={"filter-div-" + i} className="mb-3 row">
               <label className="col-sm-2 col-form-label">{f.toPascalCase()}</label>
@@ -424,6 +432,35 @@ const PrefixLookup = () => {
           );
         }
       });
+    if (checksumOptions) {
+      filtersDiv.push(
+        <div key={"filter-div-checksum"} className="mb-3 row">
+          <label className="col-sm-2 col-form-label">Checksum</label>
+          <div className="col-sm-4">
+            <Field id={"formik-field-id-checksum-option"} className="form-select" as="select" name="checksum-option" 
+            onChange={(e) => {
+              ref.current.handleChange(e);
+              checksum_type.current = e.currentTarget.value;
+            }}>
+              {checksumOptions}
+            </Field>
+          </div>
+          <div className="col-sm-6">
+            <Field
+              id={"formik-field-id-checksum"}
+              type="text"
+              className="form-control"
+              name="checksum-value"
+              onChange={(e) => {
+                ref.current.handleChange(e);
+                checksum_value.current = e.currentTarget.value;
+              }}
+            >
+              </Field>
+          </div>
+        </div>
+      );
+    }
   };
 
   const filtersFormikInitialize = () => {
@@ -432,11 +469,14 @@ const PrefixLookup = () => {
       filters.forEach((f) => {
         if (f === "RETRIEVE_RECORDS") {
           d[f] = "false";
-        } else {
+        }
+        else {
           d[f] = "";
         }
       });
     }
+    d["checksum-option"] = "CHECKSUM";
+    d["checksum-value"] = "";
     return d;
   };
 
@@ -458,11 +498,11 @@ const PrefixLookup = () => {
 
   return (
     <div className="container">
-       <h2 className="view-title mt-4 mb-4">
-          <i><FontAwesomeIcon icon="search" size="lg" /></i>
-          <span>Lookup</span>
-        
-        </h2>
+      <h2 className="view-title mt-4 mb-4">
+        <i><FontAwesomeIcon icon="search" size="lg" /></i>
+        <span>Lookup</span>
+
+      </h2>
       {filters && filters.length > 0 && (
         <>
           <Formik
@@ -470,6 +510,12 @@ const PrefixLookup = () => {
             enableReinitialize={true}
             initialValues={filtersFormikInitialize()}
             onSubmit={(data) => {
+              // Handle Checksum
+              data["CHECKSUM"] = "";
+              data["EUDAT_CHECKSUM"] = "";
+              data[checksum_type.current] = checksum_value.current;
+              delete data["checksum-option"];
+              delete data["checksum-value"];
               // FIXME: Workaround for the LOC filter. Move its value to URL filter and parse response
               let tmp = false;
               if (data["LOC"] !== "") {
@@ -498,7 +544,7 @@ const PrefixLookup = () => {
                     if (tmp) {
                       console.log(response);
                       response.map(r => {
-                        if (r["values"].length > 0 ) {
+                        if (r["values"].length > 0) {
                           r.values.map(v => {
                             if (v["10320/LOC"] !== undefined) {
                               setHandlesNextPage(flattenhandles(response));
@@ -520,6 +566,10 @@ const PrefixLookup = () => {
                 data["LOC"] = v;
                 tmp = false;
               }
+              // This is crucial because the keys that are forbidden for the API call are
+              // necessary for the formik
+              data["checksum-option"] = checksum_type.current;
+              data["checksum-value"] = checksum_value.current;
             }}>
             <Form>
               {filtersDiv}
@@ -649,7 +699,7 @@ const PrefixAdd = () => {
       {
         ...formDefaultValues,
         ...{
-          lookup_service_type: (lookup_service_types.length > 0 ? lookup_service_types[0]: formDefaultValues.lookup_service_type)
+          lookup_service_type: (lookup_service_types.length > 0 ? lookup_service_types[0] : formDefaultValues.lookup_service_type)
         }
       }
     );
@@ -670,7 +720,7 @@ const PrefixAdd = () => {
       if (!("message" in r)) {
         setAlertType("success");
         setAlertMessage("Prefix succesfully created.");
-        setTimeout(() => { 
+        setTimeout(() => {
           navigate("/prefixes/");
         }, 2000);
       }
@@ -712,11 +762,11 @@ const PrefixAdd = () => {
     return (
       <div className="container">
         {alert &&
-        <Alert type={alertType} message={alertMessage}/>
+          <Alert type={alertType} message={alertMessage} />
         }
         <form onSubmit={handleSubmit(onformSubmit)}>
           <div className="row mt-4 text-start">
-          <h2>Create new prefix</h2>
+            <h2>Create new prefix</h2>
             <div className="mb-3 mt-4">
               <label htmlFor="prefixName" className="form-label fw-bold">
                 Name
@@ -952,9 +1002,9 @@ const PrefixUpdate = () => {
 
     let intersection = {};
     for (let key in data) {
-        if (key in defaultFormValues && data[key] !== defaultFormValues[key]) {
-            intersection[key] = data[key];
-        }
+      if (key in defaultFormValues && data[key] !== defaultFormValues[key]) {
+        intersection[key] = data[key];
+      }
     }
 
     let updated_keys = Object.keys(defaultFormValues);
@@ -972,7 +1022,7 @@ const PrefixUpdate = () => {
       if (!("message" in r)) {
         setAlertType("success");
         setAlertMessage("Prefix succesfully updated.");
-        setTimeout(() => { 
+        setTimeout(() => {
           navigate("/prefixes/");
         }, 2000);
       }
@@ -1012,166 +1062,166 @@ const PrefixUpdate = () => {
 
   return (
     <div className="container">
-        {alert &&
-        <Alert type={alertType} message={alertMessage}/>
-        }
-        <form onSubmit={handleSubmit(onformSubmit)}>
-          <div className="row text-start mt-4">
+      {alert &&
+        <Alert type={alertType} message={alertMessage} />
+      }
+      <form onSubmit={handleSubmit(onformSubmit)}>
+        <div className="row text-start mt-4">
           <h2>Update prefix</h2>
-            <div className="mb-3 mt-4">
-              <label htmlFor="prefixName" className="form-label fw-bold">
-                Name
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
-                id="prefixName"
-                aria-describedby="prefixNameHelp"
-                {...register("name", {
-                  required: { value: true, message: "Name is required" },
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
-              {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="serviceID" className="form-label fw-bold">
-                Service
-              </label>
-              <select
-                className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
-                id="serviceID"
-                {...register("service_id", { required: true })}>
-                <option disabled value="">
-                  Select Service
-                </option>
-                {services.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.name}{" "}
-                  </option>
-                ))}
-              </select>
-              {errors.service_id && (
-                <div className="invalid-feedback">Service must be selected</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="providerID" className="form-label fw-bold">
-                Provider
-              </label>
-              <select
-                className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
-                id="providerID"
-                {...register("provider_id", { required: true })}>
-                <option disabled value="">
-                  Select Provider
-                </option>
-                {providers.map((provider) => (
-                  <option key={provider.id} value={provider.id}>
-                    {provider.name}
-                  </option>
-                ))}
-              </select>
-              {errors.provider_id && (
-                <div className="invalid-feedback">Provider must be selected</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="domainID" className="form-label fw-bold">
-                Domain
-              </label>
-              <select
-                className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
-                id="domainID"
-                {...register("domain_id", { required: true })}>
-                <option disabled value="">
-                  Select Domain
-                </option>
-                {domains.map((domain) => (
-                  <option key={domain.id} value={domain.id}>
-                    {domain.name}{" "}
-                  </option>
-                ))}
-              </select>
-              {errors.domain_id && <div className="invalid-feedback">Domain must be selected</div>}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="owner" className="form-label fw-bold">
-                Owner
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.owner ? "is-invalid" : ""}`}
-                id="owner"
-                {...register("owner", {
-                  required: { value: false, message: "Owner is required" },
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
-              {errors.owner && <div className="invalid-feedback">{errors.owner.message}</div>}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="usedBy" className="form-label fw-bold">
-                Used by
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.used_by ? "is-invalid" : ""}`}
-                id="usedBy"
-                {...register("used_by", {
-                  required: { value: false, message: "Used By is required" },
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
-              {errors.used_by && <div className="invalid-feedback">{errors.used_by.message}</div>}
-            </div>
-            <div className="mb-3">
-              {lookup_service_types && lookup_service_types.length > 0
-                ? lookup_service_type_select
-                : null}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="status" className="form-label fw-bold">
-                Status
-              </label>
-              <select
-                className={`form-select ${errors.status ? "is-invalid" : ""}`}
-                id="status"
-                {...register("status", { required: false })}>
-                <option disabled value="">
-                  Select Status
-                </option>
-                <option key="status-0" value="1">
-                  {status_t["1"]}
-                </option>
-                <option key="status-1" value="0">
-                  {status_t["0"]}
-                </option>
-              </select>
-              {errors.status && <div className="invalid-feedback">Status must be selected</div>}
-            </div>
+          <div className="mb-3 mt-4">
+            <label htmlFor="prefixName" className="form-label fw-bold">
+              Name
+            </label>
+            <input
+              type="text"
+              className={`form-control ${errors.name ? "is-invalid" : ""}`}
+              id="prefixName"
+              aria-describedby="prefixNameHelp"
+              {...register("name", {
+                required: { value: true, message: "Name is required" },
+                minLength: { value: 3, message: "Minimum length is 3" }
+              })}
+            />
+            {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
           </div>
-          <div className="row text-end">
-            <div className="column col-10"></div>
-            <div className="column col-2 d-flex justify-content-end">
-              <button
-                type="submit"
-                value="Submit"
-                className="btn btn-primary"
-                style={{ marginRight: "1rem" }}>
-                Update
-              </button>
-              <button
-                onClick={() => {
-                  navigate("/prefixes/");
-                }}
-                className="btn btn-dark">
-                Back
-              </button>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="serviceID" className="form-label fw-bold">
+              Service
+            </label>
+            <select
+              className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
+              id="serviceID"
+              {...register("service_id", { required: true })}>
+              <option disabled value="">
+                Select Service
+              </option>
+              {services.map((service) => (
+                <option key={service.id} value={service.id}>
+                  {service.name}{" "}
+                </option>
+              ))}
+            </select>
+            {errors.service_id && (
+              <div className="invalid-feedback">Service must be selected</div>
+            )}
           </div>
-        </form>
-      </div>
+          <div className="mb-3">
+            <label htmlFor="providerID" className="form-label fw-bold">
+              Provider
+            </label>
+            <select
+              className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
+              id="providerID"
+              {...register("provider_id", { required: true })}>
+              <option disabled value="">
+                Select Provider
+              </option>
+              {providers.map((provider) => (
+                <option key={provider.id} value={provider.id}>
+                  {provider.name}
+                </option>
+              ))}
+            </select>
+            {errors.provider_id && (
+              <div className="invalid-feedback">Provider must be selected</div>
+            )}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="domainID" className="form-label fw-bold">
+              Domain
+            </label>
+            <select
+              className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
+              id="domainID"
+              {...register("domain_id", { required: true })}>
+              <option disabled value="">
+                Select Domain
+              </option>
+              {domains.map((domain) => (
+                <option key={domain.id} value={domain.id}>
+                  {domain.name}{" "}
+                </option>
+              ))}
+            </select>
+            {errors.domain_id && <div className="invalid-feedback">Domain must be selected</div>}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="owner" className="form-label fw-bold">
+              Owner
+            </label>
+            <input
+              type="text"
+              className={`form-control ${errors.owner ? "is-invalid" : ""}`}
+              id="owner"
+              {...register("owner", {
+                required: { value: false, message: "Owner is required" },
+                minLength: { value: 3, message: "Minimum length is 3" }
+              })}
+            />
+            {errors.owner && <div className="invalid-feedback">{errors.owner.message}</div>}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="usedBy" className="form-label fw-bold">
+              Used by
+            </label>
+            <input
+              type="text"
+              className={`form-control ${errors.used_by ? "is-invalid" : ""}`}
+              id="usedBy"
+              {...register("used_by", {
+                required: { value: false, message: "Used By is required" },
+                minLength: { value: 3, message: "Minimum length is 3" }
+              })}
+            />
+            {errors.used_by && <div className="invalid-feedback">{errors.used_by.message}</div>}
+          </div>
+          <div className="mb-3">
+            {lookup_service_types && lookup_service_types.length > 0
+              ? lookup_service_type_select
+              : null}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="status" className="form-label fw-bold">
+              Status
+            </label>
+            <select
+              className={`form-select ${errors.status ? "is-invalid" : ""}`}
+              id="status"
+              {...register("status", { required: false })}>
+              <option disabled value="">
+                Select Status
+              </option>
+              <option key="status-0" value="1">
+                {status_t["1"]}
+              </option>
+              <option key="status-1" value="0">
+                {status_t["0"]}
+              </option>
+            </select>
+            {errors.status && <div className="invalid-feedback">Status must be selected</div>}
+          </div>
+        </div>
+        <div className="row text-end">
+          <div className="column col-10"></div>
+          <div className="column col-2 d-flex justify-content-end">
+            <button
+              type="submit"
+              value="Submit"
+              className="btn btn-primary"
+              style={{ marginRight: "1rem" }}>
+              Update
+            </button>
+            <button
+              onClick={() => {
+                navigate("/prefixes/");
+              }}
+              className="btn btn-dark">
+              Back
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 
