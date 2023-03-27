@@ -480,6 +480,23 @@ const PrefixLookup = () => {
     return d;
   };
 
+  const formikSetValues = () => {
+    let d = {};
+    if (filters) {
+      filters.forEach((f) => {
+        if (f === "RETRIEVE_RECORDS") {
+          d[f] = "false";
+        }
+        else {
+          d[f] = "";
+        }
+      });
+    }
+    d["checksum-option"] = "CHECKSUM";
+    d["checksum-value"] = "";
+    ref.current.setValues(d);
+  };
+
   const flattenhandles = (handles) => {
     return handles;
   };
@@ -575,6 +592,14 @@ const PrefixLookup = () => {
               {filtersDiv}
               <button type="submit" className="btn btn-primary mb-3">
                 Submit
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  formikSetValues();
+                }}
+                className="btn btn-dark mb-3">
+                Clear
               </button>
             </Form>
           </Formik>
