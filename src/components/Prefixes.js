@@ -646,7 +646,6 @@ const PrefixAdd = () => {
     domain_id: [],
     status: 1,
     owner: "",
-    lookup_service_type: []
   })
 
   const {
@@ -699,7 +698,7 @@ const PrefixAdd = () => {
       {
         ...formDefaultValues,
         ...{
-          lookup_service_type: (lookup_service_types.length > 0 ? lookup_service_types[0] : formDefaultValues.lookup_service_type)
+          lookup_service_type: (lookup_service_types && lookup_service_types.length > 0 ? "" : formDefaultValues.lookup_service_type)
         }
       }
     );
