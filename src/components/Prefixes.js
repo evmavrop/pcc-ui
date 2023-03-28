@@ -4,7 +4,10 @@ import { Formik, Field, Form } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "@fortawesome/fontawesome-free-solid";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment'
 
 import DataManager from "../api/DataManager";
 import Table from "./Table";
@@ -261,6 +264,46 @@ const PrefixDetails = (props) => {
                       </div>
                     </div>
                   }
+                  { prefix && prefix.contact_name &&
+                  <div className="col-auto">
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">Contact Name: </div>
+                      </div>
+                      <span type="text" className="form-control" > {prefix.contact_name}</span>
+                    </div>
+                  </div>
+                  }
+                  { prefix && prefix.contact_email &&
+                  <div className="col-auto">
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">Contact Email: </div>
+                      </div>
+                      <span type="text" className="form-control" > {prefix.contact_email}</span>
+                    </div>
+                  </div>
+                  }
+                  { prefix && prefix.contract_end &&
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Contract End: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix.contract_end}</span>
+                      </div>
+                    </div>
+                    }
+                  { prefix && prefix.contract_type &&
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Contract Type: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix.contract_type}</span>
+                      </div>
+                    </div>
+                    }
                   {prefix && prefix.lookup_service_type &&
                     <div className="col-auto">
                       <div className="input-group mb-2">
@@ -559,7 +602,6 @@ const PrefixLookup = () => {
                 DM.reverseLookUp(pageIndex + 1, pageSize, { filters: ref.current.values }).then(
                   (response) => {
                     if (tmp) {
-                      console.log(response);
                       response.map(r => {
                         if (r["values"].length > 0) {
                           r.values.map(v => {
@@ -671,9 +713,16 @@ const PrefixAdd = () => {
     domain_id: [],
     status: 1,
     owner: "",
+    contact_name: "",
+    contact_email: "",
+    contract_end: "",
+    contract_type: "",
   })
 
+  const dateFormat = "YYYY-MM-DD[T]HH:mm:ss[Z]"
+
   const {
+    control,
     register,
     handleSubmit,
     reset,
@@ -738,6 +787,9 @@ const PrefixAdd = () => {
   }, [lookup_service_types]);
 
   const onformSubmit = (data) => {
+    if (data["contract_end"] !== undefined) {
+      data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
+    }
     let DM = new DataManager(config.endpoint);
     DM.addPrefix(data).then((r) => {
       setAlert(true);
@@ -883,6 +935,74 @@ const PrefixAdd = () => {
               />
               {errors.owner && <div className="invalid-feedback">{errors.owner.message}</div>}
             </div>
+            <div className="mb-3 mt-4">
+              <label htmlFor="prefixContactName" className="form-label fw-bold">
+                Contact Name
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                id="prefixContactName"
+                aria-describedby="prefixContactNameHelp"
+                {...register("contact_name", {
+                  required: { value: false, message: "Contact Name is required" },
+                  minLength: { value: 3, message: "Minimum length is 3" }
+                })}
+              />
+              {errors.contact_name && <div className="invalid-feedback">{errors.contact_name.message}</div>}
+            </div>
+            <div className="mb-3 mt-4">
+              <label htmlFor="prefixContactEmail" className="form-label fw-bold">
+                Contact Email
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                id="prefixContactEmail"
+                aria-describedby="prefixContactEmailHelp"
+                {...register("contact_email", {
+                  required: { value: false, message: "Contact Email is required" },
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Entered value does not match email format"
+                  }
+                })}
+              />
+              {errors.contact_email && <div className="invalid-feedback">{errors.contact_email.message}</div>}
+            </div>
+            <div className="mb-3 mt-4">
+              <label htmlFor="prefixContractEndDate" className="form-label fw-bold">
+                Contract End Date
+              </label>
+              <Controller
+                control={control}
+                name='contract_end'
+                render={({ field }) => (
+                  <DatePicker
+                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                    placeholderText='Select date'
+                    onChange={(date) => {field.onChange(date)}}
+                    selected={field.value}
+                  />
+              )}
+              />
+              {errors.contract_end && <div className="invalid-feedback">{errors.contract_end.message}</div>}
+            </div>
+            <div className="mb-3 mt-4">
+              <label htmlFor="prefixContractType" className="form-label fw-bold">
+                Contract Type
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                id="prefixContractType"
+                aria-describedby="prefixContractTypeHelp"
+                {...register("contract_type", {
+                  minLength: { value: 3, message: "Minimum length is 3" }
+                })}
+              />
+              {errors.contract_type && <div className="invalid-feedback">{errors.contract_type.message}</div>}
+            </div>
             <div className="mb-3">
               <label htmlFor="usedBy" className="form-label fw-bold">
                 Used by
@@ -960,7 +1080,10 @@ const PrefixUpdate = () => {
   const [alertType, setAlertType] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
 
+  const dateFormat = "YYYY-MM-DD[T]HH:mm:ss[Z]";
+
   const {
+    control,
     reset,
     register,
     handleSubmit,
@@ -979,6 +1102,10 @@ const PrefixUpdate = () => {
         provider_id: response.provider_id,
         domain_id: response.provider_id,
         owner: response.owner,
+        contact_name: response.contact_name,
+        contact_email: response.contact_email,
+        contract_end: moment(response.contract_end, dateFormat).toDate(),
+        contract_type: response.contract_type,
         used_by: response.used_by,
         status: response.status,
         lookup_service_type: response.lookup_service_type
@@ -1023,6 +1150,10 @@ const PrefixUpdate = () => {
   const onformSubmit = (data) => {
     let DM = new DataManager(config.endpoint);
     let method = "PATCH";
+
+    if (data["contract_end"] !== undefined) {
+      data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
+    }
 
     let intersection = {};
     for (let key in data) {
@@ -1183,7 +1314,75 @@ const PrefixUpdate = () => {
               })}
             />
             {errors.owner && <div className="invalid-feedback">{errors.owner.message}</div>}
+            </div>
+            <div className="mb-3 mt-4">
+              <label htmlFor="prefixContactName" className="form-label fw-bold">
+                Contact Name
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                id="prefixContactName"
+                aria-describedby="prefixContactNameHelp"
+                {...register("contact_name", {
+                  required: { value: false, message: "Contact Name is required" },
+                  minLength: { value: 3, message: "Minimum length is 3" }
+                })}
+              />
+              {errors.contact_name && <div className="invalid-feedback">{errors.contact_name.message}</div>}
+            </div>
+            <div className="mb-3 mt-4">
+              <label htmlFor="prefixContactEmail" className="form-label fw-bold">
+                Contact Email
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                id="prefixContactEmail"
+                aria-describedby="prefixContactEmailHelp"
+                {...register("contact_email", {
+                  required: { value: false, message: "Contact Email is required" },
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Entered value does not match email format"
+                  }
+                })}
+              />
+              {errors.contact_email && <div className="invalid-feedback">{errors.contact_email.message}</div>}
           </div>
+          <div className="mb-3 mt-4">
+              <label htmlFor="prefixContactName" className="form-label fw-bold">
+                Contract End Date
+              </label>
+              <Controller
+                control={control}
+                name='contract_end'
+                render={({ field }) => (
+                  <DatePicker
+                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                    placeholderText='Select date'
+                    onChange={(date) => {field.onChange(date)}}
+                    selected={field.value}
+                  />
+              )}
+              />
+              {errors.contract_end && <div className="invalid-feedback">{errors.contract_end.message}</div>}
+            </div>
+            <div className="mb-3 mt-4">
+              <label htmlFor="prefixContractType" className="form-label fw-bold">
+                Contract Type
+              </label>
+              <input
+                type="text"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                id="prefixContractType"
+                aria-describedby="prefixContractTypeHelp"
+                {...register("contract_type", {
+                  minLength: { value: 3, message: "Minimum length is 3" }
+                })}
+              />
+              {errors.contract_type && <div className="invalid-feedback">{errors.contract_type.message}</div>}
+            </div>
           <div className="mb-3">
             <label htmlFor="usedBy" className="form-label fw-bold">
               Used by
