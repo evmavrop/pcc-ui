@@ -105,6 +105,25 @@ th:hover .sort-indication {
   opacity: 0.2;
 }
 
+.location-list {
+  padding: 0px;
+  list-style: none;
+}
+
+.location-list span {
+  display: inline-block;
+  background: #bbbbbb;
+  border-radius: 5px;
+  margin: 2px;
+  padding:5px;
+
+}
+
+.location-list button {
+  border: darkgrey;
+  text-align:left
+}
+
 .prefix-table tr:hover .edit-buttons {
   opacity: 1;
 }

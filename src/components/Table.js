@@ -1,4 +1,6 @@
 import React from "react";
+import { Locations } from "./Locations";
+
 import {
   useReactTable,
   getCoreRowModel,
@@ -8,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 
 
+
 const Table = (props) => {
   const data = props.data;
   const columns = props.columns;
@@ -15,6 +18,8 @@ const Table = (props) => {
   const [columnFilters, setColumnFilters] = React.useState([]);
 
   const [sorting, setSorting] = React.useState([]);
+
+ 
 
   const table = useReactTable({
     data,
@@ -74,8 +79,19 @@ const Table = (props) => {
                       let results = []
                       
                       for (let i=0; i<itemData.length; i++) {
-                        results.push(<tr><td align="right" >{itemData[i].type}: </td><td>{itemData[i].value}</td></tr>)
-                      }
+
+                        // render an xml view for location items based on 10320/LOC field
+                        let key = itemData[i].type
+                        let locItem = null
+                        if (key == "10320/LOC") {
+                          // use local quick xml formating function to pretty print the code
+                          locItem = <Locations xml={itemData[i].value} />
+                        }
+                        else {
+                          locItem = itemData[i].value
+                        } 
+                          results.push(<tr key={key}><td align="right" >{itemData[i].type}: </td><td>{locItem}</td></tr>)
+                        }
                      
                       return (
                         
