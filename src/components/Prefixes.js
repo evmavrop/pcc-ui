@@ -20,6 +20,12 @@ const status_t = {
   1: "Exists"
 };
 
+const contract_type_t = {
+  "CONTRACT": "CONTRACT",
+  "PROJECT": "PROJECT",
+  "OTHER": "OTHER"
+};
+
 String.prototype.toPascalCase = function () {
   const words = this.match(/[a-z]+/gi);
   if (!words) return "";
@@ -224,7 +230,7 @@ const PrefixDetails = (props) => {
             <div className="row">
 
               <div className="col-2">
-                <span style={{ 'font-size': '8rem' }}>📦</span>
+                <span style={{ 'fontSize': '8rem' }}>📦</span>
               </div>
 
               <div className="col-10">
@@ -707,6 +713,7 @@ const PrefixAdd = () => {
   const [alertType, setAlertType] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
 
+  const dateFormat = "YYYY-MM-DD[T]HH:mm:ss[Z]"
   const [formDefaultValues, setDefaultFormValues] = useState({
     service_id: [],
     provider_id: [],
@@ -717,9 +724,8 @@ const PrefixAdd = () => {
     contact_email: "",
     contract_end: "",
     contract_type: "",
+    lookup_service_type: ""
   })
-
-  const dateFormat = "YYYY-MM-DD[T]HH:mm:ss[Z]"
 
   const {
     control,
@@ -787,7 +793,7 @@ const PrefixAdd = () => {
   }, [lookup_service_types]);
 
   const onformSubmit = (data) => {
-    if (data["contract_end"] !== undefined) {
+    if (data["contract_end"] !== undefined && data["contract_end"] !== "") {
       data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
     }
     let DM = new DataManager(config.endpoint);
@@ -941,7 +947,7 @@ const PrefixAdd = () => {
               </label>
               <input
                 type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
                 id="prefixContactName"
                 aria-describedby="prefixContactNameHelp"
                 {...register("contact_name", {
@@ -957,13 +963,12 @@ const PrefixAdd = () => {
               </label>
               <input
                 type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
                 id="prefixContactEmail"
                 aria-describedby="prefixContactEmailHelp"
                 {...register("contact_email", {
-                  required: { value: false, message: "Contact Email is required" },
                   pattern: {
-                    value: /\S+@\S+\.\S+/,
+                    value: /(\S)+|(\S+@\S+\.\S+)/,
                     message: "Entered value does not match email format"
                   }
                 })}
@@ -979,7 +984,7 @@ const PrefixAdd = () => {
                 name='contract_end'
                 render={({ field }) => (
                   <DatePicker
-                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                    className={`form-control ${errors.contract_end ? "is-invalid" : ""}`}
                     placeholderText='Select date'
                     onChange={(date) => {field.onChange(date)}}
                     selected={field.value}
@@ -992,15 +997,19 @@ const PrefixAdd = () => {
               <label htmlFor="prefixContractType" className="form-label fw-bold">
                 Contract Type
               </label>
-              <input
-                type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+              <select
+                className={`form-select ${errors.contract_type ? "is-invalid" : ""}`}
                 id="prefixContractType"
-                aria-describedby="prefixContractTypeHelp"
-                {...register("contract_type", {
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
+                {...register("contract_type", { required: false })}>
+                <option disabled value="">
+                  Select Contract Type
+                </option>
+                {Object.entries(contract_type_t).map((contract) => (
+                  <option key={"contract-"+contract[0]} value={contract[0]}>
+                    {contract[0]}
+                  </option>
+                ))}
+              </select>
               {errors.contract_type && <div className="invalid-feedback">{errors.contract_type.message}</div>}
             </div>
             <div className="mb-3">
@@ -1104,7 +1113,7 @@ const PrefixUpdate = () => {
         owner: response.owner,
         contact_name: response.contact_name,
         contact_email: response.contact_email,
-        contract_end: moment(response.contract_end, dateFormat).toDate(),
+        contract_end: response.contract_end !== null ? moment(response.contract_end, dateFormat).toDate() : "",
         contract_type: response.contract_type,
         used_by: response.used_by,
         status: response.status,
@@ -1151,7 +1160,7 @@ const PrefixUpdate = () => {
     let DM = new DataManager(config.endpoint);
     let method = "PATCH";
 
-    if (data["contract_end"] !== undefined) {
+    if (data["contract_end"] !== undefined && data["contract_end"] !== "") {
       data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
     }
 
@@ -1321,7 +1330,7 @@ const PrefixUpdate = () => {
               </label>
               <input
                 type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
                 id="prefixContactName"
                 aria-describedby="prefixContactNameHelp"
                 {...register("contact_name", {
@@ -1337,7 +1346,7 @@ const PrefixUpdate = () => {
               </label>
               <input
                 type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                className={`form-control ${errors.contact_email ? "is-invalid" : ""}`}
                 id="prefixContactEmail"
                 aria-describedby="prefixContactEmailHelp"
                 {...register("contact_email", {
@@ -1351,7 +1360,7 @@ const PrefixUpdate = () => {
               {errors.contact_email && <div className="invalid-feedback">{errors.contact_email.message}</div>}
           </div>
           <div className="mb-3 mt-4">
-              <label htmlFor="prefixContactName" className="form-label fw-bold">
+              <label htmlFor="prefixContractEnd" className="form-label fw-bold">
                 Contract End Date
               </label>
               <Controller
@@ -1359,7 +1368,7 @@ const PrefixUpdate = () => {
                 name='contract_end'
                 render={({ field }) => (
                   <DatePicker
-                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                    className={`form-control ${errors.contract_end ? "is-invalid" : ""}`}
                     placeholderText='Select date'
                     onChange={(date) => {field.onChange(date)}}
                     selected={field.value}
@@ -1372,15 +1381,19 @@ const PrefixUpdate = () => {
               <label htmlFor="prefixContractType" className="form-label fw-bold">
                 Contract Type
               </label>
-              <input
-                type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+              <select
+                className={`form-select ${errors.contract_type ? "is-invalid" : ""}`}
                 id="prefixContractType"
-                aria-describedby="prefixContractTypeHelp"
-                {...register("contract_type", {
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
+                {...register("contract_type", { required: false })}>
+                <option disabled value="">
+                  Select Contract Type
+                </option>
+                {Object.entries(contract_type_t).map((contract) => (
+                  <option key={"contract-"+contract[0]} value={contract[0]}>
+                    {contract[0]}
+                  </option>
+                ))}
+              </select>
               {errors.contract_type && <div className="invalid-feedback">{errors.contract_type.message}</div>}
             </div>
           <div className="mb-3">
