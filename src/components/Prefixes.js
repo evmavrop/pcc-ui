@@ -132,6 +132,7 @@ const PrefixDetails = (props) => {
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
   const [pid_count, setPIDCount] = useState("");
+  const [resolvable_count, setResolvablePIDCount] = useState("");
 
   let prefix = {};
   if (prefixes) {
@@ -161,6 +162,25 @@ const PrefixDetails = (props) => {
       DM.getPIDCountByPrefixID(prefix.name).then((response) => {
         if (!(response instanceof Object)) {
           setPIDCount(response);
+        }
+      });
+    }
+  });
+
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
+    let prefix = {};
+    if (prefixes) {
+      prefixes.forEach((p) => {
+        if (String(p.id) === params.id) {
+          prefix = p;
+        }
+      });
+    }
+    if (prefix.name !== undefined) {
+      DM.getResolvablePIDCountByPrefixID(prefix.name).then((response) => {
+        if (!(response instanceof Object)) {
+          setResolvablePIDCount(response);
         }
       });
     }
@@ -220,11 +240,23 @@ const PrefixDetails = (props) => {
 
         <div className="card mt-4">
           <div className="card-header text-start">
-            <h2 className="view-title"><i><FontAwesomeIcon icon="tags" /></i> Prefix: {prefix && prefix.name}</h2>
+            <div className="row">
+            <div className="col">
+              <h2 className="view-title"><i><FontAwesomeIcon icon="tags" /></i> Prefix: {prefix && prefix.name}</h2>
+            </div>
             {pid_count ?
+            <div className="col">
               <h2>PID count: {pid_count}</h2>
+            </div>
+            : null
+            }
+            {resolvable_count ?
+            <div className="col">
+              <h2>Resolved PID count: {resolvable_count}</h2>
+            </div>
               : null
             }
+            </div>
           </div>
           <div className="card-body p-4">
             <div className="row">
