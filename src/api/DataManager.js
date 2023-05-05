@@ -62,6 +62,11 @@ class DataManager {
     return this.doGet(url, "pid_count");
   }
 
+  getResolvablePIDCountByPrefixID(id) {
+    let url = this.endpoint + "/prefixes/" + id + "/resolvable";
+    return this.doGet(url, "resolvable_count");
+  }
+
   getServices() {
     let url = this.endpoint + "/services";
     return this.doGet(url, "services");
