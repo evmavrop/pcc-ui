@@ -588,12 +588,13 @@ const PrefixLookup = () => {
           filtersDiv.push(
             <div key={"filter-div-" + i} className="mb-3 row">
               <label className="col-sm-2 col-form-label">{f.toPascalCase()}</label>
-              <div className="col-sm-10">
+              <div className="col-sm-2">
                 <Field className="form-select" as="select" name={f}>
                   <option value="true">True</option>
                   <option value="false">False</option>
                 </Field>
               </div>
+               <div className="col-sm-8">If set to True: the output will be a full Handle record. if set to False: the output will be a list of Handles.</div> 
             </div>
           );
         } else if (f == "CHECKSUM" || f == "EUDAT_CHECKSUM") {
