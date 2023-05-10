@@ -249,7 +249,7 @@ const PrefixDetails = (props) => {
   // if data available process the numbers
   if (pidCount) {
     numPidTotal = parseInt(pidCount)
-
+    setResolvablePIDCount(0);
     if (resolvableCount) {
       numPidResolv = parseInt(resolvableCount)
       numPidNonResolv = numPidTotal - numPidResolv  
@@ -393,8 +393,7 @@ const PrefixDetails = (props) => {
             </div>
 
           </div>
-
-          {pidCount > 0 && resolvableCount && 
+          {pidCount > 0 && 
           <>
            {/* middle layout column starts */}
           <div className="col-4">
