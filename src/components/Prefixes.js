@@ -248,13 +248,16 @@ const PrefixDetails = (props) => {
 
   // if data available process the numbers
   if (pidCount) {
-    numPidTotal = parseInt(pidCount)
-    setResolvablePIDCount(0);
-    if (resolvableCount) {
-      numPidResolv = parseInt(resolvableCount)
-      numPidNonResolv = numPidTotal - numPidResolv  
-      numPidPercResolv = (numPidResolv * 100) / numPidTotal
-    }
+    numPidTotal = parseInt(pidCount)  
+  }
+
+  if (resolvableCount) {
+    numPidResolv = parseInt(resolvableCount)
+  }
+
+  if (pidCount && resolvableCount) {
+    numPidNonResolv = numPidTotal - numPidResolv  
+    numPidPercResolv = (numPidResolv * 100) / numPidTotal
   }
 
   
@@ -393,7 +396,7 @@ const PrefixDetails = (props) => {
             </div>
 
           </div>
-          {pidCount > 0 && 
+       
           <>
            {/* middle layout column starts */}
           <div className="col-4">
@@ -459,7 +462,7 @@ const PrefixDetails = (props) => {
               
           </div>
           </>
-          }
+          
           
           {/* Edit/Delete prefix buttons  */}
           <div className="text-center mt-4">
