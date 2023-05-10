@@ -131,8 +131,8 @@ const PrefixDetails = (props) => {
   let params = useParams();
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
-  const [pid_count, setPIDCount] = useState("");
-  const [resolvable_count, setResolvablePIDCount] = useState("");
+  const [pidCount, setPIDCount] = useState("");
+  const [resolvableCount, setResolvablePIDCount] = useState("");
 
   let prefix = {};
   if (prefixes) {
@@ -233,96 +233,116 @@ const PrefixDetails = (props) => {
     deleteCard = null;
   }
 
+  // number of total pids
+  let numPidTotal = 0
+  // number of resolvable pids
+  let numPidResolv = 0
+  // number of non resolvable pids
+  let numPidNonResolv = 0
+  // number of unknown pids - data not yet given
+  let numPidUnknown = 0
+  // percentage of resolvable pids
+  let numPidPercResolv = 0
+  // number of users - data not yet given 
+  let numUsers = 1
+
+  // if data available process the numbers
+  if (pidCount) {
+    numPidTotal = parseInt(pidCount)
+
+    if (resolvableCount) {
+      numPidResolv = parseInt(resolvableCount)
+      numPidNonResolv = numPidTotal - numPidResolv  
+      numPidPercResolv = (numPidResolv * 100) / numPidTotal
+    }
+  }
+
+  
+
   return (
     <div>
       {deleteCard}
       <div className="container">
 
-        <div className="card mt-4">
-          <div className="card-header text-start">
-            <div className="row">
-            <div className="col">
-              <h2 className="view-title"><i><FontAwesomeIcon icon="tags" /></i> Prefix: {prefix && prefix.name}</h2>
-            </div>
-            {pid_count ?
-            <div className="col">
-              <h2>PID count: {pid_count}</h2>
-            </div>
-            : null
-            }
-            {resolvable_count ?
-            <div className="col">
-              <h2>Resolved PID count: {resolvable_count}</h2>
-            </div>
-              : null
-            }
-            </div>
-          </div>
-          <div className="card-body p-4">
-            <div className="row">
-
-              <div className="col-2">
-                <span style={{ 'fontSize': '8rem' }}>📦</span>
-              </div>
-
-              <div className="col-10">
-
-                <div className="row">
-                  <div className="col-auto">
-                    <div className="input-group mb-2">
-                      <div className="input-group-prepend">
-                        <div className="input-group-text">Service: </div>
-                      </div>
-                      <span type="text" className="form-control" > {prefix && prefix.service_name}</span>
-                    </div>
-                  </div>
-                  <div className="col-auto">
-                    <div className="input-group mb-2">
-                      <div className="input-group-prepend">
-                        <div className="input-group-text">Provider: </div>
-                      </div>
-                      <span type="text" className="form-control" > {prefix && prefix.provider_name}</span>
-                    </div>
-                  </div>
-                  <div className="col-auto">
-                    <div className="input-group mb-2">
-                      <div className="input-group-prepend">
-                        <div className="input-group-text">Domain: </div>
-                      </div>
-                      <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
-                    </div>
-                  </div>
-                  {prefix && prefix.owner &&
+      {/* prefix info starts here */}
+      <div className="row">
+            {/* left column (prefix side info panel) */}
+            <div className="col-4">
+              <div className="card mt-4 text-center">
+                <span style={{ 'fontSize': '5rem' }}>📦</span>
+                <h5 className="mx-4 pb-2 border-bottom">Prefix: {prefix && prefix.name}</h5>
+                
+                <div className="row px-4 py-2">
+                  <div className="row">
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
-                          <div className="input-group-text">Owner: </div>
+                          <div className="input-group-text">Service: </div>
                         </div>
-                        <span type="text" className="form-control" > {prefix.owner}</span>
+                        <span type="text" className="form-control" > {prefix && prefix.service_name}</span>
                       </div>
                     </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Provider: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.provider_name}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Domain: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix && prefix.domain_name}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {prefix && prefix.owner &&
+                  <div className="row">
+                    <div className="col-auto">
+                        <div className="input-group mb-2">
+                          <div className="input-group-prepend">
+                            <div className="input-group-text">Owner: </div>
+                          </div>
+                          <span type="text" className="form-control" > {prefix.owner}</span>
+                        </div>
+                    </div>
+                  </div>
+                    
                   }
                   { prefix && prefix.contact_name &&
-                  <div className="col-auto">
-                    <div className="input-group mb-2">
-                      <div className="input-group-prepend">
-                        <div className="input-group-text">Contact Name: </div>
+                  <div className="row">
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Contact Name: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix.contact_name}</span>
                       </div>
-                      <span type="text" className="form-control" > {prefix.contact_name}</span>
                     </div>
                   </div>
                   }
                   { prefix && prefix.contact_email &&
-                  <div className="col-auto">
-                    <div className="input-group mb-2">
-                      <div className="input-group-prepend">
-                        <div className="input-group-text">Contact Email: </div>
+                  <div className="row">
+                    <div className="col-auto">
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text">Contact Email: </div>
+                        </div>
+                        <span type="text" className="form-control" > {prefix.contact_email}</span>
                       </div>
-                      <span type="text" className="form-control" > {prefix.contact_email}</span>
                     </div>
                   </div>
                   }
                   { prefix && prefix.contract_end &&
+                  <div className="row">
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
@@ -331,8 +351,10 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix.contract_end}</span>
                       </div>
                     </div>
-                    }
+                  </div>
+                  }
                   { prefix && prefix.contract_type &&
+                  <div className="row">
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
@@ -341,8 +363,10 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix.contract_type}</span>
                       </div>
                     </div>
-                    }
+                  </div>
+                  }
                   {prefix && prefix.lookup_service_type &&
+                  <div className="row">
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
@@ -351,8 +375,10 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix.lookup_service_type}</span>
                       </div>
                     </div>
+                  </div>
                   }
                   {prefix && prefix.used_by &&
+                  <div className="row">
                     <div className="col-auto">
                       <div className="input-group mb-2">
                         <div className="input-group-prepend">
@@ -361,12 +387,83 @@ const PrefixDetails = (props) => {
                         <span type="text" className="form-control" > {prefix.used_by}</span>
                       </div>
                     </div>
+                  </div>
                   }
+              </div>
+            </div>
+
+          </div>
+
+          {pidCount && resolvableCount && 
+          <>
+           {/* middle layout column starts */}
+          <div className="col-4">
+
+              {/* Handle number dashboard  */}
+              <div className="card mt-4 px-4 py-2">
+                <div className="row" style={{'fontSize':'1.6rem'}}>
+                  <div className="col-6">
+                  Handles
+                  </div>
+                  <div className="col-6" style={{'textAlign':'right'}}>
+                  <code className="num num-default">{numPidTotal}</code>
+                  {" "}<i style={{'color':'lightgrey'}}><FontAwesomeIcon icon="tags" /></i>
+                  </div>
+                </div>
+              </div>
+          
+
+              {/* Resolvable percentage dashboard element */}
+              <div className="card mt-4 px-4 py-3">
+                <div className="row" style={{'fontSize':'1.26rem', 'fontWeight':'500'}}>
+                    <div className="col-6">
+                    Resolvable
+                    </div>
+                    <div className="col-6" style={{'textAlign':'right'}}>
+                    <code style={{'fontWeight':'bold'}} className="num-default">{Math.round(numPidPercResolv)}%</code>
+                    </div>
+                </div>
+                <div className="progress mt-2" style={{"height": "5px"}}>
+                  <div className="progress-bar" role="progressbar" style={{'width': numPidPercResolv + '%'}} aria-valuenow={{numPidPercResolv}} aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+             
+          </div>
+      
+
+         {/* third layout column (left)  */}
+          <div className="col-4">
+              {/* User number dashboard element */}
+              <div className="card mt-4 px-4 py-2">
+                <div className="row" style={{'fontSize':'1.6rem'}}>
+                  <div className="col-6">
+                  Users
+                  </div>
+                  <div className="col-6" style={{'textAlign':'right'}}>
+                  <code className="num num-default">{numUsers}</code>
+                  {" "}<i style={{'color':'lightgrey'}}><FontAwesomeIcon icon="user" /></i>
+                  </div>
                 </div>
 
               </div>
+           
 
-              <div className="text-center">
+              {/* Statistics dashboard element*/}
+              <div className="card mt-4 px-4 py-3">
+                <span className="border-bottom pb-1" style={{'fontSize':'1.26rem','fontWeight':'500'}}>Statistics</span>
+                  <div className="mt-2" style={{'fontSize':'1rem'}}>
+                    <code className="num-sm num-ok">{numPidResolv}</code> out of <code className="num-sm num-default">{numPidTotal}</code> resolvable<br/>
+                    <code className="num-sm num-critical">{numPidNonResolv}</code> out of <code className="num-sm num-default">{numPidTotal}</code> non-resolvable<br/>
+                    <code className="num-sm num-unknown">{numPidUnknown}</code> out of <code className="num-sm num-default">{numPidTotal}</code> unknown<br/>
+                  </div>
+              </div>
+              
+          </div>
+          </>
+          }
+          
+          {/* Edit/Delete prefix buttons  */}
+          <div className="text-center mt-4">
                 <div className="btn-group shadow">
                   <Link
                     className="btn btn-secondary"
@@ -380,10 +477,14 @@ const PrefixDetails = (props) => {
                   </Link>
                 </div>
               </div>
-            </div>
 
-          </div>
-        </div>
+            
+      </div>
+
+      {/* prefix info ends here */}
+
+        
+       
         <div className="card-footer">
 
         </div>

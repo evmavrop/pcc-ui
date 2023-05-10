@@ -282,3 +282,35 @@ ul.nav-footer li a,
 ul.nav-footer li a:hover {
   color: white;
 }
+
+.num-sm {
+  font-size:1.06rem;
+  font-weight: bold;
+}
+
+.num{
+  font-size:1.6rem;
+  font-weight: bold;
+}
+
+.num-default{
+  color:#3395d6;
+}
+
+.num-ok{
+  
+  color:#24b063;
+  
+}
+
+.num-critical{
+ 
+  color:#aa2b22;
+  
+}
+
+.num-unknown{
+  
+  color:#a69a19;
+  
+}
