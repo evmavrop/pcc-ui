@@ -131,8 +131,8 @@ const PrefixDetails = (props) => {
   let params = useParams();
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
-  const [pidCount, setPIDCount] = useState("");
-  const [resolvableCount, setResolvablePIDCount] = useState("");
+  const [pidCount, setPIDCount] = useState(0);
+  const [resolvableCount, setResolvablePIDCount] = useState(0);
 
   let prefix = {};
   if (prefixes) {
@@ -394,7 +394,7 @@ const PrefixDetails = (props) => {
 
           </div>
 
-          {pidCount && resolvableCount && 
+          {pidCount > 0 && resolvableCount && 
           <>
            {/* middle layout column starts */}
           <div className="col-4">
