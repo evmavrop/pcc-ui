@@ -131,8 +131,7 @@ const PrefixDetails = (props) => {
   let params = useParams();
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
-  const [pidCount, setPIDCount] = useState(0);
-  const [resolvableCount, setResolvablePIDCount] = useState(0);
+  const [prefixStatistics, setPrefixStatistics] = useState({});
 
   let prefix = {};
   if (prefixes) {
@@ -159,29 +158,8 @@ const PrefixDetails = (props) => {
       });
     }
     if (prefix.name !== undefined) {
-      DM.getPIDCountByPrefixID(prefix.name).then((response) => {
-        if (!(response instanceof Object)) {
-          setPIDCount(response);
-        }
-      });
-    }
-  });
-
-  useEffect(() => {
-    let DM = new DataManager(config.endpoint);
-    let prefix = {};
-    if (prefixes) {
-      prefixes.forEach((p) => {
-        if (String(p.id) === params.id) {
-          prefix = p;
-        }
-      });
-    }
-    if (prefix.name !== undefined) {
-      DM.getResolvablePIDCountByPrefixID(prefix.name).then((response) => {
-        if (!(response instanceof Object)) {
-          setResolvablePIDCount(response);
-        }
+      DM.getStatisticsByPrefixID(prefix.name).then((response) => {
+        setPrefixStatistics(response);
       });
     }
   });
@@ -247,20 +225,13 @@ const PrefixDetails = (props) => {
   let numUsers = 1
 
   // if data available process the numbers
-  if (pidCount) {
-    numPidTotal = parseInt(pidCount)  
-  }
-
-  if (resolvableCount) {
-    numPidResolv = parseInt(resolvableCount)
-  }
-
-  if (pidCount && resolvableCount) {
-    numPidNonResolv = numPidTotal - numPidResolv  
+  if (prefixStatistics) {
+    numPidTotal = parseInt(prefixStatistics.handles_count)
+    numPidResolv = parseInt(prefixStatistics.resolvable_count)
+    numPidNonResolv = parseInt(prefixStatistics.unresolvable_count)
+    numPidUnknown = parseInt(prefixStatistics.unchecked_count)
     numPidPercResolv = (numPidResolv * 100) / numPidTotal
-  }
-
-  
+  }  
 
   return (
     <div>
