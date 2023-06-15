@@ -1245,7 +1245,7 @@ const PrefixUpdate = () => {
         name: response.name,
         service_id: response.service_id,
         provider_id: response.provider_id,
-        domain_id: response.provider_id,
+        domain_id: response.domain_id,
         owner: response.owner,
         contact_name: response.contact_name,
         contact_email: response.contact_email,
@@ -1316,7 +1316,6 @@ const PrefixUpdate = () => {
         }
       }
     }
-
     DM.updatePrefix(params.id, method, intersection).then((r) => {
       setAlert(true);
       if (!("message" in r)) {
