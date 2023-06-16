@@ -162,7 +162,7 @@ const PrefixDetails = (props) => {
         setPrefixStatistics(response);
       });
     }
-  });
+  }, [prefix]);
 
   if (isNaN(Number(params.id))) {
     return <Navigate to="/" replace={true} />;
