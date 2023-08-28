@@ -900,7 +900,7 @@ const PrefixAdd = () => {
   }, [lookup_service_types]);
 
   const onformSubmit = (data) => {
-    if (data["contract_end"] !== undefined && data["contract_end"] !== "") {
+    if (data["contract_end"] !== null && data["contract_end"] !== "") {
       data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
     }
     let DM = new DataManager(config.endpoint);
@@ -1266,11 +1266,11 @@ const PrefixUpdate = () => {
   const onformSubmit = (data) => {
     let DM = new DataManager(config.endpoint);
     let method = "PATCH";
-
-    if (data["contract_end"] !== undefined && data["contract_end"] !== "") {
+  
+    if (data["contract_end"] !== null && data["contract_end"] !== "") {
       data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
     }
-
+    
     let intersection = {};
     for (let key in data) {
       if (key in defaultFormValues && data[key] !== defaultFormValues[key]) {
