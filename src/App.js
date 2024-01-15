@@ -10,7 +10,7 @@ import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Providers, ProviderDetails } from "./components/Providers";
-import { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup } from "./components/Prefixes";
+import { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup } from "./components/Prefixes/Prefixes";
 import Services from "./components/Services";
 
 function App() {
