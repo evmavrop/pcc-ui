@@ -7,6 +7,10 @@ import moment from 'moment'
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from 'react-datepicker';
 
+import DataManager from "../../api/DataManager";
+import config from "../../config";
+
+
 const status_t = {
   0: "Missing",
   1: "Exists"
