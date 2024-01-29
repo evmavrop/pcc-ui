@@ -134,6 +134,10 @@ const PrefixAdd = () => {
       <label htmlFor="status" className="form-label fw-bold">
         LookUp Type
       </label>
+      <span className="info-icon"> i
+        <span className="info-text">Input your name.
+        </span>
+      </span>
       <select
         className={`form-select ${errors.lookup_service_type ? "is-invalid" : ""}`}
         id="lookupServiceType"
@@ -166,76 +170,100 @@ const PrefixAdd = () => {
         <div className="row mt-4 text-start">
           <h2>Create new prefix</h2>
           <div className="form-group">
-            <legend>Group 1</legend>
-            <div className="mb-3 mt-4">
-              <label htmlFor="prefixName" className="form-label fw-bold">
-                Name
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
-                id="prefixName"
-                aria-describedby="prefixNameHelp"
-                {...register("name", {
-                  required: { value: true, message: "Name is required" },
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
-              {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
+            <legend>Prefix Details</legend>
+            <div className="form-row">
+              <div className="mb-3">
+                <label htmlFor="prefixName" className="form-label fw-bold">
+                  Name
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <input
+                  type="text"
+                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                  id="prefixName"
+                  aria-describedby="prefixNameHelp"
+                  {...register("name", {
+                    required: { value: true, message: "Name is required" },
+                    minLength: { value: 3, message: "Minimum length is 3" }
+                  })}
+                />
+                {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="owner" className="form-label fw-bold">
+                  Owner
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <input
+                  type="text"
+                  className={`form-control ${errors.owner ? "is-invalid" : ""}`}
+                  id="owner"
+                  {...register("owner", {
+                    required: { value: false, message: "Owner is required" },
+                    minLength: { value: 3, message: "Minimum length is 3" }
+                  })}
+                />
+                {errors.owner && <div className="invalid-feedback">{errors.owner.message}</div>}
+              </div>
             </div>
-            <div className="mb-3">
-              <label htmlFor="owner" className="form-label fw-bold">
-                Owner
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.owner ? "is-invalid" : ""}`}
-                id="owner"
-                {...register("owner", {
-                  required: { value: false, message: "Owner is required" },
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
-              {errors.owner && <div className="invalid-feedback">{errors.owner.message}</div>}
-            </div>
-            <div className="mb-3 mt-4">
-              <label htmlFor="prefixContactName" className="form-label fw-bold">
-                Contact Name
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
-                id="prefixContactName"
-                aria-describedby="prefixContactNameHelp"
-                {...register("contact_name", {
-                  required: { value: false, message: "Contact Name is required" },
-                  minLength: { value: 3, message: "Minimum length is 3" }
-                })}
-              />
-              {errors.contact_name && <div className="invalid-feedback">{errors.contact_name.message}</div>}
-            </div>
-            <div className="mb-3 mt-4">
-              <label htmlFor="prefixContactEmail" className="form-label fw-bold">
-                Contact Email
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
-                id="prefixContactEmail"
-                aria-describedby="prefixContactEmailHelp"
-                {...register("contact_email", {
-                  pattern: {
-                    value: /(\S)+|(\S+@\S+\.\S+)/,
-                    message: "Entered value does not match email format"
-                  }
-                })}
-              />
-              {errors.contact_email && <div className="invalid-feedback">{errors.contact_email.message}</div>}
+            <div className="form-row">
+              <div className="mb-3">
+                <label htmlFor="prefixContactName" className="form-label fw-bold">
+                  Contact Name
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <input
+                  type="text"
+                  className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
+                  id="prefixContactName"
+                  aria-describedby="prefixContactNameHelp"
+                  {...register("contact_name", {
+                    required: { value: false, message: "Contact Name is required" },
+                    minLength: { value: 3, message: "Minimum length is 3" }
+                  })}
+                />
+                {errors.contact_name && <div className="invalid-feedback">{errors.contact_name.message}</div>}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="prefixContactEmail" className="form-label fw-bold">
+                  Contact Email
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <input
+                  type="text"
+                  className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
+                  id="prefixContactEmail"
+                  aria-describedby="prefixContactEmailHelp"
+                  {...register("contact_email", {
+                    pattern: {
+                      value: /(\S)+|(\S+@\S+\.\S+)/,
+                      message: "Entered value does not match email format"
+                    }
+                  })}
+                />
+                {errors.contact_email && <div className="invalid-feedback">{errors.contact_email.message}</div>}
+              </div>
             </div>
             <div className="mb-3">
               <label htmlFor="usedBy" className="form-label fw-bold">
                 Used by
               </label>
+              <span className="info-icon"> i
+                <span className="info-text">Input your name.
+                </span>
+              </span>
               <input
                 type="text"
                 className={`form-control ${errors.used_by ? "is-invalid" : ""}`}
@@ -247,139 +275,166 @@ const PrefixAdd = () => {
               />
               {errors.used_by && <div className="invalid-feedback">{errors.used_by.message}</div>}
             </div>
-
           </div>
-
           <div className="form-group">
-            <legend>Group 2</legend>
-            <div className="mb-3">
-              <label htmlFor="serviceID" className="form-label fw-bold">
-                Service
-              </label>
-              <select
-                className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
-                id="serviceID"
-                {...register("service_id", { required: true })}>
-                <option disabled value="">
-                  Select Service
-                </option>
-                {services.map((service) => (
-                  <option key={service.id} value={service.id}>
-                    {service.name}{" "}
+            <legend>Service specific Information </legend>
+            <div className="form-row">
+              <div className="mb-3">
+                <label htmlFor="serviceID" className="form-label fw-bold">
+                  Service
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <select
+                  className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
+                  id="serviceID"
+                  {...register("service_id", { required: true })}>
+                  <option disabled value="">
+                    Select Service
                   </option>
-                ))}
-              </select>
-              {errors.service_id && (
-                <div className="invalid-feedback">Service must be selected</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="providerID" className="form-label fw-bold">
-                Provider
-              </label>
-              <select
-                className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
-                id="providerID"
-                {...register("provider_id", { required: true })}>
-                <option disabled value="">
-                  Select Provider
-                </option>
-                {providers.map((provider) => (
-                  <option key={provider.id} value={provider.id}>
-                    {provider.name}
-                  </option>
-                ))}
-              </select>
-              {errors.provider_id && (
-                <div className="invalid-feedback">Provider must be selected</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="domainID" className="form-label fw-bold">
-                Domain
-              </label>
-              <select
-                className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
-                id="domainID"
-                {...register("domain_id", { required: true })}>
-                <option disabled value="">
-                  Select Domain
-                </option>
-                {domains.map((domain) => (
-                  <option key={domain.id} value={domain.id}>
-                    {domain.name}{" "}
-                  </option>
-                ))}
-              </select>
-              {errors.domain_id && <div className="invalid-feedback">Domain must be selected</div>}
-            </div>
-
-          </div>
-
-          <div className="form-group">
-            <legend>Group 3</legend>
-            <div className="mb-3 mt-4">
-              <label htmlFor="prefixContractEndDate" className="form-label fw-bold">
-                Contract End Date
-              </label>
-              <Controller
-                control={control}
-                name='contract_end'
-                render={({ field }) => (
-                  <DatePicker
-                    className={`form-control ${errors.contract_end ? "is-invalid" : ""}`}
-                    placeholderText='Select date'
-                    onChange={(date) => { field.onChange(date) }}
-                    selected={field.value}
-                  />
+                  {services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.name}{" "}
+                    </option>
+                  ))}
+                </select>
+                {errors.service_id && (
+                  <div className="invalid-feedback">Service must be selected</div>
                 )}
-              />
-              {errors.contract_end && <div className="invalid-feedback">{errors.contract_end.message}</div>}
-            </div>
-            <div className="mb-3 mt-4">
-              <label htmlFor="prefixContractType" className="form-label fw-bold">
-                Contract Type
-              </label>
-              <select
-                className={`form-select ${errors.contract_type ? "is-invalid" : ""}`}
-                id="prefixContractType"
-                {...register("contract_type", { required: false })}>
-                <option disabled value="">
-                  Select Contract Type
-                </option>
-                {Object.entries(contract_type_t).map((contract) => (
-                  <option key={"contract-" + contract[0]} value={contract[0]}>
-                    {contract[0]}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="providerID" className="form-label fw-bold">
+                  Provider
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <select
+                  className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
+                  id="providerID"
+                  {...register("provider_id", { required: true })}>
+                  <option disabled value="">
+                    Select Provider
                   </option>
-                ))}
-              </select>
-              {errors.contract_type && <div className="invalid-feedback">{errors.contract_type.message}</div>}
+                  {providers.map((provider) => (
+                    <option key={provider.id} value={provider.id}>
+                      {provider.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.provider_id && (
+                  <div className="invalid-feedback">Provider must be selected</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="domainID" className="form-label fw-bold">
+                  Domain
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <select
+                  className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
+                  id="domainID"
+                  {...register("domain_id", { required: true })}>
+                  <option disabled value="">
+                    Select Domain
+                  </option>
+                  {domains.map((domain) => (
+                    <option key={domain.id} value={domain.id}>
+                      {domain.name}{" "}
+                    </option>
+                  ))}
+                </select>
+                {errors.domain_id && <div className="invalid-feedback">Domain must be selected</div>}
+              </div>
             </div>
 
-            <div className="mb-3">
-              {lookup_service_types && lookup_service_types.length > 0
-                ? lookup_service_type_select
-                : null}
+
+          </div>
+          <div className="form-group">
+            <legend>Contract Details</legend>
+            <div className="form-row">
+              <div className="mb-3">
+                <label htmlFor="prefixContractEndDate" className="form-label fw-bold">
+                  Contract End Date
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <Controller
+                  control={control}
+                  name='contract_end'
+                  render={({ field }) => (
+                    <DatePicker
+                      className={`form-control ${errors.contract_end ? "is-invalid" : ""}`}
+                      placeholderText='Select date'
+                      onChange={(date) => { field.onChange(date) }}
+                      selected={field.value}
+                    />
+                  )}
+                />
+                {errors.contract_end && <div className="invalid-feedback">{errors.contract_end.message}</div>}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="prefixContractType" className="form-label fw-bold">
+                  Contract Type
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <select
+                  className={`form-select ${errors.contract_type ? "is-invalid" : ""}`}
+                  id="prefixContractType"
+                  {...register("contract_type", { required: false })}>
+                  <option disabled value="">
+                    Select Contract Type
+                  </option>
+                  {Object.entries(contract_type_t).map((contract) => (
+                    <option key={"contract-" + contract[0]} value={contract[0]}>
+                      {contract[0]}
+                    </option>
+                  ))}
+                </select>
+                {errors.contract_type && <div className="invalid-feedback">{errors.contract_type.message}</div>}
+              </div>
             </div>
-            <div className="mb-3">
-              <label htmlFor="status" className="form-label fw-bold">
-                Status
-              </label>
-              <select
-                className={`form-select ${errors.status ? "is-invalid" : ""}`}
-                id="status"
-                {...register("status", { required: false })}>
-                <option disabled value="">
-                  Select Status
-                </option>
-                <option key="status-0" value="1">
-                  {status_t["1"]}
-                </option>
-                <option key="status-1" value="0">
-                  {status_t["0"]}
-                </option>
-              </select>
-              {errors.status && <div className="invalid-feedback">Status must be selected</div>}
+            <div className="form-row">
+              <div className="mb-3">
+                {lookup_service_types && lookup_service_types.length > 0
+                  ? lookup_service_type_select
+                  : null}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="status" className="form-label fw-bold">
+                  Status
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">Input your name.
+                  </span>
+                </span>
+                <select
+                  className={`form-select ${errors.status ? "is-invalid" : ""}`}
+                  id="status"
+                  {...register("status", { required: false })}>
+                  <option disabled value="">
+                    Select Status
+                  </option>
+                  <option key="status-0" value="1">
+                    {status_t["1"]}
+                  </option>
+                  <option key="status-1" value="0">
+                    {status_t["0"]}
+                  </option>
+                </select>
+                {errors.status && <div className="invalid-feedback">Status must be selected</div>}
+              </div>
             </div>
           </div>
           <div className="row text-end">
