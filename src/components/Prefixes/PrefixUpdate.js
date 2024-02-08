@@ -9,7 +9,7 @@ import DatePicker from 'react-datepicker';
 
 import DataManager from "../../api/DataManager";
 import config from "../../config";
-
+import prefix from "./info"
 
 const status_t = {
   0: "Missing",
@@ -141,10 +141,11 @@ const PrefixUpdate = () => {
   const lookup_service_type_select = (
     <>
       <label htmlFor="status" className="form-label fw-bold">
-        LookUp Type
+        {prefix.lookup_type.label}
       </label>
       <span className="info-icon"> i
-        <span className="info-text">Input your name.
+        <span className="info-text">
+          {prefix.lookup_type.info}
         </span>
       </span>
       <select
@@ -182,10 +183,11 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3]">
                 <label htmlFor="prefixName" className="form-label fw-bold">
-                  Name
+                  {prefix.lookup_type.name}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.name.info}
                   </span>
                 </span>
                 <input
@@ -202,10 +204,11 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="owner" className="form-label fw-bold">
-                  Owner
+                  {prefix.owner.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.owner.info}
                   </span>
                 </span>
                 <input
@@ -223,10 +226,11 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="prefixContactName" className="form-label fw-bold">
-                  Contact Name
+                  {prefix.contact_name.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.contact_name.info}
                   </span>
                 </span>
                 <input
@@ -243,10 +247,11 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="prefixContactEmail" className="form-label fw-bold">
-                  Contact Email
+                  {prefix.contact_email.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.contact_email.info}
                   </span>
                 </span>
                 <input
@@ -267,10 +272,11 @@ const PrefixUpdate = () => {
             </div>
             <div className="mb-3">
               <label htmlFor="usedBy" className="form-label fw-bold">
-                Used by
+                {prefix.used_by.label}
               </label>
               <span className="info-icon"> i
-                <span className="info-text">Input your name.
+                <span className="info-text">
+                  {prefix.used_by.info}
                 </span>
               </span>
               <input
@@ -291,10 +297,11 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="serviceID" className="form-label fw-bold">
-                  Service
+                  {prefix.service.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.service.info}
                   </span>
                 </span>
                 <select
@@ -316,10 +323,11 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="providerID" className="form-label fw-bold">
-                  Provider
+                  {prefix.provider.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.provider.info}
                   </span>
                 </span>
                 <select
@@ -341,10 +349,11 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="domainID" className="form-label fw-bold">
-                  Domain
+                  {prefix.domain.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.domain.info}
                   </span>
                 </span>
                 <select
@@ -370,10 +379,11 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="prefixContractEnd" className="form-label fw-bold">
-                  Contract End Date
+                  {prefix.contract_end_date.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.contract_end_date.info}
                   </span>
                 </span>
                 <Controller
@@ -392,10 +402,11 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="prefixContractType" className="form-label fw-bold">
-                  Contract Type
+                  {prefix.contract_type.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.contract_type.info}
                   </span>
                 </span>
                 <select
@@ -422,10 +433,11 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="status" className="form-label fw-bold">
-                  Status
+                  {prefix.status.label}
                 </label>
                 <span className="info-icon"> i
-                  <span className="info-text">Input your name.
+                  <span className="info-text">
+                    {prefix.status.label}
                   </span>
                 </span>
                 <select
