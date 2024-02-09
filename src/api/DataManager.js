@@ -57,6 +57,11 @@ class DataManager {
     return this.doGet(url, "prefixes");
   }
 
+  updateStatisticsByPrefixID(id) { 
+    let url = this.endpoint + "/prefixes/" + id + "/statistics";
+    return this.doSend("POST", url, data);
+  }
+
   getStatisticsByPrefixID(id) {
     let url = this.endpoint + "/prefixes/" + id + "/statistics";
     return this.doGet(url, "pid_count");
@@ -76,7 +81,7 @@ class DataManager {
     let url = this.endpoint + "/reverse-lookup/types";
     return this.doGet(url, "filters");
   }
-  
+
   addPrefix(data) {
     let url = this.endpoint + "/prefixes";
     return this.doSend("POST", url, data);
