@@ -183,7 +183,7 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3]">
                 <label htmlFor="prefixName" className="form-label fw-bold">
-                  {prefix.lookup_type.name}
+                  {prefix.name.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
