@@ -88,7 +88,7 @@ const Prefixes = () => {
             </Link>
             <Link
               className="btn btn-secondary btn-sm "
-              to={`/prefixes/${props.row.original.id}/editstatistics`}>
+              to={`/prefixes/editstatistics/${props.row.original.id}`}>
               <FontAwesomeIcon icon={faChartBar} />
             </Link>
           </div>

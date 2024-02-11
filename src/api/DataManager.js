@@ -57,7 +57,7 @@ class DataManager {
     return this.doGet(url, "prefixes");
   }
 
-  updateStatisticsByPrefixID(id) { 
+  updateStatisticsByPrefixID(id, data) { 
     let url = this.endpoint + "/prefixes/" + id + "/statistics";
     return this.doSend("POST", url, data);
   }

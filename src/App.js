@@ -49,7 +49,7 @@ function App() {
                     element={<Prefixes />}
                   />
                   <Route
-                    path="/prefixes/:id/editstatistics"
+                    path="/prefixes/editstatistics/:id"
                     element={<PrefixEditStats />} 
                   />
                   <Route
