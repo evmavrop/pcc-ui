@@ -15,17 +15,15 @@ const PrefixEditStats = () => {
     const [alertMessage, setAlertMessage] = useState("");
     const [prefixName, setPrefixName] = useState("");
 
-    let prefix = {};
-
     const [prefixes, setPrefixes] = useState([]);
     const [prefixStatistics, setPrefixStatistics] = useState({});
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        const sanitizedValue = value.replace(/\D/g, '');
+        const name = e.target.name;
+        const value = e.target.value || 0;
         setPrefixStatistics({
             ...prefixStatistics,
-            [name]: sanitizedValue
+            [name]: parseInt(value, 10)
         });
     };
 
@@ -49,11 +47,10 @@ const PrefixEditStats = () => {
             DM.getStatisticsByPrefixID(prefix.name).then((response) => {
                 //TODO empty response
                 setPrefixStatistics({
-                    ["handles_count"]: response.handles_count ? response.handles_count : 0,
-                    ["resolvable_count"]: response.resolvable_count ? response.resolvable_count : 0,
-                    ["unresolvable_count"]: response.unresolvable_count ? response.unresolvable_count : 0,
-                    ["unchecked_count"]: response.unresolvable_count ? response.resolvable_count : 0,
-
+                    ["handles_count"]: parseInt(response.handles_count || 0, 10),
+                    ["resolvable_count"]: parseInt(response.resolvable_count || 0, 10),
+                    ["unresolvable_count"]: parseInt(response.unresolvable_count || 0, 10),
+                    ["unchecked_count"]: parseInt(response.unchecked_count || 0, 10),
                 });
             });
         }
@@ -61,12 +58,10 @@ const PrefixEditStats = () => {
 
     const handleSubmit = (e) => {
         //TODO add check for inconsistent input (handles_count = resolvable_count + unresolvable_count + unchecked_count)
-        let numPidTotal = parseInt(prefixStatistics.handles_count)
-        let numPidResolv = parseInt(prefixStatistics.resolvable_count)
-        let numPidNonResolv = parseInt(prefixStatistics.unresolvable_count)
-        let numPidUnknown = parseInt(prefixStatistics.unchecked_count)
+        e.preventDefault();
+        const handles_count = parseInt(prefixStatistics.resolvable_count) + parseInt(prefixStatistics.unresolvable_count) + parseInt(prefixStatistics.unchecked_count)
         const stats = {
-            ["handles_count"]: prefixStatistics.handles_count.toString(),
+            ["handles_count"]: handles_count.toString(),
             ["resolvable_count"]: prefixStatistics.resolvable_count.toString(),
             ["unresolvable_count"]: prefixStatistics.unresolvable_count.toString(),
             ["unchecked_count"]: prefixStatistics.unchecked_count.toString()
@@ -88,32 +83,19 @@ const PrefixEditStats = () => {
         });
     };
 
-    // number of total pids
-    let numPidTotal = 0
-    // number of resolvable pids
-    let numPidResolv = 0
-    // number of non resolvable pids
-    let numPidNonResolv = 0
-
-    // if data available process the numbers
-    if (prefixStatistics) {
-        numPidTotal = parseInt(prefixStatistics.handles_count)
-        numPidResolv = parseInt(prefixStatistics.resolvable_count)
-        numPidNonResolv = parseInt(prefixStatistics.unresolvable_count)
-    }
-
     return (
-        <div className="container">{alert &&
-            <Alert type={alertType} message={alertMessage} />
-        }
-            <form id="editStats" onSubmit={handleSubmit}>
+        <div className="container">
+            {alert &&
+                <Alert type={alertType} message={alertMessage} />
+            }
+            <form onSubmit={handleSubmit}>
                 <div className="form-group-edit-stats">
-                    <label htmlFor="handles" className="form-label-edit-stats fw-bold">Handles</label>
-                    <input type="text" id="handles_count" name="handles_count" value={prefixStatistics.handles_count ? prefixStatistics.handles_count : "N/A"} onChange={handleChange} />
                     <label htmlFor="resolvable" className="form-label-edit-stats fw-bold">Resolvable</label>
-                    <input type="text" id="resolvable_count" name="resolvable_count" value={prefixStatistics.resolvable_count ? prefixStatistics.resolvable_count : "N/A"} onChange={handleChange} />
+                    <input type="number" id="resolvable_count" name="resolvable_count" value={!isNaN(prefixStatistics.resolvable_count) ? parseInt(prefixStatistics.resolvable_count, 10).toString() : ""} onChange={handleChange} />
                     <label htmlFor="non-resolvable" className="form-label-edit-stats fw-bold">Non-Resolvable</label>
-                    <input type="text" id="unresolvable_count" name="unresolvable_count" value={prefixStatistics.unresolvable_count ? prefixStatistics.unresolvable_count : "N/A"} onChange={handleChange} />
+                    <input type="number" id="unresolvable_count" name="unresolvable_count" value={!isNaN(prefixStatistics.unresolvable_count) ? parseInt(prefixStatistics.unresolvable_count, 10).toString() : ""} onChange={handleChange} />
+                    <label htmlFor="unchecked" className="form-label-edit-stats fw-bold">Unchecked</label>
+                    <input type="number" id="unchecked_count" name="unchecked_count" value={!isNaN(prefixStatistics.unchecked_count) ? parseInt(prefixStatistics.unchecked_count, 10).toString() : ""} onChange={handleChange} />
                 </div>
                 <div className="button-group-edit-stats">
                     <button type="submit" value="Submit" className="btn btn-primary" style={{ marginRight: "1rem" }}>Update</button>
