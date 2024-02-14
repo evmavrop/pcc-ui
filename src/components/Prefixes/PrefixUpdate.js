@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
-import { Link, Navigate, useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Alert from "../Alert";
 
 import moment from 'moment'
@@ -183,7 +183,7 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3]">
                 <label htmlFor="prefixName" className="form-label fw-bold">
-                  {prefix.lookup_type.name}
+                  {prefix.name.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
