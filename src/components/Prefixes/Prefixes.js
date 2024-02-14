@@ -15,7 +15,7 @@ import PrefixDetails from "./PrefixDetails";
 import PrefixAdd from "./PrefixAdd"
 import PrefixUpdate from "./PrefixUpdate"
 import PrefixLookup from "./PrefixLookup"
-
+import PrefixEditStats from "./PrefixEditStats";
 
 
 String.prototype.toPascalCase = function () {
@@ -86,6 +86,11 @@ const Prefixes = () => {
               to={`/prefixes/${props.row.original.id}/delete`}>
               <FontAwesomeIcon icon="times" />
             </Link>
+            <Link
+              className="btn btn-secondary btn-sm "
+              to={`/prefixes/editstatistics/${props.row.original.id}`}>
+              <FontAwesomeIcon icon={faChartBar} />
+            </Link>
           </div>
         ),
 
@@ -123,5 +128,4 @@ const Prefixes = () => {
 
 
 
-
-export { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup };
+export { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup, PrefixEditStats };
