@@ -5,6 +5,7 @@ import Alert from "../Alert";
 import DataManager from "../../api/DataManager";
 
 import config from "../../config";
+import { editStats } from "./info"
 
 
 const PrefixEditStats = () => {
@@ -57,9 +58,8 @@ const PrefixEditStats = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const handles_count = parseInt(prefixStatistics.resolvable_count) + parseInt(prefixStatistics.unresolvable_count) + parseInt(prefixStatistics.unchecked_count)
         const stats = {
-            ["handles_count"]: handles_count.toString(),
+            ["handles_count"]: prefixStatistics.handles_count.toString(),
             ["resolvable_count"]: prefixStatistics.resolvable_count.toString(),
             ["unresolvable_count"]: prefixStatistics.unresolvable_count.toString(),
             ["unchecked_count"]: prefixStatistics.unchecked_count.toString()
@@ -87,13 +87,42 @@ const PrefixEditStats = () => {
                 <Alert type={alertType} message={alertMessage} />
             }
             <form onSubmit={handleSubmit}>
-                <div className="form-group-edit-stats">
-                    <label htmlFor="resolvable" className="form-label-edit-stats fw-bold">Resolvable</label>
-                    <input type="number" id="resolvable_count" name="resolvable_count" value={!isNaN(prefixStatistics.resolvable_count) ? parseInt(prefixStatistics.resolvable_count, 10).toString() : ""} onChange={handleChange} />
-                    <label htmlFor="non-resolvable" className="form-label-edit-stats fw-bold">Non-Resolvable</label>
-                    <input type="number" id="unresolvable_count" name="unresolvable_count" value={!isNaN(prefixStatistics.unresolvable_count) ? parseInt(prefixStatistics.unresolvable_count, 10).toString() : ""} onChange={handleChange} />
-                    <label htmlFor="unchecked" className="form-label-edit-stats fw-bold">Unchecked</label>
-                    <input type="number" id="unchecked_count" name="unchecked_count" value={!isNaN(prefixStatistics.unchecked_count) ? parseInt(prefixStatistics.unchecked_count, 10).toString() : ""} onChange={handleChange} />
+                <div className="row col-md-4 mt-4 text-start">
+                    <div className="form-group">
+                        <legend>Edit Prefix Statistics</legend>
+                        <div className="form-row ">
+                            <div className=" mb-3">
+                                <label htmlFor="handles" className="form-label fw-bold mt-2">{editStats.handles.label}</label>
+                                <span className="info-icon"> i
+                                    <span className="info-text">
+                                        {editStats.handles.info}
+                                    </span>
+                                </span>
+                                <input type="number" id="handles_count" name="handles_count" className={`form-control`} value={!isNaN(prefixStatistics.handles_count) ? parseInt(prefixStatistics.handles_count, 10).toString() : ""} onChange={handleChange} />
+                                <label htmlFor="resolvable" className="form-label fw-bold mt-2">{editStats.resolvable.label}</label>
+                                <span className="info-icon"> i
+                                    <span className="info-text">
+                                        {editStats.resolvable.info}
+                                    </span>
+                                </span>
+                                <input type="number" id="resolvable_count" name="resolvable_count" className={`form-control`} value={!isNaN(prefixStatistics.resolvable_count) ? parseInt(prefixStatistics.resolvable_count, 10).toString() : ""} onChange={handleChange} />
+                                <label htmlFor="non-resolvable" className="form-label fw-bold mt-2">{editStats.nonresolvable.label}</label>
+                                <span className="info-icon"> i
+                                    <span className="info-text">
+                                        {editStats.nonresolvable.info}
+                                    </span>
+                                </span>
+                                <input type="number" id="unresolvable_count" name="unresolvable_count" className={`form-control`} value={!isNaN(prefixStatistics.unresolvable_count) ? parseInt(prefixStatistics.unresolvable_count, 10).toString() : ""} onChange={handleChange} />
+                                <label htmlFor="unchecked" className="form-label fw-bold mt-2">{editStats.unchecked.label}</label>
+                                <span className="info-icon"> i
+                                    <span className="info-text">
+                                        {editStats.unchecked.info}
+                                    </span>
+                                </span>
+                                <input type="number" id="unchecked_count" name="unchecked_count" className={`form-control`} value={!isNaN(prefixStatistics.unchecked_count) ? parseInt(prefixStatistics.unchecked_count, 10).toString() : ""} onChange={handleChange} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="button-group-edit-stats">
                     <button type="submit" value="Submit" className="btn btn-primary" style={{ marginRight: "1rem" }}>Update</button>

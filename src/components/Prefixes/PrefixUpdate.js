@@ -9,7 +9,7 @@ import DatePicker from 'react-datepicker';
 
 import DataManager from "../../api/DataManager";
 import config from "../../config";
-import prefix from "./info"
+import {prefix} from "./info"
 
 const status_t = {
   0: "Missing",
