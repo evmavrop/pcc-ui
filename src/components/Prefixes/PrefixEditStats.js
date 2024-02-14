@@ -45,7 +45,6 @@ const PrefixEditStats = () => {
         setPrefixName(prefix.name);
         if (prefix.name !== undefined) {
             DM.getStatisticsByPrefixID(prefix.name).then((response) => {
-                //TODO empty response
                 setPrefixStatistics({
                     ["handles_count"]: parseInt(response.handles_count || 0, 10),
                     ["resolvable_count"]: parseInt(response.resolvable_count || 0, 10),
@@ -57,7 +56,6 @@ const PrefixEditStats = () => {
     }, [prefixes]);
 
     const handleSubmit = (e) => {
-        //TODO add check for inconsistent input (handles_count = resolvable_count + unresolvable_count + unchecked_count)
         e.preventDefault();
         const handles_count = parseInt(prefixStatistics.resolvable_count) + parseInt(prefixStatistics.unresolvable_count) + parseInt(prefixStatistics.unchecked_count)
         const stats = {
