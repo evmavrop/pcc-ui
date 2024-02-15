@@ -249,12 +249,12 @@ const PrefixAdd = () => {
                 </span>
                 <input
                   type="text"
-                  className={`form-control ${errors.contact_name ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.contact_email ? "is-invalid" : ""}`}
                   id="prefixContactEmail"
                   aria-describedby="prefixContactEmailHelp"
                   {...register("contact_email", {
                     pattern: {
-                      value: /(\S)+|(\S+@\S+\.\S+)/,
+                      value: /\S+@\S+\.\S+/,
                       message: "Entered value does not match email format"
                     }
                   })}
