@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Alert from "../Alert";
 
 import moment from 'moment'
@@ -9,7 +9,7 @@ import DatePicker from 'react-datepicker';
 
 import DataManager from "../../api/DataManager";
 import config from "../../config";
-import {prefix} from "./info"
+import { prefix } from "./info"
 
 
 const status_t = {
@@ -171,11 +171,12 @@ const PrefixAdd = () => {
       <form onSubmit={handleSubmit(onformSubmit)}>
         <div className="row mt-4 text-start">
           <h2>Create new prefix</h2>
+          <p className="text-muted"><span className="required">*</span>Indicates a required field</p>
           <div className="form-group">
             <legend>Prefix Details</legend>
             <div className="form-row">
               <div className="mb-3">
-                <label htmlFor="prefixName" className="form-label fw-bold">
+                <label htmlFor="prefixName" className="form-label fw-bold"><span className="required">*</span>
                   {prefix.name.label}
                 </label>
                 <span className="info-icon"> i
@@ -288,6 +289,7 @@ const PrefixAdd = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="serviceID" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.service.label}
                 </label>
                 <span className="info-icon"> i
@@ -314,6 +316,7 @@ const PrefixAdd = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="providerID" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.provider.label}
                 </label>
                 <span className="info-icon"> i
@@ -340,6 +343,7 @@ const PrefixAdd = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="domainID" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.domain.label}
                 </label>
                 <span className="info-icon"> i
