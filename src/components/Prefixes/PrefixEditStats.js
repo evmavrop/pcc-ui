@@ -87,10 +87,10 @@ const PrefixEditStats = () => {
                 <Alert type={alertType} message={alertMessage} />
             }
             <form onSubmit={handleSubmit}>
-                <div className="row col-md-4 mt-4 text-start"  style={{ margin:"0 auto"}}>
+                <div className="row col-md-4 mt-4 text-start" >
                     <h2>Edit Statistics</h2>
                     <div className="form-group">
-                    <legend>Prefix Statistics</legend>
+                        <legend>Prefix Statistics</legend>
                         <div className="form-row ">
                             <div className=" mb-3">
                                 <label htmlFor="handles" className="form-label fw-bold mt-2">{editStats.handles.label}</label>
@@ -125,7 +125,7 @@ const PrefixEditStats = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col col-md-4  text-end"  style={{ margin:"0 auto"}} >
+                <div className="col col-md-4 text-end" >
                     <button type="submit" value="Submit" className="btn btn-primary" style={{ marginRight: "1rem" }}>Update</button>
                     <button type="reset" className="btn btn-dark" onClick={() => { navigate("/prefixes/"); }}>Back</button>
                 </div>
