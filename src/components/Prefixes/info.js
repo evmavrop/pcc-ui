@@ -50,4 +50,23 @@ var prefix = {
 
 }
 
-export default prefix;
+var editStats = {
+    handles: {
+        label: "Handles",
+        info: "Handles count"
+    },
+    resolvable: {
+        label: "Resolvable",
+        info: "Resolvable count"
+    },
+    nonresolvable: {
+        label: "Non-resolvable",
+        info: "Non-resolvable count"
+    },
+    unchecked: {
+        label: "Unchecked",
+        info: "Unchecked count"
+    },
+}
+
+export { prefix, editStats };

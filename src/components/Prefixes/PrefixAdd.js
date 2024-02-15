@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
-import { Link, Navigate, useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import {  useNavigate } from "react-router-dom";
 import Alert from "../Alert";
 
 import moment from 'moment'
@@ -9,7 +9,7 @@ import DatePicker from 'react-datepicker';
 
 import DataManager from "../../api/DataManager";
 import config from "../../config";
-import prefix from "./info"
+import {prefix} from "./info"
 
 
 const status_t = {
