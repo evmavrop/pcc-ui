@@ -31,7 +31,7 @@ var PrefixLabels = {
         label: "Domain",
         info: "8"
     },
-    contract_end_date: {
+    contractEndDate: {
         label: "Contact End Date",
         info: "9"
     },
@@ -69,4 +69,4 @@ var EditStats = {
     },
 }
 
-export { PrefixLabels as prefix, EditStats as editStats };
+export { PrefixLabels, EditStats };

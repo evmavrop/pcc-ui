@@ -5,7 +5,7 @@ import Alert from "../Alert";
 import DataManager from "../../api/DataManager";
 
 import config from "../../config";
-import { editStats } from "./info"
+import { EditStats } from "./info"
 
 
 const PrefixEditStats = () => {
@@ -93,31 +93,31 @@ const PrefixEditStats = () => {
                         <legend>Prefix Statistics</legend>
                         <div className="form-row ">
                             <div className=" mb-3">
-                                <label htmlFor="handles" className="form-label fw-bold mt-2">{editStats.handles.label}</label>
+                                <label htmlFor="handles" className="form-label fw-bold mt-2">{EditStats.handles.label}</label>
                                 <span className="info-icon"> i
                                     <span className="info-text">
-                                        {editStats.handles.info}
+                                        {EditStats.handles.info}
                                     </span>
                                 </span>
                                 <input type="number" id="handles_count" name="handles_count" className={`form-control`} value={!isNaN(prefixStatistics.handles_count) ? parseInt(prefixStatistics.handles_count, 10).toString() : ""} onChange={handleChange} />
-                                <label htmlFor="resolvable" className="form-label fw-bold mt-2">{editStats.resolvable.label}</label>
+                                <label htmlFor="resolvable" className="form-label fw-bold mt-2">{EditStats.resolvable.label}</label>
                                 <span className="info-icon"> i
                                     <span className="info-text">
-                                        {editStats.resolvable.info}
+                                        {EditStats.resolvable.info}
                                     </span>
                                 </span>
                                 <input type="number" id="resolvable_count" name="resolvable_count" className={`form-control`} value={!isNaN(prefixStatistics.resolvable_count) ? parseInt(prefixStatistics.resolvable_count, 10).toString() : ""} onChange={handleChange} />
-                                <label htmlFor="non-resolvable" className="form-label fw-bold mt-2">{editStats.nonresolvable.label}</label>
+                                <label htmlFor="non-resolvable" className="form-label fw-bold mt-2">{EditStats.nonResolvable.label}</label>
                                 <span className="info-icon"> i
                                     <span className="info-text">
-                                        {editStats.nonresolvable.info}
+                                        {EditStats.nonResolvable.info}
                                     </span>
                                 </span>
                                 <input type="number" id="unresolvable_count" name="unresolvable_count" className={`form-control`} value={!isNaN(prefixStatistics.unresolvable_count) ? parseInt(prefixStatistics.unresolvable_count, 10).toString() : ""} onChange={handleChange} />
-                                <label htmlFor="unchecked" className="form-label fw-bold mt-2">{editStats.unchecked.label}</label>
+                                <label htmlFor="unchecked" className="form-label fw-bold mt-2">{EditStats.unchecked.label}</label>
                                 <span className="info-icon"> i
                                     <span className="info-text">
-                                        {editStats.unchecked.info}
+                                        {EditStats.unchecked.info}
                                     </span>
                                 </span>
                                 <input type="number" id="unchecked_count" name="unchecked_count" className={`form-control`} value={!isNaN(prefixStatistics.unchecked_count) ? parseInt(prefixStatistics.unchecked_count, 10).toString() : ""} onChange={handleChange} />
