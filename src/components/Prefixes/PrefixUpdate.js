@@ -9,7 +9,7 @@ import DatePicker from 'react-datepicker';
 
 import DataManager from "../../api/DataManager";
 import config from "../../config";
-import {prefix} from "./info"
+import { prefix } from "./info"
 
 const status_t = {
   0: "Missing",
@@ -178,11 +178,13 @@ const PrefixUpdate = () => {
       <form onSubmit={handleSubmit(onformSubmit)}>
         <div className="row text-start mt-4">
           <h2>Update prefix</h2>
+          <p className="text-muted"><span className="required">*</span>Indicates a required field</p>
           <div className="form-group">
             <legend>Prefix Details</legend>
             <div className="form-row">
               <div className="mb-3]">
                 <label htmlFor="prefixName" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.name.label}
                 </label>
                 <span className="info-icon"> i
@@ -204,6 +206,7 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="owner" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.owner.label}
                 </label>
                 <span className="info-icon"> i
@@ -216,7 +219,7 @@ const PrefixUpdate = () => {
                   className={`form-control ${errors.owner ? "is-invalid" : ""}`}
                   id="owner"
                   {...register("owner", {
-                    required: { value: false, message: "Owner is required" },
+                    required: { value: true, message: "Owner is required" },
                     minLength: { value: 3, message: "Minimum length is 3" }
                   })}
                 />
@@ -226,11 +229,12 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="prefixContactName" className="form-label fw-bold">
-                  {prefix.contact_name.label}
+                  <span className="required">*</span>
+                  {prefix.contactName.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
-                    {prefix.contact_name.info}
+                    {prefix.contactName.info}
                   </span>
                 </span>
                 <input
@@ -239,7 +243,7 @@ const PrefixUpdate = () => {
                   id="prefixContactName"
                   aria-describedby="prefixContactNameHelp"
                   {...register("contact_name", {
-                    required: { value: false, message: "Contact Name is required" },
+                    required: { value: true, message: "Contact Name is required" },
                     minLength: { value: 3, message: "Minimum length is 3" }
                   })}
                 />
@@ -247,11 +251,12 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="prefixContactEmail" className="form-label fw-bold">
-                  {prefix.contact_email.label}
+                  <span className="required">*</span>
+                  {prefix.contactEmail.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
-                    {prefix.contact_email.info}
+                    {prefix.contactEmail.info}
                   </span>
                 </span>
                 <input
@@ -260,7 +265,7 @@ const PrefixUpdate = () => {
                   id="prefixContactEmail"
                   aria-describedby="prefixContactEmailHelp"
                   {...register("contact_email", {
-                    required: { value: false, message: "Contact Email is required" },
+                    required: { value: true, message: "Contact Email is required" },
                     pattern: {
                       value: /\S+@\S+\.\S+/,
                       message: "Entered value does not match email format"
@@ -307,7 +312,7 @@ const PrefixUpdate = () => {
                 <select
                   className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
                   id="serviceID"
-                  {...register("service_id", { required: true })}>
+                  {...register("service_id", { required: false })}>
                   <option disabled value="">
                     Select Service
                   </option>
@@ -323,6 +328,7 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="providerID" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.provider.label}
                 </label>
                 <span className="info-icon"> i
@@ -359,7 +365,7 @@ const PrefixUpdate = () => {
                 <select
                   className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
                   id="domainID"
-                  {...register("domain_id", { required: true })}>
+                  {...register("domain_id", { required: false })}>
                   <option disabled value="">
                     Select Domain
                   </option>

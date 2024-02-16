@@ -176,7 +176,8 @@ const PrefixAdd = () => {
             <legend>Prefix Details</legend>
             <div className="form-row">
               <div className="mb-3">
-                <label htmlFor="prefixName" className="form-label fw-bold"><span className="required">*</span>
+                <label htmlFor="prefixName" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.name.label}
                 </label>
                 <span className="info-icon"> i
@@ -198,6 +199,7 @@ const PrefixAdd = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="owner" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {prefix.owner.label}
                 </label>
                 <span className="info-icon"> i
@@ -210,7 +212,7 @@ const PrefixAdd = () => {
                   className={`form-control ${errors.owner ? "is-invalid" : ""}`}
                   id="owner"
                   {...register("owner", {
-                    required: { value: false, message: "Owner is required" },
+                    required: { value: true, message: "Owner is required" },
                     minLength: { value: 3, message: "Minimum length is 3" }
                   })}
                 />
@@ -220,11 +222,12 @@ const PrefixAdd = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="prefixContactName" className="form-label fw-bold">
-                  {prefix.contact_name.label}
+                  <span className="required">*</span>
+                  {prefix.contactName.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
-                    {prefix.contact_name.info}
+                    {prefix.contactName.info}
                   </span>
                 </span>
                 <input
@@ -233,7 +236,7 @@ const PrefixAdd = () => {
                   id="prefixContactName"
                   aria-describedby="prefixContactNameHelp"
                   {...register("contact_name", {
-                    required: { value: false, message: "Contact Name is required" },
+                    required: { value: true, message: "Contact Name is required" },
                     minLength: { value: 3, message: "Minimum length is 3" }
                   })}
                 />
@@ -241,11 +244,12 @@ const PrefixAdd = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="prefixContactEmail" className="form-label fw-bold">
-                  {prefix.contact_email.label}
+                  <span className="required">*</span>
+                  {prefix.contactEmail.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
-                    {prefix.contact_email.info}
+                    {prefix.contactEmail.info}
                   </span>
                 </span>
                 <input
@@ -254,6 +258,7 @@ const PrefixAdd = () => {
                   id="prefixContactEmail"
                   aria-describedby="prefixContactEmailHelp"
                   {...register("contact_email", {
+                    required: { value: true, message: "Contact Email is required" },
                     pattern: {
                       value: /\S+@\S+\.\S+/,
                       message: "Entered value does not match email format"
@@ -289,7 +294,6 @@ const PrefixAdd = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="serviceID" className="form-label fw-bold">
-                  <span className="required">*</span>
                   {prefix.service.label}
                 </label>
                 <span className="info-icon"> i
@@ -300,7 +304,7 @@ const PrefixAdd = () => {
                 <select
                   className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
                   id="serviceID"
-                  {...register("service_id", { required: true })}>
+                  {...register("service_id", { required: false })}>
                   <option disabled value="">
                     Select Service
                   </option>
@@ -343,7 +347,6 @@ const PrefixAdd = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="domainID" className="form-label fw-bold">
-                  <span className="required">*</span>
                   {prefix.domain.label}
                 </label>
                 <span className="info-icon"> i
@@ -354,7 +357,7 @@ const PrefixAdd = () => {
                 <select
                   className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
                   id="domainID"
-                  {...register("domain_id", { required: true })}>
+                  {...register("domain_id", { required: false })}>
                   <option disabled value="">
                     Select Domain
                   </option>

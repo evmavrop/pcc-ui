@@ -1,4 +1,4 @@
-var prefix = {
+var PrefixLabels = {
     name: {
         label: "Name",
         info: "1"
@@ -7,11 +7,11 @@ var prefix = {
         label: "Owner",
         info: "2"
     },
-    contact_name: {
+    contactName: {
         label: "Contact Name",
         info: "3"
     },
-    contact_email: {
+    contactEmail: {
         label: "Contact Email",
         info: "4"
     },
@@ -50,7 +50,7 @@ var prefix = {
 
 }
 
-var editStats = {
+var EditStats = {
     handles: {
         label: "Handles",
         info: "Handles count"
@@ -59,7 +59,7 @@ var editStats = {
         label: "Resolvable",
         info: "Resolvable count"
     },
-    nonresolvable: {
+    nonResolvable: {
         label: "Non-resolvable",
         info: "Non-resolvable count"
     },
@@ -69,4 +69,4 @@ var editStats = {
     },
 }
 
-export { prefix, editStats };
+export { PrefixLabels as prefix, EditStats as editStats };
