@@ -15,7 +15,7 @@ var PrefixLabels = {
         label: "Contact Email",
         info: "4"
     },
-    used_by: {
+    usedBy: {
         label: "Used by",
         info: "5"
     },
@@ -35,11 +35,11 @@ var PrefixLabels = {
         label: "Contact End Date",
         info: "9"
     },
-    contract_type: {
+    contractType: {
         label: "Contract Type",
         info: "10"
     },
-    lookup_type: {
+    lookupType: {
         label: "LookUp Type",
         info: "11"
     },

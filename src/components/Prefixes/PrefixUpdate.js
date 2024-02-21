@@ -141,11 +141,11 @@ const PrefixUpdate = () => {
   const lookup_service_type_select = (
     <>
       <label htmlFor="status" className="form-label fw-bold">
-        {PrefixLabels.lookup_type.label}
+        {PrefixLabels.lookupType.label}
       </label>
       <span className="info-icon"> i
         <span className="info-text">
-          {PrefixLabels.lookup_type.info}
+          {PrefixLabels.lookupType.info}
         </span>
       </span>
       <select
@@ -277,11 +277,11 @@ const PrefixUpdate = () => {
             </div>
             <div className="mb-3">
               <label htmlFor="usedBy" className="form-label fw-bold">
-                {PrefixLabels.used_by.label}
+                {PrefixLabels.usedBy.label}
               </label>
               <span className="info-icon"> i
                 <span className="info-text">
-                  {PrefixLabels.used_by.info}
+                  {PrefixLabels.usedBy.info}
                 </span>
               </span>
               <input
@@ -385,11 +385,11 @@ const PrefixUpdate = () => {
             <div className="form-row">
               <div className="mb-3">
                 <label htmlFor="prefixContractEnd" className="form-label fw-bold">
-                  {PrefixLabels.contract_end_date.label}
+                  {PrefixLabels.contractEndDate.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
-                    {PrefixLabels.contract_end_date.info}
+                    {PrefixLabels.contractEndDate.info}
                   </span>
                 </span>
                 <Controller
@@ -408,11 +408,11 @@ const PrefixUpdate = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="prefixContractType" className="form-label fw-bold">
-                  {PrefixLabels.contract_type.label}
+                  {PrefixLabels.contractType.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
-                    {PrefixLabels.contract_type.info}
+                    {PrefixLabels.contractType.info}
                   </span>
                 </span>
                 <select
