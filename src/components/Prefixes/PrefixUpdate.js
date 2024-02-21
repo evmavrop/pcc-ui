@@ -152,7 +152,7 @@ const PrefixUpdate = () => {
         className={`form-select ${errors.lookup_service_type ? "is-invalid" : ""}`}
         id="lookupServiceType"
         {...register("lookup_service_type", { required: false })}>
-        <option disabled value="">
+        <option value="">
           Select Type
         </option>
         {lookup_service_types &&
@@ -313,7 +313,7 @@ const PrefixUpdate = () => {
                   className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
                   id="serviceID"
                   {...register("service_id", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Service
                   </option>
                   {services.map((service) => (
@@ -340,7 +340,7 @@ const PrefixUpdate = () => {
                   className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
                   id="providerID"
                   {...register("provider_id", { required: true })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Provider
                   </option>
                   {providers.map((provider) => (
@@ -366,7 +366,7 @@ const PrefixUpdate = () => {
                   className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
                   id="domainID"
                   {...register("domain_id", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Domain
                   </option>
                   {domains.map((domain) => (
@@ -419,7 +419,7 @@ const PrefixUpdate = () => {
                   className={`form-select ${errors.contract_type ? "is-invalid" : ""}`}
                   id="prefixContractType"
                   {...register("contract_type", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Contract Type
                   </option>
                   {Object.entries(contract_type_t).map((contract) => (
@@ -450,7 +450,7 @@ const PrefixUpdate = () => {
                   className={`form-select ${errors.status ? "is-invalid" : ""}`}
                   id="status"
                   {...register("status", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Status
                   </option>
                   <option key="status-0" value="1">

@@ -13,8 +13,8 @@ import { PrefixLabels } from "./info"
 
 
 const status_t = {
-  0: "Missing",
-  1: "Exists"
+  "0": "Missing",
+  "1": "Exists"
 };
 
 const contract_type_t = {
@@ -35,7 +35,7 @@ const PrefixAdd = () => {
     service_id: [],
     provider_id: [],
     domain_id: [],
-    status: 1,
+    status: "",
     owner: "",
     contact_name: "",
     contact_email: "",
@@ -113,6 +113,15 @@ const PrefixAdd = () => {
     if (data["contract_end"] !== null && data["contract_end"] !== "") {
       data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
     }
+    if (data["provider_id"].length == 0){
+      data["provider_id"] = "";
+    }
+    if (data["domain_id"].length == 0){
+      data["domain_id"] = "";
+    }
+    if (data["service_id"].length == 0){
+      data["service_id"] = "";
+    }
     let DM = new DataManager(config.endpoint);
     DM.addPrefix(data).then((r) => {
       setAlert(true);
@@ -144,7 +153,7 @@ const PrefixAdd = () => {
         className={`form-select ${errors.lookup_service_type ? "is-invalid" : ""}`}
         id="lookupServiceType"
         {...register("lookup_service_type", { required: false })}>
-        <option disabled value="">
+        <option value="">
           Select Type
         </option>
         {lookup_service_types &&
@@ -305,7 +314,7 @@ const PrefixAdd = () => {
                   className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
                   id="serviceID"
                   {...register("service_id", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Service
                   </option>
                   {services.map((service) => (
@@ -332,7 +341,7 @@ const PrefixAdd = () => {
                   className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
                   id="providerID"
                   {...register("provider_id", { required: true })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Provider
                   </option>
                   {providers.map((provider) => (
@@ -358,7 +367,7 @@ const PrefixAdd = () => {
                   className={`form-select ${errors.domain_id ? "is-invalid" : ""}`}
                   id="domainID"
                   {...register("domain_id", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Domain
                   </option>
                   {domains.map((domain) => (
@@ -413,7 +422,7 @@ const PrefixAdd = () => {
                   className={`form-select ${errors.contract_type ? "is-invalid" : ""}`}
                   id="prefixContractType"
                   {...register("contract_type", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Contract Type
                   </option>
                   {Object.entries(contract_type_t).map((contract) => (
@@ -444,7 +453,7 @@ const PrefixAdd = () => {
                   className={`form-select ${errors.status ? "is-invalid" : ""}`}
                   id="status"
                   {...register("status", { required: false })}>
-                  <option disabled value="">
+                  <option value="">
                     Select Status
                   </option>
                   <option key="status-0" value="1">
