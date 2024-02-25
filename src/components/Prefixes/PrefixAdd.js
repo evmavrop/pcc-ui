@@ -113,13 +113,13 @@ const PrefixAdd = () => {
     if (data["contract_end"] !== null && data["contract_end"] !== "") {
       data["contract_end"] = moment(data["contract_end"]).format(dateFormat);
     }
-    if (data["provider_id"].length == 0){
+    if (data["provider_id"].length == 0) {
       data["provider_id"] = "";
     }
-    if (data["domain_id"].length == 0){
+    if (data["domain_id"].length == 0) {
       data["domain_id"] = "";
     }
-    if (data["service_id"].length == 0){
+    if (data["service_id"].length == 0) {
       data["service_id"] = "";
     }
     let DM = new DataManager(config.endpoint);
@@ -142,6 +142,7 @@ const PrefixAdd = () => {
   const lookup_service_type_select = (
     <>
       <label htmlFor="status" className="form-label fw-bold">
+        <span className="required">*</span>
         {PrefixLabels.lookupType.label}
       </label>
       <span className="info-icon"> i
@@ -152,7 +153,7 @@ const PrefixAdd = () => {
       <select
         className={`form-select ${errors.lookup_service_type ? "is-invalid" : ""}`}
         id="lookupServiceType"
-        {...register("lookup_service_type", { required: false })}>
+        {...register("lookup_service_type", { required: " must be selected" })}>
         <option value="">
           Select Type
         </option>
@@ -166,7 +167,7 @@ const PrefixAdd = () => {
           })}
       </select>
       {errors.lookup_service_type && (
-        <div className="invalid-feedback">Lookup Service Type must be selected</div>
+        <div className="invalid-feedback">{PrefixLabels.lookupType.label + errors.lookup_service_type.message}</div>
       )}
     </>
   );
@@ -340,7 +341,7 @@ const PrefixAdd = () => {
                 <select
                   className={`form-select ${errors.provider_id ? "is-invalid" : ""}`}
                   id="providerID"
-                  {...register("provider_id", { required: true })}>
+                  {...register("provider_id", { required: " must be selected" })}>
                   <option value="">
                     Select Provider
                   </option>
@@ -351,7 +352,7 @@ const PrefixAdd = () => {
                   ))}
                 </select>
                 {errors.provider_id && (
-                  <div className="invalid-feedback">Provider must be selected</div>
+                  <div className="invalid-feedback">{PrefixLabels.provider.label + errors.provider_id.message}</div>
                 )}
               </div>
               <div className="mb-3">
@@ -410,18 +411,18 @@ const PrefixAdd = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="prefixContractType" className="form-label fw-bold">
+                  <span className="required">*</span>
                   {PrefixLabels.contractType.label}
                 </label>
                 <span className="info-icon"> i
                   <span className="info-text">
                     {PrefixLabels.contractType.info}
-
                   </span>
                 </span>
                 <select
                   className={`form-select ${errors.contract_type ? "is-invalid" : ""}`}
                   id="prefixContractType"
-                  {...register("contract_type", { required: false })}>
+                  {...register("contract_type", { required: " must be selected" })}>
                   <option value="">
                     Select Contract Type
                   </option>
@@ -431,7 +432,8 @@ const PrefixAdd = () => {
                     </option>
                   ))}
                 </select>
-                {errors.contract_type && <div className="invalid-feedback">{errors.contract_type.message}</div>}
+                {errors.contract_type && 
+                  <div className="invalid-feedback">{PrefixLabels.contractType.label + errors.contract_type.message}</div>}
               </div>
             </div>
             <div className="form-row">
