@@ -1,4 +1,4 @@
-var prefix = {
+var PrefixLabels = {
     name: {
         label: "Prefix Name",
         info: "This is the prefix name"
@@ -7,15 +7,15 @@ var prefix = {
         label: "Owner",
         info: "The Organization that requested the prefix"
     },
-    contact_name: {
+    contactName: {
         label: "Contact Name",
         info: "The name of the contact that requested the prefix"
     },
-    contact_email: {
+    contactEmail: {
         label: "Contact Email",
         info: "The email of the contact that requested the prefix"
     },
-    used_by: {
+    usedBy: {
         label: "Used by",
         info: "The project, service, organization that is using the prefix. Information and small description of the use of prefix"
     },
@@ -31,15 +31,15 @@ var prefix = {
         label: "Domain",
         info: "The branch of science, scientific discipline that is related to the use of Prefix. Here we use the classification of the Marketplace ."
     },
-    contract_end_date: {
+    contractEndDate: {
         label: "Contact End Date",
         info: "If the prefix is based on a signed contract then define the contract end date."
     },
-    contract_type: {
+    contractType: {
         label: "Contract Type",
         info: "Select the type of collaboration ."
     },
-    lookup_type: {
+    lookupType: {
         label: "LookUp Type",
         info: "Define the way we can lookup the information of a PID. From the central catalogue, its own instance private, both or none"
     },
@@ -50,7 +50,7 @@ var prefix = {
 
 }
 
-var editStats = {
+var EditStats = {
     handles: {
         label: "Handles",
         info: "Handles count"
@@ -59,7 +59,7 @@ var editStats = {
         label: "Resolvable",
         info: "Resolvable count"
     },
-    nonresolvable: {
+    nonResolvable: {
         label: "Non-resolvable",
         info: "Non-resolvable count"
     },
@@ -69,4 +69,4 @@ var editStats = {
     },
 }
 
-export { prefix, editStats };
+export { PrefixLabels, EditStats };

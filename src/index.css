@@ -76,3 +76,7 @@ code {
   visibility: visible;
   opacity: 1;
 }
+
+.required {
+  color: red;
+}
