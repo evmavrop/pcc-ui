@@ -302,32 +302,6 @@ const PrefixUpdate = () => {
             <legend>Service specific Information </legend>
             <div className="form-row">
               <div className="mb-3">
-                <label htmlFor="serviceID" className="form-label fw-bold">
-                  {PrefixLabels.service.label}
-                </label>
-                <span className="info-icon"> i
-                  <span className="info-text">
-                    {PrefixLabels.service.info}
-                  </span>
-                </span>
-                <select
-                  className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
-                  id="serviceID"
-                  {...register("service_id", { required: false })}>
-                  <option value="">
-                    Select Service
-                  </option>
-                  {services.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.name}{" "}
-                    </option>
-                  ))}
-                </select>
-                {errors.service_id && (
-                  <div className="invalid-feedback">Service must be selected</div>
-                )}
-              </div>
-              <div className="mb-3">
                 <label htmlFor="providerID" className="form-label fw-bold">
                   <span className="required">*</span>
                   {PrefixLabels.provider.label}
@@ -352,6 +326,32 @@ const PrefixUpdate = () => {
                 </select>
                 {errors.provider_id && (
                   <div className="invalid-feedback">{PrefixLabels.provider.label + errors.provider_id.message} must be selected</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="serviceID" className="form-label fw-bold">
+                  {PrefixLabels.service.label}
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">
+                    {PrefixLabels.service.info}
+                  </span>
+                </span>
+                <select
+                  className={`form-select ${errors.service_id ? "is-invalid" : ""}`}
+                  id="serviceID"
+                  {...register("service_id", { required: false })}>
+                  <option value="">
+                    Select Service
+                  </option>
+                  {services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.name}{" "}
+                    </option>
+                  ))}
+                </select>
+                {errors.service_id && (
+                  <div className="invalid-feedback">Service must be selected</div>
                 )}
               </div>
               <div className="mb-3">
@@ -385,29 +385,6 @@ const PrefixUpdate = () => {
             <legend>Contract Details</legend>
             <div className="form-row">
               <div className="mb-3">
-                <label htmlFor="prefixContractEnd" className="form-label fw-bold">
-                  {PrefixLabels.contractEndDate.label}
-                </label>
-                <span className="info-icon"> i
-                  <span className="info-text">
-                    {PrefixLabels.contractEndDate.info}
-                  </span>
-                </span>
-                <Controller
-                  control={control}
-                  name='contract_end'
-                  render={({ field }) => (
-                    <DatePicker
-                      className={`form-control ${errors.contract_end ? "is-invalid" : ""}`}
-                      placeholderText='Select date'
-                      onChange={(date) => { field.onChange(date) }}
-                      selected={field.value}
-                    />
-                  )}
-                />
-                {errors.contract_end && <div className="invalid-feedback">{errors.contract_end.message}</div>}
-              </div>
-              <div className="mb-3">
                 <label htmlFor="prefixContractType" className="form-label fw-bold">
                   <span className="required">*</span>
                   {PrefixLabels.contractType.label}
@@ -433,12 +410,35 @@ const PrefixUpdate = () => {
                 {errors.contract_type &&
                   (<div className="invalid-feedback">{PrefixLabels.contractType.label + errors.contract_type.message}</div>)}
               </div>
-            </div>
-            <div className="form-row">
               <div className="mb-3">
                 {lookup_service_types && lookup_service_types.length > 0
                   ? lookup_service_type_select
                   : null}
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="mb-3">
+                <label htmlFor="prefixContractEnd" className="form-label fw-bold">
+                  {PrefixLabels.contractEndDate.label}
+                </label>
+                <span className="info-icon"> i
+                  <span className="info-text">
+                    {PrefixLabels.contractEndDate.info}
+                  </span>
+                </span>
+                <Controller
+                  control={control}
+                  name='contract_end'
+                  render={({ field }) => (
+                    <DatePicker
+                      className={`form-control ${errors.contract_end ? "is-invalid" : ""}`}
+                      placeholderText='Select date'
+                      onChange={(date) => { field.onChange(date) }}
+                      selected={field.value}
+                    />
+                  )}
+                />
+                {errors.contract_end && <div className="invalid-feedback">{errors.contract_end.message}</div>}
               </div>
               <div className="mb-3">
                 <label htmlFor="status" className="form-label fw-bold">
