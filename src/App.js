@@ -13,6 +13,8 @@ import { Providers, ProviderDetails } from "./components/Providers";
 import { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup, PrefixEditStats } from "./components/Prefixes/Prefixes";
 import Services from "./components/Services";
 
+import TestTable from "./components/Prefixes/PrefixTestTable";
+
 function App() {
 
   return (
@@ -43,6 +45,10 @@ function App() {
                     exact
                     path="/providers/:name"
                     element={<ProviderDetails />}
+                  />
+                   <Route
+                    path="/test"
+                    element={<TestTable />}
                   />
                   <Route
                     path="/prefixes"
