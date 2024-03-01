@@ -50,7 +50,7 @@ function App() {
                   />
                   <Route
                     path="/prefixes/editstatistics/:id"
-                    element={<PrefixEditStats />} 
+                    element={<PrefixEditStats />}
                   />
                   <Route
                     path="/prefixes/:id"
