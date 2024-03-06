@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "@fortawesome/fontawesome-free-solid";
 import { faChartBar } from '@fortawesome/free-solid-svg-icons';
@@ -94,16 +94,40 @@ const customStyles = {
 const Prefixes = () => {
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
+  const [filterText, setFilterText] = useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
     DM.getPrefixes().then((response) => setPrefixes(response));
   }, []);
 
+  const filteredPrefixes = prefixes.filter((item) => {
+    return Object.values(item).some(
+      (value) =>
+        value &&
+        typeof value === 'string' &&
+        value.toLowerCase().includes(filterText.toLowerCase())
+    );
+  });
+
+  const subHeaderComponentMemo = useMemo(() => {
+
+    return (
+      <>
+        <div className="col-6"></div>
+        <div className="col-6">
+          <div className="input-group input-group-md">
+            <input type="text" className="form-control" placeholder="Search..." value={filterText} aria-describedby="button-addon2"
+              onChange={(e) => setFilterText(e.target.value)} />
+          </div>
+        </div>
+      </>
+    );
+  }, [filterText, resetPaginationToggle]);
 
   return (
     <div>
-
       {prefixes && (
         <div className="col mx-4 mt-4 prefix-table">
           <h2 className="view-title">
@@ -118,12 +142,15 @@ const Prefixes = () => {
 
           <DataTable
             columns={columns}
-            data={prefixes}
+            data={filteredPrefixes}
             theme="default"
             customStyles={customStyles}
             highlightOnHover
             pointerOnHover
             pagination
+            paginationResetDefaultPage={resetPaginationToggle}
+            subHeader
+            subHeaderComponent={subHeaderComponentMemo}
           />
         </div>
       )}
