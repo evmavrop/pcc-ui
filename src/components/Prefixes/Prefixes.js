@@ -95,6 +95,7 @@ const Prefixes = () => {
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
   const [filterText, setFilterText] = useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
@@ -111,22 +112,22 @@ const Prefixes = () => {
   });
 
   const subHeaderComponentMemo = useMemo(() => {
+
     return (
       <>
         <div className="col-6"></div>
         <div className="col-6">
           <div className="input-group input-group-md">
             <input type="text" className="form-control" placeholder="Search..." value={filterText} aria-describedby="button-addon2"
-            onChange={(e) => setFilterText(e.target.value)} />
+              onChange={(e) => setFilterText(e.target.value)} />
           </div>
         </div>
       </>
     );
-  }, [filterText]);
+  }, [filterText, resetPaginationToggle]);
 
   return (
     <div>
-
       {prefixes && (
         <div className="col mx-4 mt-4 prefix-table">
           <h2 className="view-title">
@@ -147,6 +148,7 @@ const Prefixes = () => {
             highlightOnHover
             pointerOnHover
             pagination
+            paginationResetDefaultPage={resetPaginationToggle}
             subHeader
             subHeaderComponent={subHeaderComponentMemo}
           />
