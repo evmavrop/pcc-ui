@@ -7,6 +7,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import DataManager from "../../api/DataManager";
 import config from "../../config";
 import DataTable from 'react-data-table-component';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 
 import PrefixDetails from "./PrefixDetails";
 import PrefixAdd from "./PrefixAdd"
@@ -128,17 +130,24 @@ const Prefixes = () => {
 
   return (
     <div>
+
       {prefixes && (
         <div className="col mx-4 mt-4 prefix-table">
           <h2 className="view-title">
-            <i>
-              <FontAwesomeIcon icon="tags" size="lg" />
-            </i>
+            <i> <FontAwesomeIcon icon="tags" size="lg" /></i>
             <span>Prefix List</span>
             <button className="btn btn-secondary mb-2" onClick={() => { navigate("/prefixes/add"); }}>
               <FontAwesomeIcon icon="plus" size="lg" /> Create new
             </button>
           </h2>
+
+          <Tabs id="justify-tab-example" className="mb-3" justify
+          >
+            <Tab eventKey="GRNET" title={<span style={{ fontSize: '18px' }}><b>GRNET</b></span>} active></Tab>
+            <Tab eventKey="DKRZ" title={<span style={{ fontSize: '18px' }}><b>DKRZ</b></span>} active></Tab>
+            <Tab eventKey="SURF" title={<span style={{ fontSize: '18px' }}><b>SURF</b></span>} active></Tab>
+            <Tab eventKey="GWDG" title={<span style={{ fontSize: '18px' }}><b>GWDG</b></span>} active></Tab>
+          </Tabs>
 
           <DataTable
             columns={columns}
@@ -148,7 +157,6 @@ const Prefixes = () => {
             highlightOnHover
             pointerOnHover
             pagination
-            paginationResetDefaultPage={resetPaginationToggle}
             subHeader
             subHeaderComponent={subHeaderComponentMemo}
           />
