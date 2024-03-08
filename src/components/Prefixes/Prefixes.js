@@ -136,7 +136,7 @@ const Prefixes = () => {
         </div>
       </>
     );
-  }, [filterText, resetPaginationToggle]);
+  }, [filterText]);
 
   return (
     <div>
