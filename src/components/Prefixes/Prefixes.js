@@ -71,7 +71,6 @@ const columns = [
   },
 ];
 
-// Custom style for the table, to have bigger font and colored rows on hover
 const customStyles = {
   headCells: {
     style: {
@@ -89,7 +88,7 @@ const customStyles = {
       borderRadius: '10px',
       outline: '1px solid #FFFFFF',
     },
-  }
+  },
 };
 
 
@@ -97,14 +96,23 @@ const Prefixes = () => {
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
   const [filterText, setFilterText] = useState('');
-  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const [filterProvider, setFilterProvider] = useState('');
+  const [key, setTabKey] = useState('');
+  const [providers, setProviders] = useState([]);
+
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
     DM.getPrefixes().then((response) => setPrefixes(response));
+    DM.getProviders().then((response) => setProviders(response));
   }, []);
 
-  const filteredPrefixes = prefixes.filter((item) => {
+
+  const filteredPrefixesProviders = prefixes.filter(
+    (item) => item.provider_name && item.provider_name.toLowerCase().includes(filterProvider.toLowerCase())
+  );
+  
+  const filteredPrefixes = filteredPrefixesProviders.filter((item) => {
     return Object.values(item).some(
       (value) =>
         value &&
@@ -114,14 +122,16 @@ const Prefixes = () => {
   });
 
   const subHeaderComponentMemo = useMemo(() => {
-
+    
     return (
       <>
         <div className="col-6"></div>
         <div className="col-6">
           <div className="input-group input-group-md">
             <input type="text" className="form-control" placeholder="Search..." value={filterText} aria-describedby="button-addon2"
-              onChange={(e) => setFilterText(e.target.value)} />
+              onChange={(e) => setFilterText(e.target.value)}
+              style={{ borderColor: '#6C757D' }}
+            />
           </div>
         </div>
       </>
@@ -142,11 +152,16 @@ const Prefixes = () => {
           </h2>
 
           <Tabs id="justify-tab-example" className="mb-3" justify
+            activeKey={key}
+            onSelect={(k) => { setFilterProvider(k), setTabKey(k) }}
           >
-            <Tab eventKey="GRNET" title={<span style={{ fontSize: '18px' }}><b>GRNET</b></span>} active></Tab>
-            <Tab eventKey="DKRZ" title={<span style={{ fontSize: '18px' }}><b>DKRZ</b></span>} active></Tab>
-            <Tab eventKey="SURF" title={<span style={{ fontSize: '18px' }}><b>SURF</b></span>} active></Tab>
-            <Tab eventKey="GWDG" title={<span style={{ fontSize: '18px' }}><b>GWDG</b></span>} active></Tab>
+            <Tab eventKey="" title={<span style={{ fontSize: '18px' }}><b>ALL</b></span>} active></Tab>
+            {providers.map((provider) => (
+              <Tab
+                key={provider.id} eventKey={provider.name}
+                title={<span style={{ fontSize: '18px' }}>{provider.name}</span>}
+              />
+            ))}
           </Tabs>
 
           <DataTable
@@ -165,6 +180,5 @@ const Prefixes = () => {
     </div>
   );
 };
-
 
 export { Prefixes, PrefixDetails, PrefixAdd, PrefixUpdate, PrefixLookup, PrefixEditStats };
