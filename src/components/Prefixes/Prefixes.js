@@ -9,6 +9,8 @@ import config from "../../config";
 import DataTable from 'react-data-table-component';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 import PrefixDetails from "./PrefixDetails";
 import PrefixAdd from "./PrefixAdd"
@@ -16,14 +18,14 @@ import PrefixUpdate from "./PrefixUpdate"
 import PrefixLookup from "./PrefixLookup"
 import PrefixEditStats from "./PrefixEditStats";
 
-String.prototype.toPascalCase = function () {
-  const words = this.match(/[a-z]+/gi);
-  if (!words) return "";
-  return words
-    .map(function (w) {
-      return w.charAt(0).toUpperCase() + w.substr(1).toLowerCase();
-    })
-    .join(" ");
+const contract_type_t = {
+  "CONTRACT": "CONTRACT",
+  "PROJECT": "PROJECT",
+};
+
+const def_domains = {
+  "Medical & Health Sciences": "Medical & Health Sciences",
+  "Agricultural Sciences": "Agricultural Sciences",
 };
 
 const columns = [
@@ -111,7 +113,7 @@ const Prefixes = () => {
   const filteredPrefixesProviders = prefixes.filter(
     (item) => item.provider_name && item.provider_name.toLowerCase().includes(filterProvider.toLowerCase())
   );
-  
+
   const filteredPrefixes = filteredPrefixesProviders.filter((item) => {
     return Object.values(item).some(
       (value) =>
@@ -122,17 +124,45 @@ const Prefixes = () => {
   });
 
   const subHeaderComponentMemo = useMemo(() => {
-    
+
     return (
       <>
-        <div className="col-6"></div>
-        <div className="col-6">
-          <div className="input-group input-group-md">
-            <input type="text" className="form-control" placeholder="Search..." value={filterText} aria-describedby="button-addon2"
-              onChange={(e) => setFilterText(e.target.value)}
+        <div className="col-12">
+
+          <InputGroup className="mb-3">
+
+          <InputGroup.Text id="basic-addon1"
+          style={{ borderColor: '#6C757D' }}
+          >Domains</InputGroup.Text>
+
+            <Form.Select aria-label="Default select example"
+            style={{ borderColor: '#6C757D' }}
+            >
+            <option value="">All</option>
+              {Object.entries(def_domains).map((domain) => (
+                <option key={domain[0]} value={domain[0]}>{domain[0]}</option>
+              ))}
+            </Form.Select>
+
+            <InputGroup.Text id="basic-addon1"
+            style={{ borderColor: '#6C757D' }}
+            >Contact Type</InputGroup.Text>
+            <Form.Select aria-label="Default select example"
+            style={{ borderColor: '#6C757D' }}
+            >
+              <option value="">All</option>
+              {Object.entries(contract_type_t).map((contract) => (
+                    <option key={"contract-" + contract[0]} value={contract[0]}>
+                      {contract[0]}
+                    </option>
+                  ))}
+            </Form.Select>
+
+            <Form.Control aria-label="Text input with dropdown button" placeholder="Search ..." value={filterText} aria-describedby="button-addon2"
+              onChange={(e) => setFilterText(e.target.value)} 
               style={{ borderColor: '#6C757D' }}
-            />
-          </div>
+              />
+          </InputGroup>
         </div>
       </>
     );
