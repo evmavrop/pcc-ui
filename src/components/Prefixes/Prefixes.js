@@ -9,6 +9,8 @@ import config from "../../config";
 import DataTable from 'react-data-table-component';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 import PrefixDetails from "./PrefixDetails";
 import PrefixAdd from "./PrefixAdd"
@@ -24,6 +26,11 @@ String.prototype.toPascalCase = function () {
       return w.charAt(0).toUpperCase() + w.substr(1).toLowerCase();
     })
     .join(" ");
+};
+const contract_type_t = {
+  "CONTRACT": "CONTRACT",
+  "PROJECT": "PROJECT",
+  "OTHER": "OTHER"
 };
 
 const columns = [
@@ -48,6 +55,11 @@ const columns = [
     sortable: true,
   },
   {
+    name: 'Contract Type',
+    selector: row => row.contract_type,
+    sortable: true,
+  },
+  {
     name: 'Actions',
     cell: (row) => (
       <div className="btn-group">
@@ -60,10 +72,7 @@ const columns = [
         <Link className="btn btn-secondary btn-sm" to={`/prefixes/${row.id}/delete`}>
           <FontAwesomeIcon icon="times" />
         </Link>
-        <Link
-          className="btn btn-secondary btn-sm"
-          to={`/prefixes/editstatistics/${row.id}`}
-        >
+        <Link className="btn btn-secondary btn-sm" to={`/prefixes/editstatistics/${row.id}`} >
           <FontAwesomeIcon icon={faChartBar} />
         </Link>
       </div>
@@ -97,13 +106,24 @@ const Prefixes = () => {
   const [prefixes, setPrefixes] = useState([]);
   const [filterText, setFilterText] = useState('');
   const [filterProvider, setFilterProvider] = useState('');
+  const [filterDomains, setFilterDomains] = useState('');
+  const [filterContactType, setFilterContactType] = useState('');
   const [key, setTabKey] = useState('');
   const [providers, setProviders] = useState([]);
+  const [domains, setDomains] = useState([]);
 
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
+    DM.getDomains().then((response) => setDomains(response));
+  }, []);
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
     DM.getPrefixes().then((response) => setPrefixes(response));
+  }, []);
+
+  useEffect(() => {
+    let DM = new DataManager(config.endpoint);
     DM.getProviders().then((response) => setProviders(response));
   }, []);
 
@@ -111,32 +131,54 @@ const Prefixes = () => {
   const filteredPrefixesProviders = prefixes.filter(
     (item) => item.provider_name && item.provider_name.toLowerCase().includes(filterProvider.toLowerCase())
   );
-  
-  const filteredPrefixes = filteredPrefixesProviders.filter((item) => {
-    return Object.values(item).some(
-      (value) =>
-        value &&
-        typeof value === 'string' &&
-        value.toLowerCase().includes(filterText.toLowerCase())
+
+  const filteredPrefixesByDomain = filteredPrefixesProviders.filter((item) => {
+    return (
+      (!filterDomains || item.domain_name === filterDomains) &&
+      (!filterContactType || item.contract_type === filterContactType) &&
+      Object.values(item).some( (value) => value && typeof value === 'string' && value.toLowerCase().includes(filterText.toLowerCase()) )
     );
   });
 
   const subHeaderComponentMemo = useMemo(() => {
-    
+
     return (
       <>
-        <div className="col-6"></div>
-        <div className="col-6">
-          <div className="input-group input-group-md">
-            <input type="text" className="form-control" placeholder="Search..." value={filterText} aria-describedby="button-addon2"
-              onChange={(e) => setFilterText(e.target.value)}
-              style={{ borderColor: '#6C757D' }}
-            />
-          </div>
+        <div className="col-12">
+
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="domainSelectionText" style={{ borderColor: '#6C757D' }} >Domains
+            </InputGroup.Text>
+            <Form.Select id="domainSelection" aria-label="Domain Selection" onChange={(e) => setFilterDomains(e.target.value)} style={{ borderColor: '#6C757D' }} >
+              <option value=''>All</option>
+              {domains.length > 0 && domains.map((domain) => (
+                <option key={domain.id} value={domain.name}>
+                  {domain.name}
+                </option>
+              ))}
+            </Form.Select>
+
+            <InputGroup.Text id="contactSelectionText" style={{ borderColor: '#6C757D' }}>
+              Contract Type
+            </InputGroup.Text>
+            <Form.Select id="contactSelection" aria-label="Default select example" onChange={(e) => setFilterContactType(e.target.value)} style={{ borderColor: '#6C757D' }} >
+              <option value=''>All</option>
+              {Object.entries(contract_type_t).map((contract) => (
+                <option key={"contract-" + contract[0]} value={contract[0]}>
+                  {contract[0]}
+                </option>
+              ))}
+            </Form.Select>
+            <InputGroup.Text id="searchText" style={{ borderColor: '#6C757D' }}>
+              Search
+            </InputGroup.Text>
+            <Form.Control aria-label="Input for searching the list" placeholder="Type to search ..." value={filterText} aria-describedby="button-addon2"
+              onChange={(e) => setFilterText(e.target.value)} style={{ borderColor: '#6C757D' }} />
+          </InputGroup>
         </div>
       </>
     );
-  }, [filterText]);
+  }, [filterText, domains, filterDomains, filterContactType]);
 
   return (
     <div>
@@ -151,30 +193,26 @@ const Prefixes = () => {
             </button>
           </h2>
 
-          <Tabs id="justify-tab-example" className="mb-3" justify
-            activeKey={key}
-            onSelect={(k) => { setFilterProvider(k), setTabKey(k) }}
-          >
+          <Tabs id="justify-tab-example" className="mb-3" justify activeKey={key} onSelect={(k) => { setFilterProvider(k), setTabKey(k) }} >
             <Tab eventKey="" title={<span style={{ fontSize: '18px' }}><b>ALL</b></span>} active></Tab>
             {providers.map((provider) => (
-              <Tab
-                key={provider.id} eventKey={provider.name}
-                title={<span style={{ fontSize: '18px' }}>{provider.name}</span>}
-              />
+              <Tab key={provider.id} eventKey={provider.name} title={<span style={{ fontSize: '18px' }}>{provider.name}</span>} />
             ))}
           </Tabs>
 
-          <DataTable
-            columns={columns}
-            data={filteredPrefixes}
-            theme="default"
-            customStyles={customStyles}
-            highlightOnHover
-            pointerOnHover
-            pagination
-            subHeader
-            subHeaderComponent={subHeaderComponentMemo}
-          />
+          {domains.length > 0 && (
+            <DataTable
+              columns={columns}
+              data={filteredPrefixesByDomain}
+              theme="default"
+              customStyles={customStyles}
+              highlightOnHover
+              pointerOnHover
+              pagination
+              subHeader
+              subHeaderComponent={subHeaderComponentMemo}
+            />
+          )}
         </div>
       )}
     </div>
