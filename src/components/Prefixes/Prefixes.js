@@ -11,6 +11,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
 
 import PrefixDetails from "./PrefixDetails";
 import PrefixAdd from "./PrefixAdd"
@@ -100,7 +101,6 @@ const customStyles = {
   },
 };
 
-
 const Prefixes = () => {
   let navigate = useNavigate();
   const [prefixes, setPrefixes] = useState([]);
@@ -108,6 +108,7 @@ const Prefixes = () => {
   const [filterProvider, setFilterProvider] = useState('');
   const [filterDomains, setFilterDomains] = useState('');
   const [filterContactType, setFilterContactType] = useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const [key, setTabKey] = useState('');
   const [providers, setProviders] = useState([]);
   const [domains, setDomains] = useState([]);
@@ -116,17 +117,16 @@ const Prefixes = () => {
     let DM = new DataManager(config.endpoint);
     DM.getDomains().then((response) => setDomains(response));
   }, []);
-
+  
   useEffect(() => {
-    let DM = new DataManager(config.endpoint);
-    DM.getPrefixes().then((response) => setPrefixes(response));
+      let DM = new DataManager(config.endpoint);
+    DM.getPrefixes().then((response) => setPrefixes(response.content));
   }, []);
-
+  
   useEffect(() => {
-    let DM = new DataManager(config.endpoint);
+      let DM = new DataManager(config.endpoint);
     DM.getProviders().then((response) => setProviders(response));
   }, []);
-
 
   const filteredPrefixesProviders = prefixes.filter(
     (item) => item.provider_name && item.provider_name.toLowerCase().includes(filterProvider.toLowerCase())
@@ -136,16 +136,29 @@ const Prefixes = () => {
     return (
       (!filterDomains || item.domain_name === filterDomains) &&
       (!filterContactType || item.contract_type === filterContactType) &&
-      Object.values(item).some( (value) => value && typeof value === 'string' && value.toLowerCase().includes(filterText.toLowerCase()) )
+      Object.values(item).some((value) => value && typeof value === 'string' && value.toLowerCase().includes(filterText.toLowerCase()))
     );
   });
 
   const subHeaderComponentMemo = useMemo(() => {
+    const handleClear = () => {
+      setResetPaginationToggle(!resetPaginationToggle);
+      setFilterText('');
+      setFilterDomains('');
+      setFilterContactType('');
+      selectAllOption();
+    };
+
+    function selectAllOption() {
+      var selectElement = document.getElementById("domainSelection");
+      selectElement.selectedIndex = 0;
+      var selectElement = document.getElementById("contactSelection");
+      selectElement.selectedIndex = 0;
+    }
 
     return (
       <>
         <div className="col-12">
-
           <InputGroup className="mb-3">
             <InputGroup.Text id="domainSelectionText" style={{ borderColor: '#6C757D' }} >Domains
             </InputGroup.Text>
@@ -174,6 +187,10 @@ const Prefixes = () => {
             </InputGroup.Text>
             <Form.Control aria-label="Input for searching the list" placeholder="Type to search ..." value={filterText} aria-describedby="button-addon2"
               onChange={(e) => setFilterText(e.target.value)} style={{ borderColor: '#6C757D' }} />
+            <Button variant="outline-secondary" id="button-addon2" onClick={handleClear} >
+              <FontAwesomeIcon icon="times" id="button-addon2" />
+            </Button>
+
           </InputGroup>
         </div>
       </>
@@ -182,7 +199,6 @@ const Prefixes = () => {
 
   return (
     <div>
-
       {prefixes && (
         <div className="col mx-4 mt-4 prefix-table">
           <h2 className="view-title">
@@ -209,6 +225,7 @@ const Prefixes = () => {
               highlightOnHover
               pointerOnHover
               pagination
+              paginationResetDefaultPage={resetPaginationToggle}
               subHeader
               subHeaderComponent={subHeaderComponentMemo}
             />

@@ -25,7 +25,7 @@ const PrefixDetails = (props) => {
 
     useEffect(() => {
         let DM = new DataManager(config.endpoint);
-        DM.getPrefixes().then((response) => setPrefixes(response));
+        DM.getPrefixes().then((response) => setPrefixes(response.content));
     }, []);
 
     useEffect(() => {
