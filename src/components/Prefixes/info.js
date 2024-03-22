@@ -32,7 +32,7 @@ var PrefixLabels = {
         info: "8"
     },
     contractEndDate: {
-        label: "Contact End Date",
+        label: "Contract End Date",
         info: "9"
     },
     contractType: {

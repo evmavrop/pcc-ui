@@ -65,7 +65,7 @@ const ProviderDetails = () => {
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getPrefixes().then((response) => setPrefixes(response.content));
+    DM.getPrefixes().then((response) => setPrefixes(response));
   }, []);
 
   let providersDetails = {}

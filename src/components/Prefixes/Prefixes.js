@@ -7,17 +7,18 @@ import "react-datepicker/dist/react-datepicker.css";
 import DataManager from "../../api/DataManager";
 import config from "../../config";
 import DataTable from 'react-data-table-component';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-
 import PrefixDetails from "./PrefixDetails";
 import PrefixAdd from "./PrefixAdd"
 import PrefixUpdate from "./PrefixUpdate"
 import PrefixLookup from "./PrefixLookup"
 import PrefixEditStats from "./PrefixEditStats";
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
+import { StyleSheetManager } from 'styled-components';
+
 
 String.prototype.toPascalCase = function () {
   const words = this.match(/[a-z]+/gi);
@@ -28,6 +29,7 @@ String.prototype.toPascalCase = function () {
     })
     .join(" ");
 };
+
 const contract_type_t = {
   "CONTRACT": "CONTRACT",
   "PROJECT": "PROJECT",
@@ -81,6 +83,7 @@ const columns = [
   },
 ];
 
+// Custom style for the table, to have a bigger font and colored rows on hover
 const customStyles = {
   headCells: {
     style: {
@@ -115,17 +118,19 @@ const Prefixes = () => {
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getDomains().then((response) => setDomains(response));
-  }, []);
-  
-  useEffect(() => {
-      let DM = new DataManager(config.endpoint);
-    DM.getPrefixes().then((response) => setPrefixes(response.content));
-  }, []);
-  
-  useEffect(() => {
-      let DM = new DataManager(config.endpoint);
-    DM.getProviders().then((response) => setProviders(response));
+    // DM.getDomains().then((response) => setDomains(response));
+    DM.getDomains()
+    .then((response) => setDomains(response))
+    .catch((error) => console.error("Error fetching domains:", error));
+
+    DM.getPrefixes()
+    .then((response) => setPrefixes(response))
+    .catch((error) => console.error("Error fetching prefixes:", error));
+
+    DM.getProviders()
+    .then((response) => setProviders(response))
+    .catch((error) => console.error("Error fetching providers:", error));
+
   }, []);
 
   const filteredPrefixesProviders = prefixes.filter(
@@ -159,10 +164,9 @@ const Prefixes = () => {
     return (
       <>
         <div className="col-12">
-          <InputGroup className="mb-3">
-            <InputGroup.Text id="domainSelectionText" style={{ borderColor: '#6C757D' }} >Domains
-            </InputGroup.Text>
-            <Form.Select id="domainSelection" aria-label="Domain Selection" onChange={(e) => setFilterDomains(e.target.value)} style={{ borderColor: '#6C757D' }} >
+          <InputGroup id="filtering" className="mb-3">
+            <InputGroup.Text id="domainSelectionText" style={{ borderColor: '#6C757D' }}> Domains </InputGroup.Text>
+            <Form.Select id="domainSelection" name="formSelectDomain" aria-label="Domain Selection" onChange={(e) => setFilterDomains(e.target.value)} style={{ borderColor: '#6C757D' }} >
               <option value=''>All</option>
               {domains.length > 0 && domains.map((domain) => (
                 <option key={domain.id} value={domain.name}>
@@ -171,22 +175,21 @@ const Prefixes = () => {
               ))}
             </Form.Select>
 
-            <InputGroup.Text id="contactSelectionText" style={{ borderColor: '#6C757D' }}>
-              Contract Type
-            </InputGroup.Text>
-            <Form.Select id="contactSelection" aria-label="Default select example" onChange={(e) => setFilterContactType(e.target.value)} style={{ borderColor: '#6C757D' }} >
-              <option value=''>All</option>
+            <InputGroup.Text id="contactSelectionText" style={{ borderColor: '#6C757D' }}> Contract Type </InputGroup.Text>
+            <Form.Select id="contactSelection" name="formSelectContact" aria-label="Default select example" onChange={(e) => setFilterContactType(e.target.value)} style={{ borderColor: '#6C757D' }} >
+              <option id="All" value=''>All</option>
               {Object.entries(contract_type_t).map((contract) => (
-                <option key={"contract-" + contract[0]} value={contract[0]}>
+                <option id={contract[0]}  key={"contract-" + contract[0]} value={contract[0]}>
                   {contract[0]}
                 </option>
               ))}
             </Form.Select>
-            <InputGroup.Text id="searchText" style={{ borderColor: '#6C757D' }}>
-              Search
-            </InputGroup.Text>
-            <Form.Control aria-label="Input for searching the list" placeholder="Type to search ..." value={filterText} aria-describedby="button-addon2"
+
+            <InputGroup.Text id="searchText" style={{ borderColor: '#6C757D' }}> Search </InputGroup.Text>
+
+            <Form.Control id="searchField" name="filterText" aria-label="Input for searching the list" placeholder="Type to search ..." value={filterText} aria-describedby="button-addon2"
               onChange={(e) => setFilterText(e.target.value)} style={{ borderColor: '#6C757D' }} />
+              
             <Button variant="outline-secondary" id="button-addon2" onClick={handleClear} >
               <FontAwesomeIcon icon="times" id="button-addon2" />
             </Button>
@@ -216,6 +219,7 @@ const Prefixes = () => {
             ))}
           </Tabs>
 
+          <StyleSheetManager shouldForwardProp={(prop) => prop !== 'align'}>
           {domains.length > 0 && (
             <DataTable
               columns={columns}
@@ -230,6 +234,7 @@ const Prefixes = () => {
               subHeaderComponent={subHeaderComponentMemo}
             />
           )}
+          </StyleSheetManager>
         </div>
       )}
     </div>

@@ -67,7 +67,7 @@ const ServicesDetails = () => {
 
   useEffect(() => {
     let DM = new DataManager(config.endpoint);
-    DM.getPrefixes().then((response) => setPrefixes(response.content));
+    DM.getPrefixes().then((response) => setPrefixes(response));
   }, []);
 
   let servicesDetails = {}
@@ -154,8 +154,5 @@ const ServicesDetails = () => {
     </>
   );
 }
-
-
-
 
 export { Services, ServicesDetails };
