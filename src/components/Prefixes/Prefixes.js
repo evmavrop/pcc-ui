@@ -18,6 +18,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import { StyleSheetManager } from 'styled-components';
+import './prefix.css';
 
 
 String.prototype.toPascalCase = function () {
@@ -66,16 +67,16 @@ const columns = [
     name: 'Actions',
     cell: (row) => (
       <div className="btn-group">
-        <Link className="btn btn-secondary btn-sm" to={`/prefixes/${row.id}`} title="View Details">
+        <Link className="btn btn-default btn-sm circular-button" to={`/prefixes/${row.id}`} title="View Details">
           <FontAwesomeIcon icon="list" />
         </Link>
-        <Link className="btn btn-secondary btn-sm" to={`/prefixes/${row.id}/update`} title="Update Prefix">
+        <Link className="btn btn-default btn-sm circular-button" to={`/prefixes/${row.id}/update`} title="Update Prefix">
           <FontAwesomeIcon icon="edit" />
         </Link>
-        <Link className="btn btn-secondary btn-sm" to={`/prefixes/${row.id}/delete`} title="Delete Prefix">
+        <Link className="btn btn-default btn-sm circular-button" to={`/prefixes/${row.id}/delete`} title="Delete Prefix">
           <FontAwesomeIcon icon="times" />
         </Link>
-        <Link className="btn btn-secondary btn-sm" to={`/prefixes/editstatistics/${row.id}`} title="Edit Statistics">
+        <Link className="btn btn-default btn-sm circular-button" to={`/prefixes/editstatistics/${row.id}`} title="Edit Statistics">
           <FontAwesomeIcon icon={faChartBar} />
         </Link>
       </div>
@@ -89,6 +90,7 @@ const customStyles = {
     style: {
       color: '#202124',
       fontSize: '18px',
+      backgroundColor: '#F4F6F8',
     },
   },
   rows: {
