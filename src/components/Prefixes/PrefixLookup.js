@@ -81,7 +81,7 @@ const PrefixLookup = () => {
                 name: "Handle",
                 selector: (row) => row.handle,
                 sortable: false,
-                grow: 2,
+                width: '500px'
             },
             {
                 name: "URL",
@@ -90,13 +90,12 @@ const PrefixLookup = () => {
                     return urlValue ? urlValue.value : '';
                 },
                 sortable: false,
-                grow: 4,
             },
             {
                 name: "Metadata",
                 cell: (row) => ("Click to expand"),
                 sortable: false,
-                width: '150px'
+                width: '200px'
             },
 
         ],
